@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://7cvnh6gy8rxu"]
+[gd_scene load_steps=5 format=3 uid="uid://7cvnh6gy8rxu"]
 
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachine.gd" id="1_2u3i6"]
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_AnyKeyToContinue.gd" id="2_6bx2r"]
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_MainMenu.gd" id="3_dgp3i"]
+[ext_resource type="Script" path="res://Scripts/Decorators/ControlDecorator.gd" id="4_hagyi"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -90,13 +91,24 @@ grow_vertical = 2
 layout_mode = 2
 text = "Play"
 
+[node name="PlayDecorator" type="Node" parent="MainStateMachine/MainMenu/VBoxContainer/Play"]
+script = ExtResource("4_hagyi")
+
 [node name="Credits" type="Button" parent="MainStateMachine/MainMenu/VBoxContainer"]
 layout_mode = 2
 text = "Credits"
 
+[node name="CreditsDecorator" type="Node" parent="MainStateMachine/MainMenu/VBoxContainer/Credits" node_paths=PackedStringArray("loads_after")]
+script = ExtResource("4_hagyi")
+loads_after = NodePath("../../Play/PlayDecorator")
+
 [node name="Quit" type="Button" parent="MainStateMachine/MainMenu/VBoxContainer"]
 layout_mode = 2
 text = "Quit"
+
+[node name="QuitDecorator" type="Node" parent="MainStateMachine/MainMenu/VBoxContainer/Quit" node_paths=PackedStringArray("loads_after")]
+script = ExtResource("4_hagyi")
+loads_after = NodePath("../../Credits/CreditsDecorator")
 
 [node name="Credits" type="Control" parent="MainStateMachine" node_paths=PackedStringArray("next_state")]
 visible = false
