@@ -1,0 +1,167 @@
+[gd_scene load_steps=4 format=3 uid="uid://7cvnh6gy8rxu"]
+
+[ext_resource type="Script" path="res://Scripts/StateMachine/StateMachine.gd" id="1_2u3i6"]
+[ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_AnyKeyToContinue.gd" id="2_6bx2r"]
+[ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_MainMenu.gd" id="3_dgp3i"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainStateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("1_2u3i6")
+initial_state = NodePath("SplashScreen")
+
+[node name="SplashScreen" type="Control" parent="MainStateMachine" node_paths=PackedStringArray("next_state")]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_6bx2r")
+next_state = NodePath("../MainMenu")
+time_out_in_seconds = 5.0
+
+[node name="ColorRect" type="ColorRect" parent="MainStateMachine/SplashScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.454902, 1, 1)
+
+[node name="Label" type="Label" parent="MainStateMachine/SplashScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 80
+text = "Mad Idle Scientist"
+
+[node name="MainMenu" type="Control" parent="MainStateMachine"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_dgp3i")
+
+[node name="ColorRect" type="ColorRect" parent="MainStateMachine/MainMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.454902, 1, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainStateMachine/MainMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Play" type="Button" parent="MainStateMachine/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "Play"
+
+[node name="Credits" type="Button" parent="MainStateMachine/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "Credits"
+
+[node name="Quit" type="Button" parent="MainStateMachine/MainMenu/VBoxContainer"]
+layout_mode = 2
+text = "Quit"
+
+[node name="Credits" type="Control" parent="MainStateMachine" node_paths=PackedStringArray("next_state")]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_6bx2r")
+next_state = NodePath("../MainMenu")
+
+[node name="ColorRect" type="ColorRect" parent="MainStateMachine/Credits"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.454902, 1, 1)
+
+[node name="GridContainer" type="GridContainer" parent="MainStateMachine/Credits"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -358.0
+offset_top = -55.0
+offset_right = 358.0
+offset_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 40
+columns = 2
+
+[node name="Programmer" type="Label" parent="MainStateMachine/Credits/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 80
+text = "Code:"
+
+[node name="JasonAbbott" type="Label" parent="MainStateMachine/Credits/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 80
+text = "Jason Abbott"
+
+[node name="Design" type="Label" parent="MainStateMachine/Credits/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 80
+text = "Design:"
+
+[node name="JasonAbbott2" type="Label" parent="MainStateMachine/Credits/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 80
+text = "Jason Abbott"
+
+[connection signal="pressed" from="MainStateMachine/MainMenu/VBoxContainer/Play" to="MainStateMachine/MainMenu" method="_on_play_pressed"]
+[connection signal="pressed" from="MainStateMachine/MainMenu/VBoxContainer/Credits" to="MainStateMachine/MainMenu" method="_on_credits_pressed"]
+[connection signal="pressed" from="MainStateMachine/MainMenu/VBoxContainer/Quit" to="MainStateMachine/MainMenu" method="_on_quit_pressed"]
