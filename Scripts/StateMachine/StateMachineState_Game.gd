@@ -10,6 +10,7 @@ var workshops_button : Button = null
 var augment_eta : Label = null
 var oppossum_attr : Label = null
 var oppossum_value : Label = null
+var generate_money_tab : Control = null
 var workshop_tab : Control = null
 var tab_container : TabContainer = null
 var main_button_stage : int = 0
@@ -34,6 +35,17 @@ var augment_button_stages = {
 	1: [100, 250, 0.4, "I need more oppossums!"],
 	2: [200, 500, 0.3, "Onward, my marsupials!"],
 	3: [400, 1000, 0.2, "Type with your tails if need be!"],
+}
+
+enum TabRef {
+	GENERATE_MONEY_TAB,
+	WORKSHOP_TAB,
+}
+enum TabAction {
+	HIDE_TAB,
+	SHOW_TAB,
+	HIGHLIGHT_TAB,
+	IS_HIDDEN,
 }
 
 func find_label(label_name : String) -> Label:
@@ -76,12 +88,46 @@ func _ready() -> void:
 	oppossum_value = find_label("OpposumValue")
 	oppossum_value.hide()
 	
+	generate_money_tab = find_control("Generate Money");
 	workshop_tab = find_control("Workshops");
-	var idx = tab_container.get_tab_idx_from_control(workshop_tab)
-	tab_container.set_tab_hidden(idx, true)
+	change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.SHOW_TAB)
+	change_tab(TabRef.WORKSHOP_TAB, TabAction.HIDE_TAB)
 
 	workshops_button = find_button("WorkshopsButton");
 	workshops_button.hide()
+	
+func get_tab_index(tab: TabRef) -> int:
+	var idx : int = -1;
+	match tab:
+		TabRef.GENERATE_MONEY_TAB:
+			idx = tab_container.get_tab_idx_from_control(generate_money_tab)
+		TabRef.WORKSHOP_TAB:
+			idx = tab_container.get_tab_idx_from_control(workshop_tab)
+	assert(idx != -1, "Did not find tab %s in %s" % [TabRef.find_key(tab), tab_container.name])
+	return idx
+
+func change_tab(tab : TabRef, change : TabAction) -> void:
+	var idx : int = get_tab_index(tab)
+	match change:
+		TabAction.HIDE_TAB:
+			tab_container.set_tab_hidden(idx, true)
+		TabAction.SHOW_TAB:
+			tab_container.set_tab_hidden(idx, false)
+		TabAction.HIGHLIGHT_TAB:
+			assert(!tab_container.is_tab_hidden(idx), "Can't highlight of Tab.%s - still hidden" % TabRef.find_key(tab))
+			if tab_container.current_tab != idx:
+				print("TODO: implement highlight of Tab.%s" % TabRef.find_key(tab))
+		_:
+			assert(false, "Do not understand the %s action to perform on %s.%s" % [TabAction.find_key(change), tab_container.name, TabRef.find_key(tab)])
+
+func query_tab(tab : TabRef, query : TabAction) -> bool:
+	var idx : int = get_tab_index(tab)
+	match query:
+		TabAction.IS_HIDDEN:
+			return tab_container.is_tab_hidden(idx)
+		_:
+			assert(false, "Do not understand the %s query to perform on %s.%s" % [TabAction.find_key(query), tab_container.name, TabRef.find_key(tab)])
+	return false
 	
 func _process(delta: float) -> void:
 	update_augment_button_fraction(delta, 1)
@@ -112,9 +158,11 @@ func update_augment_button_fraction(amount: float, index: int) -> void:
 		augment_button.text = augment_button_stages[augment_button_stage][3]
 		augment_button.show()
 		augment_eta.hide()
+		change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.HIGHLIGHT_TAB)
 	elif augment_button_unlock_fraction >= augment_button_stages[augment_button_stage][2]:
 		if augment_eta.visible == false:
 			augment_eta.show()
+			change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.HIGHLIGHT_TAB)
 		var a : float = (augment_button_unlock_fraction - augment_button_stages[augment_button_stage][2]) / (1.0 - augment_button_stages[augment_button_stage][2])
 		if a > 1:
 			a = 1;
@@ -129,10 +177,11 @@ func set_money(new_value : int) -> void:
 		if money >= main_button_stages[main_button_stage + 1][1]:
 			unlock_button.text = main_button_stages[main_button_stage][3]
 			unlock_button.show()
+			change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.HIGHLIGHT_TAB)
 	if money >= workshop_unlock_amount && workshops_button.visible == false:
-		var idx = tab_container.get_tab_idx_from_control(workshop_tab)
-		if tab_container.is_tab_hidden(idx):
+		if query_tab(TabRef.WORKSHOP_TAB, TabAction.IS_HIDDEN):
 			workshops_button.show()
+			change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.HIGHLIGHT_TAB)
 
 func set_click_count(new_value : int) -> void:
 	click_count = new_value
@@ -156,6 +205,7 @@ func _on_augment_button_pressed() -> void:
 	if augment_amount == 0:
 		oppossum_attr.show();
 		oppossum_value.show();
+		change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.HIGHLIGHT_TAB)
 		augment_amount = 1.0
 	else:
 		augment_amount *= augment_stage_multiplier
@@ -163,5 +213,5 @@ func _on_augment_button_pressed() -> void:
 func _on_workshops_button_pressed() -> void:
 	click_count += 1
 	workshops_button.hide()
-	var idx = tab_container.get_tab_idx_from_control(workshop_tab)
-	tab_container.set_tab_hidden(idx, false);
+	change_tab(TabRef.WORKSHOP_TAB, TabAction.SHOW_TAB)
+	change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
