@@ -37,6 +37,7 @@ func _ready() -> void:
 	assert(target != null, "{0} does not have a Control as a parent".format([name]))
 	target.mouse_entered.connect(on_hover)
 	target.mouse_exited.connect(off_hover)
+	target.visibility_changed.connect(on_visibility_changed)
 	
 	our_state = get_our_state(target)
 	our_state.state_enter.connect(on_state_entered)
@@ -50,20 +51,43 @@ func on_hover() -> void:
 	add_transition("hover", settings_hover, settings_hover["duration_in_seconds"], Callable())
 
 func off_hover() -> void:
-	add_transition("default-off-hover", settings_default, settings_hover["duration_in_seconds"], Callable())
+	if target.visible:
+		add_transition("default-off-hover", settings_default, settings_hover["duration_in_seconds"], Callable())
 
 func on_state_entered() -> void:
 	add_transition("loading", settings_loading, 0.01, finished_loading)
 
+var appear_dependancy_can_show : bool = false
+var appear_dependancy_can_load : bool = false
+
+func handle_appearance(mode_name : String, dur : float) -> void:
+	if appear_dependancy_can_load && appear_dependancy_can_show:
+		add_transition(mode_name, settings_default, dur * settings_default["duration_in_seconds"], signal_finished_loading)
+
+func on_visibility_changed() -> void:
+	appear_dependancy_can_show = target.visible
+	if appear_dependancy_can_show:
+		#print("%s visibility changed (currently visible=%s) - calling handle_appearance(%s)" % [target.name, target.visible, str(target.scale)])
+		handle_appearance("default-made-visible", 5)
+	elif appear_dependancy_can_load == true:
+		#print("%s visibility changed (currently visible=%s) - shrinking to %s" % [target.name, target.visible, str(settings_loading["scale"])])
+		add_transition("vanishing", settings_loading, 0.01, Callable())
+
 func on_load_after_completed() -> void:
-	add_transition("default-dependancy-loaded", settings_default, settings_default["duration_in_seconds"], signal_finished_loading)
+	appear_dependancy_can_load = true
+	handle_appearance("default-dependancy-loaded", 1)
+	#add_transition(, settings_default, settings_default["duration_in_seconds"], signal_finished_loading)
 
 func finished_loading() -> void:
 	if loads_after == null:
-		add_transition("default-state-entered", settings_default, settings_loading["duration_in_seconds"], signal_finished_loading)
+		appear_dependancy_can_load = true
+		handle_appearance("default-state-entered", 1)
 
+var has_ever_loaded : bool = false
 func signal_finished_loading() -> void:
-	loading_completed.emit()
+	if has_ever_loaded == false:
+		has_ever_loaded = true
+		loading_completed.emit()
 
 var tween : Tween = null
 var callback_after_tween_finished : Callable = Callable()
@@ -71,6 +95,7 @@ var callback_after_tween_finished : Callable = Callable()
 func invoke_tween_callback() -> void:
 	var tmp : Callable = callback_after_tween_finished
 	callback_after_tween_finished = Callable()
+	#print("callback invoking, %s.scale=%s" % [target.name, str(target.scale)])
 	tmp.call()
 
 func add_transition(mode_name : String, settings, seconds : float, callback : Callable ) -> void:
@@ -88,6 +113,7 @@ func add_transition(mode_name : String, settings, seconds : float, callback : Ca
 	if tree != null:
 		tween = tree.create_tween()
 		tween.tween_property(target, "scale", settings["scale"], seconds).set_trans(settings["transition_type"])
+		#print("transitioning from %s.scale=%s to %s.scale=%s in %f seconds because of %s" % [target.name, str(target.scale), target.name, str(settings["scale"]), seconds, mode_name])
 		tween.parallel().tween_property(target, "self_modulate", settings["self_modulate"], seconds).set_trans(settings["transition_type"])
 		if callback_after_tween_finished.is_valid():
 			tween.tween_callback(invoke_tween_callback)

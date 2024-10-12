@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://c58yyta2hdulp"]
+[gd_scene load_steps=5 format=3 uid="uid://c58yyta2hdulp"]
 
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_Game.gd" id="1_fiind"]
 [ext_resource type="Script" path="res://Scripts/Decorators/ControlDecorator.gd" id="2_f1jsb"]
 [ext_resource type="Theme" uid="uid://cqjlv35tewje1" path="res://theme.tres" id="3_yf0vc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cut1r"]
 
 [node name="GameState" type="Control"]
 layout_mode = 3
@@ -53,11 +55,17 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 text = "Opposum Income:"
 
+[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/GlobalStats/OpposumAttr"]
+script = ExtResource("2_f1jsb")
+
 [node name="OpposumValue" type="Label" parent="MarginContainer/VBoxContainer/GlobalStats"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 text = "$0"
+
+[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/GlobalStats/OpposumValue"]
+script = ExtResource("2_f1jsb")
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -80,6 +88,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
+theme_override_styles/focus = SubResource("StyleBoxEmpty_cut1r")
 text = "Click Me"
 
 [node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/Button"]
