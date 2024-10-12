@@ -1,0 +1,97 @@
+[gd_scene load_steps=4 format=3 uid="uid://c58yyta2hdulp"]
+
+[ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_Game.gd" id="1_fiind"]
+[ext_resource type="Script" path="res://Scripts/Decorators/ControlDecorator.gd" id="2_f1jsb"]
+[ext_resource type="Theme" uid="uid://cqjlv35tewje1" path="res://theme.tres" id="3_yf0vc"]
+
+[node name="GameState" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fiind")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="GlobalStats" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MoneyAttr" type="Label" parent="MarginContainer/VBoxContainer/GlobalStats"]
+layout_mode = 2
+text = "Money:"
+
+[node name="MoneyValue" type="Label" parent="MarginContainer/VBoxContainer/GlobalStats"]
+layout_mode = 2
+text = "$0"
+
+[node name="Spacer_postMoney" type="Control" parent="MarginContainer/VBoxContainer/GlobalStats"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Generate Money" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+text = "Click Me"
+
+[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/Button"]
+script = ExtResource("2_f1jsb")
+
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer"]
+layout_mode = 2
+
+[node name="Spacer_postMoney" type="Control" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/CenterContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/CenterContainer"]
+layout_mode = 2
+theme = ExtResource("3_yf0vc")
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="UnlockButton" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/CenterContainer/MarginContainer"]
+layout_mode = 2
+text = "Unlock"
+
+[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/CenterContainer/MarginContainer/UnlockButton"]
+script = ExtResource("2_f1jsb")
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/CenterContainer/MarginContainer/UnlockButton" to="." method="_on_unlock_button_pressed"]

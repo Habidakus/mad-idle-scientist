@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://7cvnh6gy8rxu"]
+[gd_scene load_steps=6 format=3 uid="uid://7cvnh6gy8rxu"]
 
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachine.gd" id="1_2u3i6"]
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_AnyKeyToContinue.gd" id="2_6bx2r"]
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_MainMenu.gd" id="3_dgp3i"]
 [ext_resource type="Script" path="res://Scripts/Decorators/ControlDecorator.gd" id="4_hagyi"]
+[ext_resource type="PackedScene" uid="uid://c58yyta2hdulp" path="res://Scenes/game_state.tscn" id="5_wjm77"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -155,6 +156,8 @@ size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 80
 text = "Jason Abbott"
+
+[node name="Game" parent="MainStateMachine" instance=ExtResource("5_wjm77")]
 
 [connection signal="pressed" from="MainStateMachine/MainMenu/VBoxContainer/Play" to="MainStateMachine/MainMenu" method="_on_play_pressed"]
 [connection signal="pressed" from="MainStateMachine/MainMenu/VBoxContainer/Credits" to="MainStateMachine/MainMenu" method="_on_credits_pressed"]

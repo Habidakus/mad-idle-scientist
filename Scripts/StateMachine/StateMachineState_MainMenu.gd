@@ -17,4 +17,4 @@ func _on_credits_pressed() -> void:
 	our_state_machine.switch_state("Credits")
 
 func _on_play_pressed() -> void:
-	our_state_machine.switch_state("Play")
+	our_state_machine.switch_state("Game")
