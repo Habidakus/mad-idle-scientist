@@ -1,0 +1,6 @@
+Oct 11th: 8 hours
+	Created initial project
+	Created base StateMachine
+	Created initial pages
+	Created initial button decorator
+	Created first page page (generating money)
