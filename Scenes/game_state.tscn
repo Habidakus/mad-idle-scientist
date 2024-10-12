@@ -33,15 +33,31 @@ layout_mode = 2
 
 [node name="MoneyAttr" type="Label" parent="MarginContainer/VBoxContainer/GlobalStats"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
 text = "Money:"
 
 [node name="MoneyValue" type="Label" parent="MarginContainer/VBoxContainer/GlobalStats"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
 text = "$0"
 
 [node name="Spacer_postMoney" type="Control" parent="MarginContainer/VBoxContainer/GlobalStats"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="OpposumAttr" type="Label" parent="MarginContainer/VBoxContainer/GlobalStats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "Opposum Income:"
+
+[node name="OpposumValue" type="Label" parent="MarginContainer/VBoxContainer/GlobalStats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "$0"
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -93,5 +109,59 @@ text = "Unlock"
 [node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/CenterContainer/MarginContainer/UnlockButton"]
 script = ExtResource("2_f1jsb")
 
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -83.5
+offset_top = -72.0
+offset_right = 83.5
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_yf0vc")
+
+[node name="AugmentButton" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer"]
+visible = false
+layout_mode = 2
+text = "Augment"
+
+[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer/AugmentButton"]
+script = ExtResource("2_f1jsb")
+
+[node name="AugmentETA" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer"]
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -101.0
+offset_right = 359.0
+grow_vertical = 0
+theme = ExtResource("3_yf0vc")
+
+[node name="WorkshopsButton" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer2"]
+layout_mode = 2
+text = "Damn my eyes - I should have workshops!
+Dozens and Dozens of workshops!
+Positively humming with activity!"
+autowrap_mode = 2
+
+[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer2/WorkshopsButton"]
+script = ExtResource("2_f1jsb")
+
+[node name="Workshops" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
 [connection signal="pressed" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/CenterContainer/MarginContainer/UnlockButton" to="." method="_on_unlock_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer/AugmentButton" to="." method="_on_augment_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer2/WorkshopsButton" to="." method="_on_workshops_button_pressed"]
