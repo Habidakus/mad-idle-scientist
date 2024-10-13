@@ -87,7 +87,7 @@ var has_ever_loaded : bool = false
 func signal_finished_loading() -> void:
 	if has_ever_loaded == false:
 		has_ever_loaded = true
-		loading_completed.emit()
+	loading_completed.emit()
 
 var tween : Tween = null
 var callback_after_tween_finished : Callable = Callable()
