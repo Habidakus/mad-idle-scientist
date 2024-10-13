@@ -4,9 +4,11 @@ Oct 11th: 8 hours
 	Created initial pages
 	Created initial button decorator
 	Created first page page (generating money)
+Oct 12th: 4 hours
+	Button Decorator handles becoming visible (via .show())
+	Did work on the workshop page
 
 TODO:
-  - update button decorator with transition for becoming visible
   - add sounds to all the button transitions
   - randomize the type of marsupials each player might get
 
