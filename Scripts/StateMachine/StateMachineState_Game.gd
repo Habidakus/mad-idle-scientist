@@ -7,6 +7,7 @@ var main_button : Button = null
 var unlock_button : Button = null
 var augment_button : Button = null
 var workshops_button : Button = null
+var hire_minion_button : Button = null
 var augment_eta : Label = null
 var oppossum_attr : Label = null
 var oppossum_value : Label = null
@@ -22,6 +23,9 @@ var main_button_stages = {
 	4: ["Patent", 10000, 50, "The fools don't understand me\nI will show them!"],
 	5: ["Scheme", 100000, 100, "(((should not see this)))"],
 }
+
+var cost_to_hire_next_minion : int = 1000
+var cost_to_nire_next_minion_multiplier : float = 2
 
 var workshop_unlock_amount : int = 3500
 
@@ -66,7 +70,6 @@ func find_tab_container(tc_name : String) -> TabContainer:
 	return tc
 
 func _ready() -> void:
-	money = 0
 	
 	tab_container = find_tab_container("TabContainer");
 	
@@ -88,6 +91,9 @@ func _ready() -> void:
 	oppossum_value = find_label("OpposumValue")
 	oppossum_value.hide()
 	
+	hire_minion_button = find_button("HireMinion")
+	update_minion_button()
+	
 	generate_money_tab = find_control("Generate Money");
 	workshop_tab = find_control("Workshops");
 	change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.SHOW_TAB)
@@ -95,6 +101,8 @@ func _ready() -> void:
 
 	workshops_button = find_button("WorkshopsButton");
 	workshops_button.hide()
+
+	money = 0
 	
 func get_tab_index(tab: TabRef) -> int:
 	var idx : int = -1;
@@ -114,9 +122,11 @@ func change_tab(tab : TabRef, change : TabAction) -> void:
 		TabAction.SHOW_TAB:
 			tab_container.set_tab_hidden(idx, false)
 		TabAction.HIGHLIGHT_TAB:
-			assert(!tab_container.is_tab_hidden(idx), "Can't highlight of Tab.%s - still hidden" % TabRef.find_key(tab))
-			if tab_container.current_tab != idx:
-				print("TODO: implement highlight of Tab.%s" % TabRef.find_key(tab))
+			if !tab_container.is_tab_disabled(idx):
+				if tab_container.current_tab != idx:
+					print("TODO: implement highlight of Tab.%s" % TabRef.find_key(tab))
+			else:
+				print("Can't highlight of Tab.%s - still hidden" % TabRef.find_key(tab))
 		_:
 			assert(false, "Do not understand the %s action to perform on %s.%s" % [TabAction.find_key(change), tab_container.name, TabRef.find_key(tab)])
 
@@ -182,6 +192,15 @@ func set_money(new_value : int) -> void:
 		if query_tab(TabRef.WORKSHOP_TAB, TabAction.IS_HIDDEN):
 			workshops_button.show()
 			change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.HIGHLIGHT_TAB)
+	update_minion_button()
+
+func update_minion_button() -> void:
+	hire_minion_button.text = "Hire Minion\n$%.2f" % [cost_to_hire_next_minion]
+	if money < cost_to_hire_next_minion:
+		hire_minion_button.set_disabled(true)
+	elif hire_minion_button.is_disabled():
+		change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
+		hire_minion_button.set_disabled(false)
 
 func set_click_count(new_value : int) -> void:
 	click_count = new_value
@@ -215,3 +234,8 @@ func _on_workshops_button_pressed() -> void:
 	workshops_button.hide()
 	change_tab(TabRef.WORKSHOP_TAB, TabAction.SHOW_TAB)
 	change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
+
+func _on_hire_minion_pressed() -> void:
+	money -= cost_to_hire_next_minion
+	cost_to_hire_next_minion = (int) (cost_to_hire_next_minion * cost_to_nire_next_minion_multiplier)
+	update_minion_button()
