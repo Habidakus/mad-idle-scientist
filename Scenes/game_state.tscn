@@ -30,42 +30,68 @@ theme_override_constants/margin_bottom = 10
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="GlobalStats" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="MoneyStats" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="MoneyAttr" type="Label" parent="MarginContainer/VBoxContainer/GlobalStats"]
+[node name="MoneyAttr" type="Label" parent="MarginContainer/VBoxContainer/MoneyStats"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 text = "Money:"
 
-[node name="MoneyValue" type="Label" parent="MarginContainer/VBoxContainer/GlobalStats"]
+[node name="MoneyValue" type="Label" parent="MarginContainer/VBoxContainer/MoneyStats"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 text = "$0"
 
-[node name="Spacer_postMoney" type="Control" parent="MarginContainer/VBoxContainer/GlobalStats"]
+[node name="Spacer_postMoney" type="Control" parent="MarginContainer/VBoxContainer/MoneyStats"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="OpposumAttr" type="Label" parent="MarginContainer/VBoxContainer/GlobalStats"]
+[node name="OpposumAttr" type="Label" parent="MarginContainer/VBoxContainer/MoneyStats"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 text = "Opposum Income:"
 
-[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/GlobalStats/OpposumAttr"]
+[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/MoneyStats/OpposumAttr"]
 script = ExtResource("2_f1jsb")
 
-[node name="OpposumValue" type="Label" parent="MarginContainer/VBoxContainer/GlobalStats"]
+[node name="OpposumValue" type="Label" parent="MarginContainer/VBoxContainer/MoneyStats"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 text = "$0"
 
-[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/GlobalStats/OpposumValue"]
+[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/MoneyStats/OpposumValue"]
 script = ExtResource("2_f1jsb")
+
+[node name="BlueprintStats" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BlueprintAttr" type="Label" parent="MarginContainer/VBoxContainer/BlueprintStats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "Blueprints: "
+
+[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/BlueprintStats/BlueprintAttr"]
+script = ExtResource("2_f1jsb")
+
+[node name="BlueprintValue" type="Label" parent="MarginContainer/VBoxContainer/BlueprintStats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "0"
+
+[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/BlueprintStats/BlueprintValue"]
+script = ExtResource("2_f1jsb")
+
+[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/BlueprintStats"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
