@@ -265,14 +265,32 @@ func _on_hire_minion_pressed() -> void:
 	cost_to_hire_next_minion = (int) (cost_to_hire_next_minion * cost_to_nire_next_minion_multiplier)
 	update_minion_button()
 
+var workshop_name_index_a : int = -1
+var workshop_name_index_b : int = -1
+var workshop_name_index_c : int = -1
+var some_primes : Array = [2749, 2909, 3083, 3259, 3433, 3581, 3733, 3749, 1709]
+var workshop_name_stepper_a : int
+var workshop_name_stepper_b : int
+var workshop_name_stepper_c : int
+
 func generate_workshop_name() -> String:
-	var a : Array = ["Alpha", "Beta", "Gamma", "Delta", "Omega"]
+	if workshop_name_index_a == -1:
+		var rng : RandomNumberGenerator = RandomNumberGenerator.new()
+		workshop_name_index_a = rng.randi() % 100000;
+		workshop_name_index_b = rng.randi() % 100000;
+		workshop_name_index_c = rng.randi() % 100000;
+		workshop_name_stepper_a = some_primes[rng.randi_range(0, some_primes.size() - 1)]
+		workshop_name_stepper_b = some_primes[rng.randi_range(0, some_primes.size() - 1)]
+		workshop_name_stepper_c = some_primes[rng.randi_range(0, some_primes.size() - 1)]
+	var a : Array = ["Alpha", "Beta", "Gamma", "Delta", "Omega", "Primus", "Secundus", "Tertius", "Quartus"]
 	var b : Array = [2, 3, 5,  7, 11, 13,  17, 19, 23,  29, 31, 37,  41, 43, 47, 53, 59, 61]
 	var c : Array = ["Jekyll", "Strange", "No", "Moreau", "Moriarty", "Luthor", "Brundle", "Von Doom", "Loveless", "West", "Octavius", "Nemo"]
-	var tick = (int) (Time.get_unix_time_from_system() * 1000.0)
-	var x = a[tick % a.size()]
-	var y = b[tick % b.size()]
-	var z = c[tick % c.size()]
+	workshop_name_index_a = (workshop_name_index_a + workshop_name_stepper_a) % a.size()
+	workshop_name_index_b = (workshop_name_index_b + workshop_name_stepper_b) % b.size()
+	workshop_name_index_c = (workshop_name_index_c + workshop_name_stepper_c) % c.size()
+	var x = a[workshop_name_index_a]
+	var y = b[workshop_name_index_b]
+	var z = c[workshop_name_index_c]
 	return "%s-%d-%s" % [x, y, z]
 
 enum WorkshopTask {
@@ -282,8 +300,7 @@ enum WorkshopTask {
 	GOLEMS,
 }
 # index: [task, minions]
-var workshop_list : Dictionary = {
-}
+var workshop_list : Dictionary = {}
 
 func add_workshop() -> void:
 	list_of_workshops_grid.show()
@@ -324,9 +341,12 @@ func on_workshop_task_selected(item_selected, workshop_index : int, option_butto
 	var task : WorkshopTask = option_button.get_item_id(option_button.selected) as WorkshopTask
 	print("Task changed to %s for workshop #%d (item selected = %s)" % [WorkshopTask.find_key(task), workshop_index, str(item_selected)])
 	click_count += 1
+	workshop_list[workshop_index][0] = task
+
 func on_workshop_minion_count_changed(value : float, workshop_index : int, spin_box : SpinBox) -> void:
 	print("Minion cound changed to %d for workshop #%d (value=%f)" % [spin_box.value, workshop_index, value])
 	click_count += 1
+	workshop_list[workshop_index][1] = spin_box.value as int
 
 func _on_build_workshop_pressed() -> void:
 	click_count += 1
