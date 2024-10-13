@@ -8,6 +8,8 @@ var unlock_button : Button = null
 var augment_button : Button = null
 var workshops_button : Button = null
 var hire_minion_button : Button = null
+var build_workshop_button : Button = null
+var list_of_workshops_grid : GridContainer = null
 var augment_eta : Label = null
 var oppossum_attr : Label = null
 var oppossum_value : Label = null
@@ -26,6 +28,8 @@ var main_button_stages = {
 
 var cost_to_hire_next_minion : int = 1000
 var cost_to_nire_next_minion_multiplier : float = 2
+var cost_to_build_next_workshop : int = 1000
+var cost_to_build_next_workshop_multiplier : float = 3
 
 var workshop_unlock_amount : int = 3500
 
@@ -68,6 +72,10 @@ func find_tab_container(tc_name : String) -> TabContainer:
 	var tc = find_child(tc_name) as TabContainer
 	assert(tc != null, "%s could not find tab container child %s" % [name, tc_name])
 	return tc
+func find_grid_container(grid_name : String) -> GridContainer:
+	var gc = find_child(grid_name) as GridContainer
+	assert(gc != null, "%s could not find grid container child %s" % [name, grid_name])
+	return gc
 
 func _ready() -> void:
 	
@@ -93,17 +101,23 @@ func _ready() -> void:
 	
 	hire_minion_button = find_button("HireMinion")
 	update_minion_button()
+	build_workshop_button = find_button("BuildWorkshop")
+	update_workshop_button()
 	
 	generate_money_tab = find_control("Generate Money");
+	generate_money_tab.show()
 	workshop_tab = find_control("Workshops");
 	change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.SHOW_TAB)
 	change_tab(TabRef.WORKSHOP_TAB, TabAction.HIDE_TAB)
-
+	
 	workshops_button = find_button("WorkshopsButton");
 	workshops_button.hide()
-
-	money = 0
 	
+	list_of_workshops_grid = find_grid_container("ListOfWorkshops");
+	list_of_workshops_grid.hide();
+	
+	money = 3100
+
 func get_tab_index(tab: TabRef) -> int:
 	var idx : int = -1;
 	match tab:
@@ -193,6 +207,7 @@ func set_money(new_value : int) -> void:
 			workshops_button.show()
 			change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.HIGHLIGHT_TAB)
 	update_minion_button()
+	update_workshop_button()
 
 func update_minion_button() -> void:
 	hire_minion_button.text = "Hire Minion\n$%.2f" % [cost_to_hire_next_minion]
@@ -201,6 +216,15 @@ func update_minion_button() -> void:
 	elif hire_minion_button.is_disabled():
 		change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
 		hire_minion_button.set_disabled(false)
+
+func update_workshop_button() -> void:
+	build_workshop_button.text = "Build Workshop\n$%.2f" % [cost_to_build_next_workshop]
+	if money < cost_to_build_next_workshop:
+		build_workshop_button.set_disabled(true)
+	elif build_workshop_button.is_disabled():
+		change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
+		build_workshop_button.set_disabled(false)
+
 
 func set_click_count(new_value : int) -> void:
 	click_count = new_value
@@ -236,6 +260,77 @@ func _on_workshops_button_pressed() -> void:
 	change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
 
 func _on_hire_minion_pressed() -> void:
+	click_count += 1
 	money -= cost_to_hire_next_minion
 	cost_to_hire_next_minion = (int) (cost_to_hire_next_minion * cost_to_nire_next_minion_multiplier)
 	update_minion_button()
+
+func generate_workshop_name() -> String:
+	var a : Array = ["Alpha", "Beta", "Gamma", "Delta", "Omega"]
+	var b : Array = [2, 3, 5,  7, 11, 13,  17, 19, 23,  29, 31, 37,  41, 43, 47, 53, 59, 61]
+	var c : Array = ["Jekyll", "Strange", "No", "Moreau", "Moriarty", "Luthor", "Brundle", "Von Doom", "Loveless", "West", "Octavius", "Nemo"]
+	var tick = (int) (Time.get_unix_time_from_system() * 1000.0)
+	var x = a[tick % a.size()]
+	var y = b[tick % b.size()]
+	var z = c[tick % c.size()]
+	return "%s-%d-%s" % [x, y, z]
+
+enum WorkshopTask {
+	UNASSIGNED,
+	MONEY,
+	BLUEPRINT,
+	GOLEMS,
+}
+# index: [task, minions]
+var workshop_list : Dictionary = {
+}
+
+func add_workshop() -> void:
+	list_of_workshops_grid.show()
+	var name_label : Label = Label.new()
+	name_label.text = generate_workshop_name()
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list_of_workshops_grid.add_child(name_label)
+	var minion_count_selector : SpinBox = SpinBox.new()
+	minion_count_selector.prefix = "Minions allocated: "
+	minion_count_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list_of_workshops_grid.add_child(minion_count_selector)
+	var option_button : OptionButton = OptionButton.new()
+	option_button.add_item("(SELECT SOMETHING)", WorkshopTask.UNASSIGNED);
+	option_button.set_item_tooltip(WorkshopTask.UNASSIGNED, "Select something for this workshop to build");
+	option_button.add_item("Perform mindless labor", WorkshopTask.MONEY);
+	option_button.set_item_tooltip(WorkshopTask.MONEY, "This will generate some money");
+	option_button.add_item("Draft blueprints", WorkshopTask.BLUEPRINT);
+	option_button.set_item_tooltip(WorkshopTask.BLUEPRINT, "Blueprints help you invent new things");
+	option_button.select(0)
+	option_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list_of_workshops_grid.add_child(option_button)
+	option_button.set_item_disabled(0, true)
+	var status_label : Label = Label.new()
+	status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	status_label.text = "10.0 quatloos/sec";
+	list_of_workshops_grid.add_child(status_label)
+	
+	var child_count = list_of_workshops_grid.get_children().size();
+	assert(child_count % 4 == 0);
+	var workshop_index : int = (int)(child_count / 4.0);
+	workshop_list[workshop_index] = [WorkshopTask.UNASSIGNED, 0]
+
+	option_button.item_selected.connect(on_workshop_task_selected.bindv([workshop_index, option_button]))
+	minion_count_selector.value_changed.connect(on_workshop_minion_count_changed.bindv([workshop_index, minion_count_selector]))
+
+func on_workshop_task_selected(item_selected, workshop_index : int, option_button : OptionButton) -> void:
+	var task : WorkshopTask = option_button.get_item_id(option_button.selected) as WorkshopTask
+	print("Task changed to %s for workshop #%d (item selected = %s)" % [WorkshopTask.find_key(task), workshop_index, str(item_selected)])
+	click_count += 1
+func on_workshop_minion_count_changed(value : float, workshop_index : int, spin_box : SpinBox) -> void:
+	print("Minion cound changed to %d for workshop #%d (value=%f)" % [spin_box.value, workshop_index, value])
+	click_count += 1
+
+func _on_build_workshop_pressed() -> void:
+	click_count += 1
+	money -= cost_to_build_next_workshop
+	cost_to_build_next_workshop = (int) (cost_to_build_next_workshop * cost_to_build_next_workshop_multiplier)
+	add_workshop()
+	update_workshop_button()
