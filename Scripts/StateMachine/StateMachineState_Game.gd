@@ -356,6 +356,40 @@ func set_blueprints(new_value : int) -> void:
 		change_tab(TabRef.LAB_TAB, TabAction.SHOW_TAB)
 		change_tab(TabRef.LAB_TAB, TabAction.HIGHLIGHT_TAB)
 
+var workshop_types_unlocked : Array[Workshop.WorkshopTask] = []
+var workshop_types : Dictionary = {
+	Invention.ActivationType.UNLOCK_GOLEM: [false, Workshop.WorkshopTask.GOLEMS, "Craft Robots", "Robots will help you out in workshops"],
+	Invention.ActivationType.UNLOCK_GEARS: [false, Workshop.WorkshopTask.GEARS, "Craft Gears", "Gears will help you craft other things"],
+	Invention.ActivationType.UNLOCK_ARTIFICIAL_MUSCLE: [false, Workshop.WorkshopTask.ARTIFICIAL_MUSCLE, "Craft Synthetic Muscle", "Synthetic muscle will help you craft other things" ],
+}
+
+func populate_workshop_option_button(option_button : OptionButton) -> void:
+	if option_button.get_item_index(Workshop.WorkshopTask.MONEY) == -1:
+		option_button.add_item("Perform mindless labor", Workshop.WorkshopTask.MONEY);
+		option_button.set_item_tooltip(Workshop.WorkshopTask.MONEY, "This will generate some money");
+		option_button.select(0)
+	if option_button.get_item_index(Workshop.WorkshopTask.BLUEPRINT) == -1:
+		option_button.add_item("Draft blueprints", Workshop.WorkshopTask.BLUEPRINT);
+		option_button.set_item_tooltip(Workshop.WorkshopTask.BLUEPRINT, "Blueprints help you invent new things");
+	for key in workshop_types.keys():
+		var data = workshop_types[key]
+		if data[0]:
+			if option_button.get_item_index(data[1]) == -1:
+				option_button.add_item(data[2], data[1])
+				option_button.set_item_tooltip(data[1], data[3])
+
+func activate_invention(blueprint_cost : int, activation_type : Invention.ActivationType, _activation_amount : int) -> void:
+	assert(blueprints >= blueprint_cost)
+	blueprints -= blueprint_cost
+	if workshop_types.keys().has(activation_type):
+		if workshop_types[activation_type][0] == false:
+			workshop_types[activation_type][0] = true
+			for workshop in workshop_array:
+				populate_workshop_option_button(workshop.option_button)
+			change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
+	else:
+		assert(false, "Can't activate invention for %s - no matching workshop" % [Invention.ActivationType.find_key(activation_type)])
+
 func update_minion_button() -> void:
 	hire_minion_button.text = "Hire Minion\n$%.0f" % [cost_to_hire_next_minion]
 	if money < cost_to_hire_next_minion:
@@ -475,7 +509,7 @@ func add_workshop() -> void:
 	var workshop : Workshop = Workshop.new()
 	var workshop_name : String = generate_workshop_name()
 	add_child(workshop)
-	workshop.init(workshop_name, list_of_workshops_grid, workshop_array, get_available_minions())
+	workshop.init(workshop_name, list_of_workshops_grid, workshop_array, get_available_minions(), self)
 
 func _on_build_workshop_pressed() -> void:
 	click_count += 1

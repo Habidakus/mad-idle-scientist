@@ -8,3 +8,5 @@ condition = 1
 condition_threshold = 3.0
 blueprint_cost = 5
 button_text = "Primative Workshop Robots"
+activation_type = 1
+activation_amount = 1

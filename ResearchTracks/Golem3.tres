@@ -8,3 +8,5 @@ condition = 2
 condition_threshold = 15.0
 blueprint_cost = 50
 button_text = "Robust Workshop Robots"
+activation_type = 1
+activation_amount = 3

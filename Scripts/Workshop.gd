@@ -6,7 +6,10 @@ enum WorkshopTask {
 	MONEY,
 	BLUEPRINT,
 	GOLEMS,
+	GEARS,
+	ARTIFICIAL_MUSCLE,
 }
+
 var task : WorkshopTask = WorkshopTask.MONEY
 var minion_count : int = 0
 
@@ -18,7 +21,7 @@ var status_label : Label = Label.new()
 func get_workshop_name() -> String:
 	return name_label.text
 
-func init(workshop_name : String, grid_container : GridContainer, workshop_list : Array[Workshop], available_minions : int) -> void:
+func init(workshop_name : String, grid_container : GridContainer, workshop_list : Array[Workshop], available_minions : int, game : Control) -> void:
 	name_label.text = workshop_name
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -27,13 +30,14 @@ func init(workshop_name : String, grid_container : GridContainer, workshop_list 
 	minion_count_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	minion_count_selector.max_value = available_minions
 	grid_container.add_child(minion_count_selector)
-	option_button.add_item("Perform mindless labor", WorkshopTask.MONEY);
-	option_button.set_item_tooltip(WorkshopTask.MONEY, "This will generate some money");
-	option_button.add_item("Draft blueprints", WorkshopTask.BLUEPRINT);
-	option_button.set_item_tooltip(WorkshopTask.BLUEPRINT, "Blueprints help you invent new things");
-	option_button.select(0)
+	game.populate_workshop_option_button(option_button)
+	#option_button.add_item("Perform mindless labor", WorkshopTask.MONEY);
+	#option_button.set_item_tooltip(WorkshopTask.MONEY, "This will generate some money");
+	#option_button.add_item("Draft blueprints", WorkshopTask.BLUEPRINT);
+	#option_button.set_item_tooltip(WorkshopTask.BLUEPRINT, "Blueprints help you invent new things");
+	#option_button.select(0)
 	option_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	option_button.set_item_disabled(0, true)
+	#option_button.set_item_disabled(0, true)
 	grid_container.add_child(option_button)
 	status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid_container.add_child(status_label)

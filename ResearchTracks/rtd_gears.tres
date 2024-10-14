@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="ResearchTrackData" load_steps=2 format=3 uid="uid://bfs22cxftqca0"]
+
+[ext_resource type="Script" path="res://Scripts/ResearchTrackData.gd" id="1_y6g4r"]
+
+[resource]
+script = ExtResource("1_y6g4r")
+inventions = Array[Resource]([])

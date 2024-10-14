@@ -6,12 +6,22 @@ enum InventionCondition {
 	UNSET,
 	WORKSHOP_COUNT,
 	GOLEM_COUNT,
+	GEAR_COUNT,
+}
+
+enum ActivationType {
+	UNSET,
+	UNLOCK_GOLEM,
+	UNLOCK_GEARS,
+	UNLOCK_ARTIFICIAL_MUSCLE,
 }
 
 @export var condition : InventionCondition = InventionCondition.UNSET
 @export var condition_threshold : float = -1;
 @export var blueprint_cost : int = -1;
 @export var button_text : String = "unset"
+@export var activation_type : ActivationType = ActivationType.UNSET
+@export var activation_amount : int = 1
 var condition_checker : Control = null
 
 #func init(bname : String, cost : int, game : Control) -> void:
@@ -46,4 +56,4 @@ func get_button_text() -> String:
 	return button_text
 
 func activate() -> void:
-	print("TODO: Need to activate \"%s\"" % button_text)
+	condition_checker.activate_invention(blueprint_cost, activation_type, activation_amount)
