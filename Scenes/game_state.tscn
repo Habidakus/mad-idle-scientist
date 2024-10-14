@@ -274,10 +274,12 @@ text = "Workshops:"
 script = ExtResource("2_f1jsb")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer/Workshops/HBoxContainer/MarginContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Workshops/HBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -303,6 +305,7 @@ theme = ExtResource("3_yf0vc")
 
 [node name="ListOfLabProjects" type="GridContainer" parent="MarginContainer/VBoxContainer/TabContainer/Lab/MarginContainer"]
 layout_mode = 2
+columns = 5
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/CenterContainer/MarginContainer/UnlockButton" to="." method="_on_unlock_button_pressed"]

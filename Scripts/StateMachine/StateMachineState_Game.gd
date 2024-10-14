@@ -16,6 +16,7 @@ var workshops_button : Button = null
 var hire_minion_button : Button = null
 var build_workshop_button : Button = null
 var list_of_workshops_grid : GridContainer = null
+var lab_grid : GridContainer = null
 var augment_eta : Label = null
 var oppossum_attr : Label = null
 var oppossum_value : Label = null
@@ -66,6 +67,8 @@ enum TabAction {
 	HIGHLIGHT_TAB,
 	IS_HIDDEN,
 }
+
+var research_track_packed_scene : PackedScene = preload("res://Scenes/research_track.tscn")
 
 func find_label(label_name : String) -> Label:
 	var label = find_child(label_name) as Label
@@ -157,12 +160,57 @@ func _ready() -> void:
 	
 	lab_tab = find_control("Lab");
 	change_tab(TabRef.LAB_TAB, TabAction.HIDE_TAB)
+	lab_grid = find_grid_container("ListOfLabProjects");
+	load_lab_grid()
 	
 	#-------
 	# Other
 	#-------
 
 	money = 3300
+
+func load_lab_grid() -> void:
+	var track : ResearchTrack = research_track_packed_scene.instantiate()
+	var inv1 : Invention = Invention.new()
+	inv1.init("Basic Workshop Robots", 5, self);
+	inv1.add_condition(Invention.InventionCondition.WORKSHOP_COUNT, 3)
+	track.add_invention(inv1)
+	var inv2 : Invention = Invention.new()
+	inv2.init("Simple Workshop Robots", 15, self);
+	inv2.add_condition(Invention.InventionCondition.GOLEM_COUNT, 5)
+	var inv3 : Invention = Invention.new()
+	inv3.init("Robust Workshop Robots", 50, self);
+	inv3.add_condition(Invention.InventionCondition.GOLEM_COUNT, 15)
+	track.add_invention(inv2)
+	lab_grid.add_child(track)
+	
+func is_invention_hidden(condition : Invention.InventionCondition, _threshold : float) -> bool:
+	match condition:
+		Invention.InventionCondition.WORKSHOP_COUNT:
+			return workshop_array.is_empty()
+		Invention.InventionCondition.GOLEM_COUNT:
+			return total_golems == 0
+		_:
+			assert(false, "Unknown invention condition: %s" % [Invention.InventionCondition.find_key(condition)])
+			return false
+			
+func is_invention_pending(condition : Invention.InventionCondition, threshold : float, blueprints_needed: int) -> String:
+	var blueprint_fraction : float = (blueprints as float) / (blueprints_needed as float)
+	var cond_fraction : float = 0 
+	match condition:
+		Invention.InventionCondition.WORKSHOP_COUNT:
+			cond_fraction = workshop_array.size() as float / threshold
+		Invention.InventionCondition.GOLEM_COUNT:
+			cond_fraction = total_golems as float / threshold
+		_:
+			assert(false, "Unknown invention condition: %s" % [Invention.InventionCondition.find_key(condition)])
+
+	if blueprint_fraction >= 1.0 && cond_fraction >= 1.0:
+		return ""
+	
+	var percent : float = 50.0 * (min(1.0, blueprint_fraction) + min(1.0, cond_fraction))
+	#print("pending: b = %d, bASf = %f, bn = %d, bnASf = %f, bf = %f, cf = %f, p = %f" % [blueprints, blueprints as float, blueprints_needed, blueprints_needed as float, blueprint_fraction, cond_fraction, percent])
+	return "%.1f%%" % [percent]
 
 func get_tab_index(tab: TabRef) -> int:
 	var idx : int = -1;
@@ -186,7 +234,8 @@ func change_tab(tab : TabRef, change : TabAction) -> void:
 		TabAction.HIGHLIGHT_TAB:
 			if !tab_container.is_tab_disabled(idx):
 				if tab_container.current_tab != idx:
-					print("TODO: implement highlight of Tab.%s" % TabRef.find_key(tab))
+					var foo = 1
+					#print("TODO: implement highlight of Tab.%s" % TabRef.find_key(tab))
 			else:
 				print("Can't highlight of Tab.%s - still hidden" % TabRef.find_key(tab))
 		_:
@@ -318,6 +367,7 @@ func _on_workshops_button_pressed() -> void:
 	change_tab(TabRef.WORKSHOP_TAB, TabAction.SHOW_TAB)
 	change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
 
+var total_golems : int = 0
 var total_minions : int = 0
 func _on_hire_minion_pressed() -> void:
 	click_count += 1
