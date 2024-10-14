@@ -7,6 +7,9 @@ Oct 11th: 8 hours
 Oct 12th: 4 hours
 	Button Decorator handles becoming visible (via .show())
 	Did work on the workshop page
+Oct 13th: 8 hours
+	Added blueprints 
+	Added structure for research tracks
 
 TODO:
   - add sounds to all the button transitions
