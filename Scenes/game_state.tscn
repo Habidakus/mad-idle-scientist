@@ -93,10 +93,28 @@ custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="IdleAttr" type="Label" parent="MarginContainer/VBoxContainer/BlueprintStats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "Idle Workers:  "
+
+[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/BlueprintStats/IdleAttr"]
+script = ExtResource("2_f1jsb")
+
+[node name="IdleValue" type="Label" parent="MarginContainer/VBoxContainer/BlueprintStats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "0"
+
+[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/BlueprintStats/IdleValue"]
+script = ExtResource("2_f1jsb")
+
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 1
+current_tab = 2
 
 [node name="Generate Money" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
 visible = false
@@ -193,6 +211,7 @@ autowrap_mode = 2
 script = ExtResource("2_f1jsb")
 
 [node name="Workshops" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
@@ -244,14 +263,46 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_yf0vc")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer/Workshops/HBoxContainer/MarginContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Workshops/HBoxContainer/MarginContainer2"]
 layout_mode = 2
 
-[node name="ListOfWorkshops" type="GridContainer" parent="MarginContainer/VBoxContainer/TabContainer/Workshops/HBoxContainer/MarginContainer2/ScrollContainer"]
+[node name="WorkshopPanelLabel" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Workshops/HBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+text = "Workshops:"
+
+[node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Workshops/HBoxContainer/MarginContainer2/VBoxContainer/WorkshopPanelLabel"]
+script = ExtResource("2_f1jsb")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer/Workshops/HBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Workshops/HBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ListOfWorkshops" type="GridContainer" parent="MarginContainer/VBoxContainer/TabContainer/Workshops/HBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 4
+
+[node name="Lab" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Lab"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_yf0vc")
+
+[node name="ListOfLabProjects" type="GridContainer" parent="MarginContainer/VBoxContainer/TabContainer/Lab/MarginContainer"]
+layout_mode = 2
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/CenterContainer/MarginContainer/UnlockButton" to="." method="_on_unlock_button_pressed"]

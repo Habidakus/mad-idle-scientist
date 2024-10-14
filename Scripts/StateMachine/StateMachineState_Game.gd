@@ -6,6 +6,9 @@ var blueprints : int = 0 : set = set_blueprints
 var money_label : Label = null
 var blueprints_attr : Label = null
 var blueprints_value : Label = null
+var idle_attr : Label = null
+var idle_value : Label = null
+var workshop_panel_label : Label = null
 var main_button : Button = null
 var unlock_button : Button = null
 var augment_button : Button = null
@@ -18,6 +21,7 @@ var oppossum_attr : Label = null
 var oppossum_value : Label = null
 var generate_money_tab : Control = null
 var workshop_tab : Control = null
+var lab_tab : Control = null
 var tab_container : TabContainer = null
 var main_button_stage : int = 0
 var main_button_stages = {
@@ -54,6 +58,7 @@ var augment_button_stages = {
 enum TabRef {
 	GENERATE_MONEY_TAB,
 	WORKSHOP_TAB,
+	LAB_TAB,
 }
 enum TabAction {
 	HIDE_TAB,
@@ -85,13 +90,35 @@ func find_grid_container(grid_name : String) -> GridContainer:
 
 func _ready() -> void:
 	
+	#-------
+	# Page Frame & Header
+	#-------
 	tab_container = find_tab_container("TabContainer");
 	
 	money_label = find_label("MoneyValue")
+	
+	oppossum_attr = find_label("OpposumAttr")
+	oppossum_attr.hide()
+	oppossum_value = find_label("OpposumValue")
+	oppossum_value.hide()
+	
 	blueprints_attr = find_label("BlueprintAttr")
 	blueprints_attr.hide()
 	blueprints_value = find_label("BlueprintValue")
 	blueprints_value.hide()
+	
+	idle_attr = find_label("IdleAttr")
+	idle_attr.hide()
+	idle_value = find_label("IdleValue")
+	idle_value.hide()
+	
+	#-------
+	# Money Page
+	#-------
+
+	generate_money_tab = find_control("Generate Money");
+	generate_money_tab.show()
+	change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.SHOW_TAB)
 	
 	main_button = find_button("Button")
 	main_button.text = main_button_stages[main_button_stage][0]
@@ -103,30 +130,39 @@ func _ready() -> void:
 	augment_button.hide()
 	augment_eta = find_label("AugmentETA")
 	augment_eta.hide()
-	
-	oppossum_attr = find_label("OpposumAttr")
-	oppossum_attr.hide()
-	oppossum_value = find_label("OpposumValue")
-	oppossum_value.hide()
+
+	#-------
+	# Workshop Page
+	#-------
+
+	workshop_tab = find_control("Workshops");
+	change_tab(TabRef.WORKSHOP_TAB, TabAction.HIDE_TAB)
 	
 	hire_minion_button = find_button("HireMinion")
 	update_minion_button()
 	build_workshop_button = find_button("BuildWorkshop")
 	update_workshop_button()
 	
-	generate_money_tab = find_control("Generate Money");
-	generate_money_tab.show()
-	workshop_tab = find_control("Workshops");
-	change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.SHOW_TAB)
-	change_tab(TabRef.WORKSHOP_TAB, TabAction.HIDE_TAB)
-	
 	workshops_button = find_button("WorkshopsButton");
 	workshops_button.hide()
 	
+	workshop_panel_label = find_label("WorkshopPanelLabel");
+	workshop_panel_label.hide();
 	list_of_workshops_grid = find_grid_container("ListOfWorkshops");
 	list_of_workshops_grid.hide();
+
+	#-------
+	# Labrotory
+	#-------
 	
-	money = 3100
+	lab_tab = find_control("Lab");
+	change_tab(TabRef.LAB_TAB, TabAction.HIDE_TAB)
+	
+	#-------
+	# Other
+	#-------
+
+	money = 3300
 
 func get_tab_index(tab: TabRef) -> int:
 	var idx : int = -1;
@@ -135,6 +171,8 @@ func get_tab_index(tab: TabRef) -> int:
 			idx = tab_container.get_tab_idx_from_control(generate_money_tab)
 		TabRef.WORKSHOP_TAB:
 			idx = tab_container.get_tab_idx_from_control(workshop_tab)
+		TabRef.LAB_TAB:
+			idx = tab_container.get_tab_idx_from_control(lab_tab)
 	assert(idx != -1, "Did not find tab %s in %s" % [TabRef.find_key(tab), tab_container.name])
 	return idx
 
@@ -222,11 +260,14 @@ func set_money(new_value : int) -> void:
 
 func set_blueprints(new_value : int) -> void:
 	blueprints = new_value
-	if blueprints > 0:
-		blueprints_value.text = "{0}".format([blueprints])
-		if blueprints_attr.hidden:
-			blueprints_value.show()
-			blueprints_attr.show()
+	blueprints_value.text = "{0}".format([blueprints])
+	if blueprints == 0:
+		return
+	if blueprints_attr.hidden:
+		blueprints_value.show()
+		blueprints_attr.show()
+		change_tab(TabRef.LAB_TAB, TabAction.SHOW_TAB)
+		change_tab(TabRef.LAB_TAB, TabAction.HIGHLIGHT_TAB)
 
 func update_minion_button() -> void:
 	hire_minion_button.text = "Hire Minion\n$%.2f" % [cost_to_hire_next_minion]
@@ -329,11 +370,17 @@ func process_workshops(delta: float) -> void:
 
 func update_all_workshops() -> void:
 	var available_minions : int = get_available_minions()
+	if available_minions > 0 && idle_attr.hidden:
+		idle_attr.show()
+		idle_value.show()
+	idle_value.text = str(available_minions)
 	for workshop in workshop_array:
 		workshop.update_available_minions(available_minions)
 
 func add_workshop() -> void:
-	list_of_workshops_grid.show()
+	if workshop_panel_label.hidden:
+		workshop_panel_label.show()
+		list_of_workshops_grid.show()
 	var workshop : Workshop = Workshop.new()
 	var workshop_name : String = generate_workshop_name()
 	add_child(workshop)
