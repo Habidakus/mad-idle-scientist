@@ -34,6 +34,8 @@ var main_button_stages = {
 	5: ["Scheme", 100000, 100, "(((should not see this)))"],
 }
 
+var highlight_tab_texture : Texture2D = load("res://Art/redCircle.png")
+
 var cost_to_hire_next_minion : int = 1000
 var cost_to_nire_next_minion_multiplier : float = 2
 var cost_to_build_next_workshop : int = 1000
@@ -69,6 +71,9 @@ enum TabAction {
 }
 
 var research_track_packed_scene : PackedScene = preload("res://Scenes/research_track.tscn")
+	
+@export var research_track_data_sets : Array[Resource] = []
+@export var research_track : PackedScene = load("res://Scenes/research_track.tscn")
 
 func find_label(label_name : String) -> Label:
 	var label = find_child(label_name) as Label
@@ -97,6 +102,7 @@ func _ready() -> void:
 	# Page Frame & Header
 	#-------
 	tab_container = find_tab_container("TabContainer");
+	tab_container.tab_changed.connect(on_tab_changed)
 	
 	money_label = find_label("MoneyValue")
 	
@@ -169,8 +175,10 @@ func _ready() -> void:
 
 	money = 3300
 	
-@export var research_track_data_sets : Array[Resource] = []
-@export var research_track : PackedScene = load("res://Scenes/research_track.tscn")
+	var it : Image = highlight_tab_texture.get_image();
+	var imt : ImageTexture = ImageTexture.create_from_image(it)
+	imt.set_size_override(Vector2i(8, 8))
+	highlight_tab_texture = imt
 
 func load_lab_grid() -> void:
 	print("load_lab_grid - start");
@@ -247,7 +255,7 @@ func change_tab(tab : TabRef, change : TabAction) -> void:
 		TabAction.HIGHLIGHT_TAB:
 			if !tab_container.is_tab_disabled(idx):
 				if tab_container.current_tab != idx:
-					print("TODO: implement highlight of Tab.%s" % TabRef.find_key(tab))
+					tab_container.get_tab_bar().set_tab_icon(idx, highlight_tab_texture)
 			else:
 				print("Can't highlight of Tab.%s - still hidden" % TabRef.find_key(tab))
 		_:
@@ -349,6 +357,9 @@ func update_workshop_button() -> void:
 func set_click_count(new_value : int) -> void:
 	click_count = new_value
 	update_augment_button_fraction(1.0, 0)
+
+func on_tab_changed(index : int) -> void:
+	tab_container.get_tab_bar().set_tab_icon(index, null)
 
 func _on_button_pressed() -> void:
 	click_count += 1
