@@ -14,4 +14,21 @@ Oct 13th: 8 hours
 TODO:
   - add sounds to all the button transitions
   - randomize the type of marsupials each player might get
+  - fix minion +/- buttons on workshops
+  - add golem +/- buttons on workshops
+  - ranting tracks
+  - options page (ranting: off, full, text only, sound only)
 
+Research Tracks:
+  - minion cost
+  - minion/workspace efficiency (cybernetics, chimera, etc...)
+  - max golems per workspace
+  - mercenary gigs (risk minions)
+  - theft gigs (risk minions)
+  - endgame
+  - crafting:
+    - golems
+    - cyborg parts
+    - endgame part 1
+    - endgame part 2
+    - endgame part 3
