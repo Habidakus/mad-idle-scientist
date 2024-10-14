@@ -168,21 +168,17 @@ func _ready() -> void:
 	#-------
 
 	money = 3300
+	
+@export var research_track_data_sets : Array[Resource] = []
+@export var research_track : PackedScene = load("res://Scenes/research_track.tscn")
 
 func load_lab_grid() -> void:
-	var track : ResearchTrack = research_track_packed_scene.instantiate()
-	var inv1 : Invention = Invention.new()
-	inv1.init("Basic Workshop Robots", 5, self);
-	inv1.add_condition(Invention.InventionCondition.WORKSHOP_COUNT, 3)
-	track.add_invention(inv1)
-	var inv2 : Invention = Invention.new()
-	inv2.init("Simple Workshop Robots", 15, self);
-	inv2.add_condition(Invention.InventionCondition.GOLEM_COUNT, 5)
-	var inv3 : Invention = Invention.new()
-	inv3.init("Robust Workshop Robots", 50, self);
-	inv3.add_condition(Invention.InventionCondition.GOLEM_COUNT, 15)
-	track.add_invention(inv2)
-	lab_grid.add_child(track)
+	print("load_lab_grid - start");
+	for rt_data : Resource in research_track_data_sets:
+		print("load_lab_grid - processing %s" % [rt_data.resource_path]);
+		var track : ResearchTrack = research_track.instantiate()
+		track.init(self, rt_data)
+		lab_grid.add_child(track)
 	
 func is_invention_hidden(condition : Invention.InventionCondition, _threshold : float) -> bool:
 	match condition:
@@ -193,7 +189,23 @@ func is_invention_hidden(condition : Invention.InventionCondition, _threshold : 
 		_:
 			assert(false, "Unknown invention condition: %s" % [Invention.InventionCondition.find_key(condition)])
 			return false
-			
+
+var dbo0 : String
+func db0(t : String) -> void:
+	if t != dbo0:
+		dbo0 = t;
+		print(t)
+var dbo1 : String
+func db1(t : String) -> void:
+	if t != dbo1:
+		dbo1 = t;
+		print(t)
+var dbo2 : String
+func db2(t : String) -> void:
+	if t != dbo2:
+		dbo2 = t;
+		print(t)
+
 func is_invention_pending(condition : Invention.InventionCondition, threshold : float, blueprints_needed: int) -> String:
 	var blueprint_fraction : float = (blueprints as float) / (blueprints_needed as float)
 	var cond_fraction : float = 0 
@@ -205,11 +217,12 @@ func is_invention_pending(condition : Invention.InventionCondition, threshold : 
 		_:
 			assert(false, "Unknown invention condition: %s" % [Invention.InventionCondition.find_key(condition)])
 
+	db1("is_pending[%s]: b = %f, bn = %f, bf = %f, cf = %f" % [Invention.InventionCondition.find_key(condition), blueprints as float, blueprints_needed as float, blueprint_fraction, cond_fraction])
 	if blueprint_fraction >= 1.0 && cond_fraction >= 1.0:
 		return ""
 	
 	var percent : float = 50.0 * (min(1.0, blueprint_fraction) + min(1.0, cond_fraction))
-	#print("pending: b = %d, bASf = %f, bn = %d, bnASf = %f, bf = %f, cf = %f, p = %f" % [blueprints, blueprints as float, blueprints_needed, blueprints_needed as float, blueprint_fraction, cond_fraction, percent])
+	db2("pending[%s]: %.1f" % [Invention.InventionCondition.find_key(condition), percent])
 	return "%.1f%%" % [percent]
 
 func get_tab_index(tab: TabRef) -> int:
@@ -234,8 +247,7 @@ func change_tab(tab : TabRef, change : TabAction) -> void:
 		TabAction.HIGHLIGHT_TAB:
 			if !tab_container.is_tab_disabled(idx):
 				if tab_container.current_tab != idx:
-					var foo = 1
-					#print("TODO: implement highlight of Tab.%s" % TabRef.find_key(tab))
+					print("TODO: implement highlight of Tab.%s" % TabRef.find_key(tab))
 			else:
 				print("Can't highlight of Tab.%s - still hidden" % TabRef.find_key(tab))
 		_:
@@ -312,7 +324,7 @@ func set_blueprints(new_value : int) -> void:
 	blueprints_value.text = "{0}".format([blueprints])
 	if blueprints == 0:
 		return
-	if blueprints_attr.hidden:
+	if blueprints_attr.visible == false:
 		blueprints_value.show()
 		blueprints_attr.show()
 		change_tab(TabRef.LAB_TAB, TabAction.SHOW_TAB)
@@ -435,39 +447,6 @@ func add_workshop() -> void:
 	var workshop_name : String = generate_workshop_name()
 	add_child(workshop)
 	workshop.init(workshop_name, list_of_workshops_grid, workshop_array, get_available_minions())
-	
-	#var name_label : Label = Label.new()
-	#name_label.text = generate_workshop_name()
-	#name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	#name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	#list_of_workshops_grid.add_child(name_label)
-	#var minion_count_selector : SpinBox = SpinBox.new()
-	#minion_count_selector.prefix = "Minions allocated: "
-	#minion_count_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	#list_of_workshops_grid.add_child(minion_count_selector)
-	#var option_button : OptionButton = OptionButton.new()
-	#option_button.add_item("(SELECT SOMETHING)", WorkshopTask.UNASSIGNED);
-	#option_button.set_item_tooltip(WorkshopTask.UNASSIGNED, "Select something for this workshop to build");
-	#option_button.add_item("Perform mindless labor", WorkshopTask.MONEY);
-	#option_button.set_item_tooltip(WorkshopTask.MONEY, "This will generate some money");
-	#option_button.add_item("Draft blueprints", WorkshopTask.BLUEPRINT);
-	#option_button.set_item_tooltip(WorkshopTask.BLUEPRINT, "Blueprints help you invent new things");
-	#option_button.select(0)
-	#option_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	#list_of_workshops_grid.add_child(option_button)
-	#option_button.set_item_disabled(0, true)
-	#var status_label : Label = Label.new()
-	#status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	#status_label.text = "10.0 quatloos/sec";
-	#list_of_workshops_grid.add_child(status_label)
-	#
-	#var child_count = list_of_workshops_grid.get_children().size();
-	#assert(child_count % 4 == 0);
-	#var workshop_index : int = (int)(child_count / 4.0);
-	#workshop_list[workshop_index] = [WorkshopTask.UNASSIGNED, 0]
-#
-	#option_button.item_selected.connect(on_workshop_task_selected.bindv([workshop_index, option_button]))
-	#minion_count_selector.value_changed.connect(on_workshop_minion_count_changed.bindv([workshop_index, minion_count_selector]))
 
 func _on_build_workshop_pressed() -> void:
 	click_count += 1

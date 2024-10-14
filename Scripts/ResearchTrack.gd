@@ -2,23 +2,34 @@ extends Control
 
 class_name ResearchTrack
 
-var inventions : Array[Invention] = []
+#@export var invention_resources : Array[Resource] = []
+var invensions : Array[Invention] = []
 var current_index : int = 0
 
 func _ready() -> void:
+	var button : Button = ($Button as Button)
+	assert(button != null, "%s does not have a Button" % [name])
 	($Button as Button).pressed.connect(on_button_press)
 	hide()
+
+func init(game : Control, rtd : ResearchTrackData) -> void:
+	print("ResearchTrack.init() for %s" % [rtd.resource_path])
+	for i : Invention in rtd.inventions:
+		print("Adding invention %s" % [i.button_text])
+		i.set_condition_checker(game)
+		print("Adding %s" % [i.describe()])
+		invensions.append(i)
+	print("Initialized to %s" % [get_next_pending_invention().describe()])
 	
 func get_next_pending_invention() -> Invention:
-	if current_index >= inventions.size():
+	if current_index >= invensions.size():
 		return null
 	else:
-		return inventions[current_index]
-
-func add_invention(invention : Invention) -> void:
-	inventions.append(invention)
+		return invensions[current_index] as Invention
 
 func _process(_delta: float) -> void:
+	if get_parent().visible == false:
+		return
 	update()
 
 func update() -> void:
@@ -57,7 +68,8 @@ func update() -> void:
 		
 func on_button_press() -> void:
 	var pending_invention = get_next_pending_invention()
-	if pending_invention != null:
-		pending_invention.activate()
-		current_index += 1
-		update()
+	assert(pending_invention != null)
+	pending_invention.activate()
+	current_index += 1
+	print("Advancing to %s" % [get_next_pending_invention().describe()])
+	update()

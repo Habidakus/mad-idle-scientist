@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Invention" load_steps=2 format=3 uid="uid://w2dxkfgyfd0v"]
+
+[ext_resource type="Script" path="res://Scripts/Invention.gd" id="1_1ianq"]
+
+[resource]
+script = ExtResource("1_1ianq")
+condition = 2
+condition_threshold = 15.0
+blueprint_cost = 50
+button_text = "Robust Workshop Robots"

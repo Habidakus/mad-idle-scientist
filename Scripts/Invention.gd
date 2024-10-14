@@ -1,4 +1,4 @@
-extends Node
+extends Resource
 
 class_name Invention
 
@@ -7,23 +7,32 @@ enum InventionCondition {
 	WORKSHOP_COUNT,
 	GOLEM_COUNT,
 }
-var condition : InventionCondition = InventionCondition.UNSET
-var condition_threshold : float = -1;
-var blueprint_cost : int = -1;
-var button_text : String = "unset"
+
+@export var condition : InventionCondition = InventionCondition.UNSET
+@export var condition_threshold : float = -1;
+@export var blueprint_cost : int = -1;
+@export var button_text : String = "unset"
 var condition_checker : Control = null
 
-func init(bname : String, cost : int, game : Control) -> void:
+#func init(bname : String, cost : int, game : Control) -> void:
+	#condition_checker = game
+	#blueprint_cost = cost
+	#button_text = bname
+	
+func describe() -> String:
+	return "%s: %s >= %f && blueprints >= %d" % [button_text, InventionCondition.find_key(condition), condition_threshold, blueprint_cost]
+
+func set_condition_checker(game : Control) -> void:
 	condition_checker = game
-	blueprint_cost = cost
-	button_text = bname
 
 func add_condition(cond : InventionCondition, amount : float) -> void:
 	condition = cond
 	condition_threshold = amount
 
 func is_hidden() -> bool:
-	return condition_checker.is_invention_hidden(condition, condition_threshold)
+	var retVal : bool = condition_checker.is_invention_hidden(condition, condition_threshold)
+	condition_checker.db0("isHidden[%s, %s] = %s" % [button_text, InventionCondition.find_key(condition), str(retVal)])
+	return retVal
 
 var eta_text : String
 func is_pending() -> bool:

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Invention" load_steps=2 format=3 uid="uid://dxk64h2o5nh2m"]
+
+[ext_resource type="Script" path="res://Scripts/Invention.gd" id="1_etfnl"]
+
+[resource]
+script = ExtResource("1_etfnl")
+condition = 1
+condition_threshold = 3.0
+blueprint_cost = 5
+button_text = "Primative Workshop Robots"

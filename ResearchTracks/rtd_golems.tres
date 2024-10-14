@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ResearchTrackData" load_steps=5 format=3 uid="uid://xnnlqrtn0vui"]
+
+[ext_resource type="Resource" uid="uid://dxk64h2o5nh2m" path="res://ResearchTracks/Golem1.tres" id="1_ex34w"]
+[ext_resource type="Script" path="res://Scripts/ResearchTrackData.gd" id="1_x2th4"]
+[ext_resource type="Resource" uid="uid://dkuakmqdi0yds" path="res://ResearchTracks/Golem2.tres" id="2_148pu"]
+[ext_resource type="Resource" uid="uid://w2dxkfgyfd0v" path="res://ResearchTracks/Golem3.tres" id="3_jkjp7"]
+
+[resource]
+script = ExtResource("1_x2th4")
+inventions = Array[Resource]([ExtResource("1_ex34w"), ExtResource("2_148pu"), ExtResource("3_jkjp7")])
