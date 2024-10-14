@@ -3,12 +3,11 @@ extends Node
 class_name Workshop
 
 enum WorkshopTask {
-	UNASSIGNED,
 	MONEY,
 	BLUEPRINT,
 	GOLEMS,
 }
-var task : WorkshopTask = WorkshopTask.UNASSIGNED
+var task : WorkshopTask = WorkshopTask.MONEY
 var minion_count : int = 0
 
 var name_label : Label = Label.new()
@@ -28,8 +27,6 @@ func init(workshop_name : String, grid_container : GridContainer, workshop_list 
 	minion_count_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	minion_count_selector.max_value = available_minions
 	grid_container.add_child(minion_count_selector)
-	option_button.add_item("(SELECT SOMETHING)", WorkshopTask.UNASSIGNED);
-	option_button.set_item_tooltip(WorkshopTask.UNASSIGNED, "Select something for this workshop to build");
 	option_button.add_item("Perform mindless labor", WorkshopTask.MONEY);
 	option_button.set_item_tooltip(WorkshopTask.MONEY, "This will generate some money");
 	option_button.add_item("Draft blueprints", WorkshopTask.BLUEPRINT);
@@ -55,8 +52,6 @@ var partial_blueprints : float = 0
 func process(delta : float) -> void:
 	var minion_strength : float = sqrt(minion_count)
 	match task:
-		WorkshopTask.UNASSIGNED:
-			pass
 		WorkshopTask.MONEY:
 			partial_money += get_parent().minion_money_delta * minion_strength * delta
 			if partial_money >= 1.0:
@@ -75,24 +70,18 @@ func process(delta : float) -> void:
 func update_status() -> void:
 	var minion_strength : float = sqrt(minion_count)
 	match task:
-		WorkshopTask.UNASSIGNED:
-			status_label.text = "(doing nothing)";
 		WorkshopTask.MONEY:
 			var dollars_per_second : float = get_parent().minion_money_delta * minion_strength
-			status_label.text = "$%.2f/sec" % dollars_per_second;
+			status_label.text = "$%.0f/sec" % dollars_per_second;
 		WorkshopTask.BLUEPRINT:
 			var blueprints_per_second : float = get_parent().minion_blueprints_delta * minion_strength
 			status_label.text = "%.2f blueprints/sec" % blueprints_per_second;
 		_:
 			status_label.text = "TASK UNKNOWN"
 
-var still_has_unassigned_task : bool = true
 func on_workshop_task_selected(index : int) -> void:
 	task = option_button.get_item_id(index) as WorkshopTask
-	if task != WorkshopTask.UNASSIGNED && still_has_unassigned_task:
-		still_has_unassigned_task = false
-		option_button.remove_item(option_button.get_item_index(WorkshopTask.UNASSIGNED as int))
-	print("Workshop %s task changed to %s (index = %s)" % [get_workshop_name(), WorkshopTask.find_key(task), str(index)])
+	#print("Workshop %s task changed to %s (index = %s)" % [get_workshop_name(), WorkshopTask.find_key(task), str(index)])
 	option_button.selected = option_button.get_item_index(task as int)
 	get_parent().click_count += 1
 	update_status()

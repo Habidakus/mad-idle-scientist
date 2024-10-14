@@ -5,6 +5,7 @@ class_name ResearchTrack
 #@export var invention_resources : Array[Resource] = []
 var invensions : Array[Invention] = []
 var current_index : int = 0
+var lab_manager : Control = null
 
 func _ready() -> void:
 	var button : Button = ($Button as Button)
@@ -13,13 +14,14 @@ func _ready() -> void:
 	hide()
 
 func init(game : Control, rtd : ResearchTrackData) -> void:
-	print("ResearchTrack.init() for %s" % [rtd.resource_path])
+	#print("ResearchTrack.init() for %s" % [rtd.resource_path])
+	lab_manager = game
 	for i : Invention in rtd.inventions:
 		print("Adding invention %s" % [i.button_text])
 		i.set_condition_checker(game)
-		print("Adding %s" % [i.describe()])
+		#print("Adding %s" % [i.describe()])
 		invensions.append(i)
-	print("Initialized to %s" % [get_next_pending_invention().describe()])
+	#print("Initialized to %s" % [get_next_pending_invention().describe()])
 	
 func get_next_pending_invention() -> Invention:
 	if current_index >= invensions.size():
@@ -54,13 +56,15 @@ func update() -> void:
 		if $Button.visible:
 			$Button.hide()
 		if $ETA.visible == false:
-			print("Showing ETA for %s" % pending_invention.get_button_text())
+			#print("Showing ETA for %s" % pending_invention.get_button_text())
+			lab_manager.highlight_lab()
 			$ETA.show()
 		$ETA.text = pending_invention.get_eta_text()
 		return
 	else:
 		if $Button.visible == false:
-			print("Showing Button for %s" % pending_invention.get_button_text())
+			#print("Showing Button for %s" % pending_invention.get_button_text())
+			lab_manager.highlight_lab()
 			$Button.show()
 		if $ETA.visible:
 			$ETA.hide()

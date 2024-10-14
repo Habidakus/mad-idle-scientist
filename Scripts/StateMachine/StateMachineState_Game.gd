@@ -17,6 +17,7 @@ var hire_minion_button : Button = null
 var build_workshop_button : Button = null
 var list_of_workshops_grid : GridContainer = null
 var lab_grid : GridContainer = null
+var werehouse_grid : GridContainer = null;
 var augment_eta : Label = null
 var oppossum_attr : Label = null
 var oppossum_value : Label = null
@@ -24,6 +25,8 @@ var generate_money_tab : Control = null
 var workshop_tab : Control = null
 var lab_tab : Control = null
 var tab_container : TabContainer = null
+var	werehouse_tab : Control = null;
+
 var main_button_stage : int = 0
 var main_button_stages = {
 	0: ["Tinker", 0, 1, "Put away your tinkering!\nBecome a coder."],
@@ -62,6 +65,7 @@ enum TabRef {
 	GENERATE_MONEY_TAB,
 	WORKSHOP_TAB,
 	LAB_TAB,
+	WEREHOUSE_TAB,
 }
 enum TabAction {
 	HIDE_TAB,
@@ -170,6 +174,14 @@ func _ready() -> void:
 	load_lab_grid()
 	
 	#-------
+	# Werehouse
+	#-------
+
+	werehouse_tab = find_control("Werehouse");
+	change_tab(TabRef.WEREHOUSE_TAB, TabAction.HIDE_TAB)
+	werehouse_grid = find_grid_container("ListOfGoods");
+	
+	#-------
 	# Other
 	#-------
 
@@ -181,7 +193,6 @@ func _ready() -> void:
 	highlight_tab_texture = imt
 
 func load_lab_grid() -> void:
-	print("load_lab_grid - start");
 	for rt_data : Resource in research_track_data_sets:
 		print("load_lab_grid - processing %s" % [rt_data.resource_path]);
 		var track : ResearchTrack = research_track.instantiate()
@@ -225,12 +236,12 @@ func is_invention_pending(condition : Invention.InventionCondition, threshold : 
 		_:
 			assert(false, "Unknown invention condition: %s" % [Invention.InventionCondition.find_key(condition)])
 
-	db1("is_pending[%s]: b = %f, bn = %f, bf = %f, cf = %f" % [Invention.InventionCondition.find_key(condition), blueprints as float, blueprints_needed as float, blueprint_fraction, cond_fraction])
+	#db1("is_pending[%s]: b = %f, bn = %f, bf = %f, cf = %f" % [Invention.InventionCondition.find_key(condition), blueprints as float, blueprints_needed as float, blueprint_fraction, cond_fraction])
 	if blueprint_fraction >= 1.0 && cond_fraction >= 1.0:
 		return ""
 	
 	var percent : float = 50.0 * (min(1.0, blueprint_fraction) + min(1.0, cond_fraction))
-	db2("pending[%s]: %.1f" % [Invention.InventionCondition.find_key(condition), percent])
+	#db2("pending[%s]: %.1f" % [Invention.InventionCondition.find_key(condition), percent])
 	return "%.1f%%" % [percent]
 
 func get_tab_index(tab: TabRef) -> int:
@@ -242,6 +253,8 @@ func get_tab_index(tab: TabRef) -> int:
 			idx = tab_container.get_tab_idx_from_control(workshop_tab)
 		TabRef.LAB_TAB:
 			idx = tab_container.get_tab_idx_from_control(lab_tab)
+		TabRef.WEREHOUSE_TAB:
+			idx = tab_container.get_tab_idx_from_control(werehouse_tab)
 	assert(idx != -1, "Did not find tab %s in %s" % [TabRef.find_key(tab), tab_container.name])
 	return idx
 
@@ -250,8 +263,10 @@ func change_tab(tab : TabRef, change : TabAction) -> void:
 	match change:
 		TabAction.HIDE_TAB:
 			tab_container.set_tab_hidden(idx, true)
+			print("Hiding tab %s" % tab_container.get_tab_title(idx))
 		TabAction.SHOW_TAB:
 			tab_container.set_tab_hidden(idx, false)
+			print("Showing tab %s" % tab_container.get_tab_title(idx))
 		TabAction.HIGHLIGHT_TAB:
 			if !tab_container.is_tab_disabled(idx):
 				if tab_container.current_tab != idx:
@@ -327,6 +342,9 @@ func set_money(new_value : int) -> void:
 	update_minion_button()
 	update_workshop_button()
 
+func highlight_lab() -> void:
+	change_tab(TabRef.LAB_TAB, TabAction.HIGHLIGHT_TAB)
+
 func set_blueprints(new_value : int) -> void:
 	blueprints = new_value
 	blueprints_value.text = "{0}".format([blueprints])
@@ -339,7 +357,7 @@ func set_blueprints(new_value : int) -> void:
 		change_tab(TabRef.LAB_TAB, TabAction.HIGHLIGHT_TAB)
 
 func update_minion_button() -> void:
-	hire_minion_button.text = "Hire Minion\n$%.2f" % [cost_to_hire_next_minion]
+	hire_minion_button.text = "Hire Minion\n$%.0f" % [cost_to_hire_next_minion]
 	if money < cost_to_hire_next_minion:
 		hire_minion_button.set_disabled(true)
 	elif hire_minion_button.is_disabled():
@@ -347,7 +365,7 @@ func update_minion_button() -> void:
 		hire_minion_button.set_disabled(false)
 
 func update_workshop_button() -> void:
-	build_workshop_button.text = "Build Workshop\n$%.2f" % [cost_to_build_next_workshop]
+	build_workshop_button.text = "Build Workshop\n$%.0f" % [cost_to_build_next_workshop]
 	if money < cost_to_build_next_workshop:
 		build_workshop_button.set_disabled(true)
 	elif build_workshop_button.is_disabled():
