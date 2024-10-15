@@ -15,6 +15,11 @@ Oct 14th: 8 hours
 	Research Tracks are now data driven rather than hard coded
 	Workshops now build gears, muscle, and golems
 	Added highlight icon for tabs that changed
+Oct 15th: 4 hours
+	Inventory dependancies are their own data type and class
+	Present dependancy needs and research track names on the lab tab
+	Replaced all instances of golem with robot (and fixed some spelling)
+	Fixed the number of significant digits when displaying money
 
 TODO:
   - add sounds to all the button transitions
