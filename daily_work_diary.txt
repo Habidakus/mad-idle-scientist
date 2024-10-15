@@ -10,12 +10,16 @@ Oct 12th: 4 hours
 Oct 13th: 8 hours
 	Added blueprints 
 	Added structure for research tracks
+Oct 14th: 8 hours
+	Added werehouse tab
+	Research Tracks are now data driven rather than hard coded
+	Workshops now build gears, muscle, and golems
+	Added highlight icon for tabs that changed
 
 TODO:
   - add sounds to all the button transitions
   - randomize the type of marsupials each player might get
   - fix minion +/- buttons on workshops
-  - add golem +/- buttons on workshops
   - ranting tracks
   - options page (ranting: off, full, text only, sound only)
 
@@ -27,7 +31,6 @@ Research Tracks:
   - theft gigs (risk minions)
   - endgame
   - crafting:
-    - golems
     - cyborg parts
     - endgame part 1
     - endgame part 2
