@@ -5,7 +5,7 @@ class_name Workshop
 enum WorkshopTask {
 	MONEY,
 	BLUEPRINT,
-	GOLEMS,
+	ROBOTS,
 	GEARS,
 	ARTIFICIAL_MUSCLE,
 }
@@ -47,7 +47,7 @@ func init(workshop_name : String, grid_container : GridContainer, workshop_list 
 
 var partial_money : float = 0
 var partial_blueprints : float = 0
-var partial_golems : float = 0
+var partial_robots : float = 0
 var partial_gears : float = 0
 var partial_muscles : float = 0
 func process(delta : float) -> void:
@@ -60,14 +60,14 @@ func process(delta : float) -> void:
 				var earned_money : int = floor(partial_money) as int
 				partial_money -= earned_money
 				game.money += earned_money
-		WorkshopTask.GOLEMS:
-			if game.werehouse_count(SMS_Game.CraftedItemType.GEAR) > 0 && game.werehouse_count(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE) > 0:
-				partial_golems += game.minion_golems_delta * minion_strength * delta
-				while partial_golems >= 1.0:
-					game.werehouse_add(SMS_Game.CraftedItemType.GEAR, -1)
-					game.werehouse_add(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE, -1)
-					partial_golems -= 1
-					game.increase_golems()
+		WorkshopTask.ROBOTS:
+			if game.warehouse_count(SMS_Game.CraftedItemType.GEAR) > 0 && game.warehouse_count(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE) > 0:
+				partial_robots += game.minion_robots_delta * minion_strength * delta
+				while partial_robots >= 1.0:
+					game.warehouse_add(SMS_Game.CraftedItemType.GEAR, -1)
+					game.warehouse_add(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE, -1)
+					partial_robots -= 1
+					game.increase_robots()
 		WorkshopTask.BLUEPRINT:
 			partial_blueprints += game.minion_blueprints_delta * minion_strength * delta
 			if partial_blueprints >= 1.0:
@@ -79,13 +79,13 @@ func process(delta : float) -> void:
 			if partial_gears >= 1.0:
 				var earned_gears : int = floor(partial_gears) as int
 				partial_gears -= earned_gears
-				game.werehouse_add(SMS_Game.CraftedItemType.GEAR, earned_gears)
+				game.warehouse_add(SMS_Game.CraftedItemType.GEAR, earned_gears)
 		WorkshopTask.ARTIFICIAL_MUSCLE:
 			partial_muscles += game.minion_muscles_delta * minion_strength * delta
 			if partial_muscles >= 1.0:
 				var earned_muscles : int = floor(partial_muscles) as int
 				partial_muscles -= earned_muscles
-				game.werehouse_add(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE, earned_muscles)
+				game.warehouse_add(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE, earned_muscles)
 		_:
 			assert(false, "Workshops don't know how to process task %s yet" % [WorkshopTask.find_key(task)])
 
@@ -103,14 +103,14 @@ func update_status() -> void:
 		WorkshopTask.BLUEPRINT:
 			var blueprints_per_second : float = game.minion_blueprints_delta * minion_strength
 			status_label.text = "%.2f blueprints/sec" % blueprints_per_second;
-		WorkshopTask.GOLEMS:
-			if game.werehouse_count(SMS_Game.CraftedItemType.GEAR) == 0:
+		WorkshopTask.ROBOTS:
+			if game.warehouse_count(SMS_Game.CraftedItemType.GEAR) == 0:
 				status_label.text = "Stalled - no gears"
-			elif game.werehouse_count(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE) == 0:
+			elif game.warehouse_count(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE) == 0:
 				status_label.text = "Stalled - no synthetic muscle"
 			else:
-				var golems_per_second : float = game.minion_golems_delta * minion_strength
-				status_label.text = "%.2f robots/sec" % golems_per_second;
+				var robots_per_second : float = game.minion_robots_delta * minion_strength
+				status_label.text = "%.2f robots/sec" % robots_per_second;
 		WorkshopTask.GEARS:
 			var gears_per_second : float = game.minion_gears_delta * minion_strength
 			status_label.text = "%.2f gears/sec" % gears_per_second;
@@ -132,7 +132,7 @@ func on_workshop_minion_count_changed(value : float) -> void:
 	#print("Workshop %s minion count changed to %d (value = %f)" % [get_workshop_name(), minion_count, value])
 	var parent = get_parent()
 	parent.click_count += 1
-	parent.update_all_workshops()
+	parent.update_all_workshop_minions()
 	update_status()
 
 func update_available_minions(available_minions : int) -> void:

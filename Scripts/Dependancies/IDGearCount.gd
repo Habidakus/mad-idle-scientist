@@ -13,10 +13,10 @@ func describe(game : SMS_Game) -> String:
 	return retVal
 
 func is_invention_hidden(game : SMS_Game) -> bool:
-	return game.werehouse_count(SMS_Game.CraftedItemType.GEAR) == 0;
+	return game.warehouse_count(SMS_Game.CraftedItemType.GEAR) == 0;
 
 func is_invention_pending(game : SMS_Game) -> Array[String]:
-	var fraction : float = min(1.0, game.werehouse_count(SMS_Game.CraftedItemType.GEAR) as float / gear_count as float)
+	var fraction : float = min(1.0, game.warehouse_count(SMS_Game.CraftedItemType.GEAR) as float / gear_count as float)
 	var needs : Array = [[fraction, "Gears"]]
 	var total : float = 1.0
 	if blueprint_cost > 0:
@@ -39,4 +39,4 @@ func is_invention_pending(game : SMS_Game) -> Array[String]:
 func pay_for_activation(game : SMS_Game) -> void:
 	pay_money(game)
 	pay_blueprints(game)
-	game.werehouse_add(SMS_Game.CraftedItemType.GEAR, 0 - gear_count)
+	game.warehouse_add(SMS_Game.CraftedItemType.GEAR, 0 - gear_count)

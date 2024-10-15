@@ -13,10 +13,10 @@ func describe(game : SMS_Game) -> String:
 	return retVal
 
 func is_invention_hidden(game : SMS_Game) -> bool:
-	return game.total_golems == 0
+	return game.total_robots == 0
 
 func is_invention_pending(game : SMS_Game) -> Array[String]:
-	var fraction : float = min(1.0, game.total_golems as float / robot_count as float)
+	var fraction : float = min(1.0, game.total_robots as float / robot_count as float)
 	var needs : Array = [[fraction, "Robots"]]
 	var total : float = 1.0
 	if blueprint_cost > 0:

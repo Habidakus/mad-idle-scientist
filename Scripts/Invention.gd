@@ -4,7 +4,7 @@ class_name Invention
 
 enum ActivationType {
 	UNSET,
-	UNLOCK_GOLEM,
+	UNLOCK_ROBOT,
 	UNLOCK_GEARS,
 	UNLOCK_ARTIFICIAL_MUSCLE,
 }

@@ -19,7 +19,7 @@ var hire_minion_button : Button = null
 var build_workshop_button : Button = null
 var list_of_workshops_grid : GridContainer = null
 var lab_grid : GridContainer = null
-var werehouse_grid : GridContainer = null;
+var warehouse_grid : GridContainer = null;
 var augment_eta : Label = null
 var oppossum_attr : Label = null
 var oppossum_value : Label = null
@@ -27,7 +27,7 @@ var generate_money_tab : Control = null
 var workshop_tab : Control = null
 var lab_tab : Control = null
 var tab_container : TabContainer = null
-var	werehouse_tab : Control = null;
+var	warehouse_tab : Control = null;
 
 var main_button_stage : int = 0
 var main_button_stages = {
@@ -50,7 +50,7 @@ var workshop_unlock_amount : int = 3500
 
 var minion_money_delta : float = 600.0
 var minion_blueprints_delta : float = 1 / 20.0
-var minion_golems_delta : float = 1 / 20.0
+var minion_robots_delta : float = 1 / 20.0
 var minion_gears_delta : float = 1 / 20.0
 var minion_muscles_delta : float = 1 / 20.0
 
@@ -70,7 +70,7 @@ enum TabRef {
 	GENERATE_MONEY_TAB,
 	WORKSHOP_TAB,
 	LAB_TAB,
-	WEREHOUSE_TAB,
+	WAREHOUSE_TAB,
 }
 enum TabAction {
 	HIDE_TAB,
@@ -179,12 +179,12 @@ func _ready() -> void:
 	load_lab_grid()
 	
 	#-------
-	# Werehouse
+	# Warehouse
 	#-------
 
-	werehouse_tab = find_control("Werehouse");
-	change_tab(TabRef.WEREHOUSE_TAB, TabAction.HIDE_TAB)
-	werehouse_grid = find_grid_container("ListOfGoods");
+	warehouse_tab = find_control("Warehouse");
+	change_tab(TabRef.WAREHOUSE_TAB, TabAction.HIDE_TAB)
+	warehouse_grid = find_grid_container("ListOfGoods");
 	
 	#-------
 	# Other
@@ -203,22 +203,6 @@ func load_lab_grid() -> void:
 		var track : ResearchTrack = research_track.instantiate()
 		track.init(self, rt_data)
 		lab_grid.add_child(track)
-	
-#func is_invention_hidden(condition : Invention.InventionCondition, _threshold : float) -> bool:
-	#match condition:
-		#Invention.InventionCondition.WORKSHOP_COUNT:
-			#return workshop_array.is_empty()
-		#Invention.InventionCondition.GOLEM_COUNT:
-			#return total_golems == 0
-		#Invention.InventionCondition.GEAR_COUNT:
-			#return werehouse_count(CraftedItemType.GEAR) == 0
-		#Invention.InventionCondition.ARTIFICIAL_MUSCLE_COUNT:
-			#return werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) == 0
-		#Invention.InventionCondition.GEAR_AND_MUSCLE_COUNT:
-			#return werehouse_count(CraftedItemType.GEAR) == 0 || werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) == 0
-		#_:
-			#assert(false, "Unknown invention condition: %s" % [Invention.InventionCondition.find_key(condition)])
-			#return false
 
 var dbo0 : String
 func db0(t : String) -> void:
@@ -236,55 +220,30 @@ func db2(t : String) -> void:
 		dbo2 = t;
 		print(t)
 
-#func is_invention_pending(condition : Invention.InventionCondition, threshold : float, blueprints_needed: int) -> String:
-	#var blueprint_fraction : float = (blueprints as float) / (blueprints_needed as float)
-	#var cond_fraction : float = 0 
-	#match condition:
-		#Invention.InventionCondition.WORKSHOP_COUNT:
-			#cond_fraction = workshop_array.size() as float / threshold
-		#Invention.InventionCondition.GOLEM_COUNT:
-			#cond_fraction = total_golems as float / threshold
-		#Invention.InventionCondition.GEAR_COUNT:
-			#cond_fraction = werehouse_count(CraftedItemType.GEAR) as float / threshold
-		#Invention.InventionCondition.ARTIFICIAL_MUSCLE_COUNT:
-			#cond_fraction = werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) as float / threshold
-		#Invention.InventionCondition.GEAR_AND_MUSCLE_COUNT:
-			#var g : float = werehouse_count(CraftedItemType.GEAR) as float / threshold
-			#var am : float = werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) as float / threshold
-			#cond_fraction = (min(1.0, g) + min(1.0, am)) / 2.0
-		#_:
-			#assert(false, "Unknown invention condition: %s" % [Invention.InventionCondition.find_key(condition)])
-#
-	##db1("is_pending[%s]: b = %f, bn = %f, bf = %f, cf = %f" % [Invention.InventionCondition.find_key(condition), blueprints as float, blueprints_needed as float, blueprint_fraction, cond_fraction])
-	#if blueprint_fraction >= 1.0 && cond_fraction >= 1.0:
-		#return ""
-	#
-	#var percent : float = 50.0 * (min(1.0, blueprint_fraction) + min(1.0, cond_fraction))
-	##db2("pending[%s]: %.1f" % [Invention.InventionCondition.find_key(condition), percent])
-	#return "%.1f%%" % [percent]
-
 enum CraftedItemType {
 	GEAR,
 	ARTIFICIAL_MUSCLE,
 }
-var werehouse_holdings : Dictionary = {}
-func werehouse_count(item_type : CraftedItemType) -> int:
-	if werehouse_holdings.has(item_type):
-		return werehouse_holdings[item_type] as int
+var warehouse_holdings : Dictionary = {}
+func warehouse_count(item_type : CraftedItemType) -> int:
+	if warehouse_holdings.has(item_type):
+		return warehouse_holdings[item_type] as int
 	else:
 		return 0
 
-var werehouse_account_label_mapping : Dictionary = {}
-func werehouse_add(item_type: CraftedItemType, amount: int) -> void:
-	if werehouse_holdings.has(item_type):
-		werehouse_holdings[item_type] += amount
+var warehouse_account_label_mapping : Dictionary = {}
+func warehouse_add(item_type: CraftedItemType, amount: int) -> void:
+	if warehouse_holdings.has(item_type):
+		warehouse_holdings[item_type] += amount
+		if warehouse_holdings[item_type] == 0:
+			update_all_workshop_status()
 	else:
-		werehouse_holdings[item_type] = amount
-		change_tab(TabRef.WEREHOUSE_TAB, TabAction.SHOW_TAB)
-		change_tab(TabRef.WEREHOUSE_TAB, TabAction.HIGHLIGHT_TAB)
+		warehouse_holdings[item_type] = amount
+		change_tab(TabRef.WAREHOUSE_TAB, TabAction.SHOW_TAB)
+		change_tab(TabRef.WAREHOUSE_TAB, TabAction.HIGHLIGHT_TAB)
 	
-	if werehouse_account_label_mapping.has(item_type as int):
-		werehouse_account_label_mapping[item_type as int].text = str(werehouse_holdings[item_type])
+	if warehouse_account_label_mapping.has(item_type as int):
+		warehouse_account_label_mapping[item_type as int].text = str(warehouse_holdings[item_type])
 	else:
 		var mc = MarginContainer.new()
 		mc.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -293,12 +252,12 @@ func werehouse_add(item_type: CraftedItemType, amount: int) -> void:
 		l.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		mc.add_child(l)
 		var a = Label.new()
-		a.text = str(werehouse_holdings[item_type])
+		a.text = str(warehouse_holdings[item_type])
 		a.size_flags_horizontal = Control.SIZE_SHRINK_END
 		mc.add_child(a)
-		werehouse_grid.add_child(mc)
-		werehouse_account_label_mapping[item_type as int] = a
-		assert(werehouse_account_label_mapping.has(item_type as int))
+		warehouse_grid.add_child(mc)
+		warehouse_account_label_mapping[item_type as int] = a
+		assert(warehouse_account_label_mapping.has(item_type as int))
 
 func get_tab_index(tab: TabRef) -> int:
 	var idx : int = -1;
@@ -309,8 +268,8 @@ func get_tab_index(tab: TabRef) -> int:
 			idx = tab_container.get_tab_idx_from_control(workshop_tab)
 		TabRef.LAB_TAB:
 			idx = tab_container.get_tab_idx_from_control(lab_tab)
-		TabRef.WEREHOUSE_TAB:
-			idx = tab_container.get_tab_idx_from_control(werehouse_tab)
+		TabRef.WAREHOUSE_TAB:
+			idx = tab_container.get_tab_idx_from_control(warehouse_tab)
 	assert(idx != -1, "Did not find tab %s in %s" % [TabRef.find_key(tab), tab_container.name])
 	return idx
 
@@ -414,7 +373,7 @@ func set_blueprints(new_value : int) -> void:
 
 var workshop_types_unlocked : Array[Workshop.WorkshopTask] = []
 var workshop_types : Dictionary = {
-	Invention.ActivationType.UNLOCK_GOLEM: [false, Workshop.WorkshopTask.GOLEMS, "Craft Robots", "Robots will work with minions in workshops"],
+	Invention.ActivationType.UNLOCK_ROBOT: [false, Workshop.WorkshopTask.ROBOTS, "Craft Robots", "Robots will work with minions in workshops"],
 	Invention.ActivationType.UNLOCK_GEARS: [false, Workshop.WorkshopTask.GEARS, "Craft Gears", "Gears will help you craft other things"],
 	Invention.ActivationType.UNLOCK_ARTIFICIAL_MUSCLE: [false, Workshop.WorkshopTask.ARTIFICIAL_MUSCLE, "Craft Synthetic Muscle", "Synthetic muscle will help you craft other things" ],
 }
@@ -457,12 +416,30 @@ func money_string(dollars : float) -> String:
 		return "$%.0f" % dollars
 	
 	if dollars < 1000000:
-		return "%.1fK" % (dollars / 1000.0)
+		var k = dollars / 1000.0
+		if k < 10:
+			return "%.2fK" % k
+		elif k < 100:
+			return "%.1fK" % k
+		else:
+			return "%.0fK" % k
 
 	if dollars < 1000000000:
-		return "%.1fM" % (dollars / 1000000.0)
+		var m = dollars / 1000000.0
+		if m < 10:
+			return "%.2fM" % m
+		elif m < 100:
+			return "%.1fM" % m
+		else:
+			return "%.0fM" % m
 
-	return "%.1fB" % (dollars / 1000000000.0)
+	var b = dollars / 1000000000.0
+	if b < 10:
+		return "%.2fB" % b
+	elif b < 100:
+		return "%.1fB" % b
+	else:
+		return "%.0fB" % b
 
 func update_minion_button() -> void:
 	hire_minion_button.text = "Hire Minion\n%s" % money_string(cost_to_hire_next_minion)
@@ -516,13 +493,13 @@ func _on_workshops_button_pressed() -> void:
 	change_tab(TabRef.WORKSHOP_TAB, TabAction.SHOW_TAB)
 	change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
 
-var total_golems : int = 0
+var total_robots : int = 0
 var total_minions : int = 0
 
-func increase_golems() -> void:
-	total_golems += 1
+func increase_robots() -> void:
+	total_robots += 1
 	update_minion_button()
-	update_all_workshops()
+	update_all_workshop_minions()
 
 func _on_hire_minion_pressed() -> void:
 	click_count += 1
@@ -530,7 +507,7 @@ func _on_hire_minion_pressed() -> void:
 	total_minions += 1
 	cost_to_hire_next_minion = (int) (cost_to_hire_next_minion * cost_to_nire_next_minion_multiplier)
 	update_minion_button()
-	update_all_workshops()
+	update_all_workshop_minions()
 
 var workshop_name_index_a : int = -1
 var workshop_name_index_b : int = -1
@@ -564,7 +541,7 @@ func generate_workshop_name() -> String:
 var workshop_array : Array[Workshop] = []
 
 func get_available_minions() -> int:
-	var retVal : int = total_minions + total_golems
+	var retVal : int = total_minions + total_robots
 	for workshop in workshop_array:
 		retVal -= workshop.minion_count
 	return retVal
@@ -573,7 +550,11 @@ func process_workshops(delta: float) -> void:
 	for workshop in workshop_array:
 		workshop.process(delta)
 
-func update_all_workshops() -> void:
+func update_all_workshop_status() -> void:
+	for workshop in workshop_array:
+		workshop.update_status()
+	
+func update_all_workshop_minions() -> void:
 	var available_minions : int = get_available_minions()
 	if available_minions > 0 && idle_attr.hidden:
 		idle_attr.show()

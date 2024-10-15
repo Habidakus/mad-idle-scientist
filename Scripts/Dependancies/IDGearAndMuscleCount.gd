@@ -14,11 +14,11 @@ func describe(game : SMS_Game) -> String:
 	return retVal
 
 func is_invention_hidden(game : SMS_Game) -> bool:
-	return game.werehouse_count(SMS_Game.CraftedItemType.GEAR) == 0 || game.werehouse_count(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE) == 0;
+	return game.warehouse_count(SMS_Game.CraftedItemType.GEAR) == 0 || game.warehouse_count(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE) == 0;
 
 func is_invention_pending(game : SMS_Game) -> Array[String]:
-	var g_fraction : float = min(1.0, game.werehouse_count(SMS_Game.CraftedItemType.GEAR) as float / gear_count as float)
-	var am_fraction : float = min(1.0, game.werehouse_count(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE) as float / muscle_count as float)
+	var g_fraction : float = min(1.0, game.warehouse_count(SMS_Game.CraftedItemType.GEAR) as float / gear_count as float)
+	var am_fraction : float = min(1.0, game.warehouse_count(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE) as float / muscle_count as float)
 	var fraction : float = g_fraction + am_fraction
 	var needs : Array = [[g_fraction, "Gears"], [am_fraction, "Synthetic Muscle"]]
 	var total : float = 2.0
@@ -42,5 +42,5 @@ func is_invention_pending(game : SMS_Game) -> Array[String]:
 func pay_for_activation(game : SMS_Game) -> void:
 	pay_money(game)
 	pay_blueprints(game)
-	game.werehouse_add(SMS_Game.CraftedItemType.GEAR, 0 - gear_count)
-	game.werehouse_add(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE, 0 - muscle_count)
+	game.warehouse_add(SMS_Game.CraftedItemType.GEAR, 0 - gear_count)
+	game.warehouse_add(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE, 0 - muscle_count)
