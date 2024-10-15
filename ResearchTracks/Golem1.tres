@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_etfnl")
-condition = 1
+condition = 5
 condition_threshold = 3.0
 blueprint_cost = 5
 button_text = "Primative Workshop Robots"

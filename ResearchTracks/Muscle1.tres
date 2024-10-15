@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Invention" load_steps=2 format=3 uid="uid://bn7m3twhgdk4l"]
+
+[ext_resource type="Script" path="res://Scripts/Invention.gd" id="1_6smbh"]
+
+[resource]
+script = ExtResource("1_6smbh")
+condition = 1
+condition_threshold = 3.0
+blueprint_cost = 3
+button_text = "Synthetic Muscle"
+activation_type = 3
+activation_amount = 1

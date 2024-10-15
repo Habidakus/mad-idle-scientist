@@ -7,6 +7,8 @@ enum InventionCondition {
 	WORKSHOP_COUNT,
 	GOLEM_COUNT,
 	GEAR_COUNT,
+	ARTIFICIAL_MUSCLE_COUNT,
+	GEAR_AND_MUSCLE_COUNT,
 }
 
 enum ActivationType {
@@ -41,7 +43,7 @@ func add_condition(cond : InventionCondition, amount : float) -> void:
 
 func is_hidden() -> bool:
 	var retVal : bool = condition_checker.is_invention_hidden(condition, condition_threshold)
-	condition_checker.db0("isHidden[%s, %s] = %s" % [button_text, InventionCondition.find_key(condition), str(retVal)])
+	#condition_checker.db0("isHidden[%s, %s] = %s" % [button_text, InventionCondition.find_key(condition), str(retVal)])
 	return retVal
 
 var eta_text : String

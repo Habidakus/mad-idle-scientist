@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://c58yyta2hdulp"]
+[gd_scene load_steps=9 format=3 uid="uid://c58yyta2hdulp"]
 
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_Game.gd" id="1_fiind"]
 [ext_resource type="Script" path="res://Scripts/Decorators/ControlDecorator.gd" id="2_f1jsb"]
 [ext_resource type="Resource" uid="uid://xnnlqrtn0vui" path="res://ResearchTracks/rtd_golems.tres" id="2_unryd"]
 [ext_resource type="PackedScene" uid="uid://cif1udarhmm2c" path="res://Scenes/research_track.tscn" id="3_5j0ak"]
+[ext_resource type="Resource" uid="uid://bfs22cxftqca0" path="res://ResearchTracks/rtd_gears.tres" id="3_rvlh5"]
 [ext_resource type="Theme" uid="uid://cqjlv35tewje1" path="res://theme.tres" id="3_yf0vc"]
+[ext_resource type="Resource" uid="uid://b6lgcgt7gcvtj" path="res://ResearchTracks/rtd_muscle.tres" id="4_ohmf4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cut1r"]
 
@@ -16,7 +18,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_fiind")
-research_track_data_sets = Array[Resource]([ExtResource("2_unryd")])
+research_track_data_sets = Array[Resource]([ExtResource("2_unryd"), ExtResource("3_rvlh5"), ExtResource("4_ohmf4")])
 research_track = ExtResource("3_5j0ak")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]

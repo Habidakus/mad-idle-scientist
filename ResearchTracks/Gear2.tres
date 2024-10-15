@@ -4,9 +4,9 @@
 
 [resource]
 script = ExtResource("1_hjpph")
-condition = 1
-condition_threshold = 2.0
-blueprint_cost = 5
-button_text = "Robot Gears"
+condition = 3
+condition_threshold = 200.0
+blueprint_cost = 50
+button_text = "Krell Metal Gears"
 activation_type = 2
 activation_amount = 2

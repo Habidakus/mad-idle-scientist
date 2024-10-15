@@ -75,5 +75,7 @@ func on_button_press() -> void:
 	assert(pending_invention != null)
 	pending_invention.activate()
 	current_index += 1
-	print("Advancing to %s" % [get_next_pending_invention().describe()])
+	var next = get_next_pending_invention()
+	if next != null:
+		print("Advancing to %s" % [next.describe()])
 	update()

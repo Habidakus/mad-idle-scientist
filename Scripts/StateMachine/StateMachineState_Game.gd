@@ -1,5 +1,7 @@
 extends StateMachineState
 
+class_name SMS_Game
+
 var click_count : int = 0 : set = set_click_count
 var money : int = 0 : set = set_money
 var blueprints : int = 0 : set = set_blueprints
@@ -48,6 +50,9 @@ var workshop_unlock_amount : int = 3500
 
 var minion_money_delta : float = 600.0
 var minion_blueprints_delta : float = 1 / 20.0
+var minion_golems_delta : float = 1 / 20.0
+var minion_gears_delta : float = 1 / 20.0
+var minion_muscles_delta : float = 1 / 20.0
 
 var augment_remainder : float = 0
 var augment_amount : float = 0
@@ -205,6 +210,12 @@ func is_invention_hidden(condition : Invention.InventionCondition, _threshold : 
 			return workshop_array.is_empty()
 		Invention.InventionCondition.GOLEM_COUNT:
 			return total_golems == 0
+		Invention.InventionCondition.GEAR_COUNT:
+			return werehouse_count(CraftedItemType.GEAR) == 0
+		Invention.InventionCondition.ARTIFICIAL_MUSCLE_COUNT:
+			return werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) == 0
+		Invention.InventionCondition.GEAR_AND_MUSCLE_COUNT:
+			return werehouse_count(CraftedItemType.GEAR) == 0 || werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) == 0
 		_:
 			assert(false, "Unknown invention condition: %s" % [Invention.InventionCondition.find_key(condition)])
 			return false
@@ -233,6 +244,14 @@ func is_invention_pending(condition : Invention.InventionCondition, threshold : 
 			cond_fraction = workshop_array.size() as float / threshold
 		Invention.InventionCondition.GOLEM_COUNT:
 			cond_fraction = total_golems as float / threshold
+		Invention.InventionCondition.GEAR_COUNT:
+			cond_fraction = werehouse_count(CraftedItemType.GEAR) as float / threshold
+		Invention.InventionCondition.ARTIFICIAL_MUSCLE_COUNT:
+			cond_fraction = werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) as float / threshold
+		Invention.InventionCondition.GEAR_AND_MUSCLE_COUNT:
+			var g : float = werehouse_count(CraftedItemType.GEAR) as float / threshold
+			var am : float = werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) as float / threshold
+			cond_fraction = (min(1.0, g) + min(1.0, am)) / 2.0
 		_:
 			assert(false, "Unknown invention condition: %s" % [Invention.InventionCondition.find_key(condition)])
 
@@ -243,6 +262,39 @@ func is_invention_pending(condition : Invention.InventionCondition, threshold : 
 	var percent : float = 50.0 * (min(1.0, blueprint_fraction) + min(1.0, cond_fraction))
 	#db2("pending[%s]: %.1f" % [Invention.InventionCondition.find_key(condition), percent])
 	return "%.1f%%" % [percent]
+
+enum CraftedItemType {
+	GEAR,
+	ARTIFICIAL_MUSCLE,
+}
+var werehouse_holdings : Dictionary = {}
+func werehouse_count(item_type : CraftedItemType) -> int:
+	if werehouse_holdings.has(item_type):
+		return werehouse_holdings[item_type] as int
+	else:
+		return 0
+
+func werehouse_add(item_type: CraftedItemType, amount: int) -> void:
+	if werehouse_holdings.has(item_type):
+		werehouse_holdings[item_type] += amount
+	else:
+		werehouse_holdings[item_type] = amount
+		change_tab(TabRef.WEREHOUSE_TAB, TabAction.SHOW_TAB)
+		change_tab(TabRef.WEREHOUSE_TAB, TabAction.HIGHLIGHT_TAB)
+	var it_name = CraftedItemType.find_key(item_type)
+	var existing_child = werehouse_grid.find_child(it_name)
+	if existing_child == null:
+		var mc = MarginContainer.new()
+		mc.name = it_name
+		var l = Label.new()
+		l.text = it_name
+		mc.add_child(l)
+		var a = Label.new()
+		a.text = str(werehouse_holdings[item_type])
+		mc.add_child(a)
+		werehouse_grid.add_child(mc)
+	else:
+		existing_child.get_child(1).text = str(werehouse_holdings[item_type])
 
 func get_tab_index(tab: TabRef) -> int:
 	var idx : int = -1;
@@ -289,7 +341,7 @@ func _process(delta: float) -> void:
 	update_augment_button_fraction(delta, 1)
 	if augment_amount > 0:
 		augment_remainder += delta * augment_amount * main_button_stages[main_button_stage][2]
-		oppossum_value.text = "$%.2f/sec" % (augment_amount * main_button_stages[main_button_stage][2])
+		oppossum_value.text = "%s/sec" % money_string(augment_amount * main_button_stages[main_button_stage][2])
 		if augment_remainder >= 1.0:
 			money += (int)(augment_remainder)
 			augment_remainder -= floor(augment_remainder)
@@ -329,7 +381,7 @@ func update_augment_button_fraction(amount: float, index: int) -> void:
 func set_money(new_value : int) -> void:
 	money = new_value
 	if money > 0:
-		money_label.text = "${0}".format([money])
+		money_label.text = money_string(money)
 	if main_button_stage + 1 < main_button_stages.size():
 		if money >= main_button_stages[main_button_stage + 1][1]:
 			unlock_button.text = main_button_stages[main_button_stage][3]
@@ -347,7 +399,7 @@ func highlight_lab() -> void:
 
 func set_blueprints(new_value : int) -> void:
 	blueprints = new_value
-	blueprints_value.text = "{0}".format([blueprints])
+	blueprints_value.text = str(blueprints)
 	if blueprints == 0:
 		return
 	if blueprints_attr.visible == false:
@@ -358,25 +410,30 @@ func set_blueprints(new_value : int) -> void:
 
 var workshop_types_unlocked : Array[Workshop.WorkshopTask] = []
 var workshop_types : Dictionary = {
-	Invention.ActivationType.UNLOCK_GOLEM: [false, Workshop.WorkshopTask.GOLEMS, "Craft Robots", "Robots will help you out in workshops"],
+	Invention.ActivationType.UNLOCK_GOLEM: [false, Workshop.WorkshopTask.GOLEMS, "Craft Robots", "Robots will work with minions in workshops"],
 	Invention.ActivationType.UNLOCK_GEARS: [false, Workshop.WorkshopTask.GEARS, "Craft Gears", "Gears will help you craft other things"],
 	Invention.ActivationType.UNLOCK_ARTIFICIAL_MUSCLE: [false, Workshop.WorkshopTask.ARTIFICIAL_MUSCLE, "Craft Synthetic Muscle", "Synthetic muscle will help you craft other things" ],
 }
 
+func add_text_and_tooltip_to_id(option_button : OptionButton, task : Workshop.WorkshopTask, item_name : String, item_tooltip : String) -> int:
+	option_button.add_item(item_name, task);
+	var index : int = option_button.get_item_index(task)
+	option_button.set_item_tooltip(index, item_tooltip);
+	return index
+
 func populate_workshop_option_button(option_button : OptionButton) -> void:
 	if option_button.get_item_index(Workshop.WorkshopTask.MONEY) == -1:
-		option_button.add_item("Perform mindless labor", Workshop.WorkshopTask.MONEY);
-		option_button.set_item_tooltip(Workshop.WorkshopTask.MONEY, "This will generate some money");
-		option_button.select(0)
+		var index = add_text_and_tooltip_to_id(option_button, Workshop.WorkshopTask.MONEY, "Perform mindless labor", "This will generate some money")
+		#option_button.add_item("Perform mindless labor", Workshop.WorkshopTask.MONEY);
+		#option_button.set_item_tooltip(Workshop.WorkshopTask.MONEY, "This will generate some money");
+		option_button.select(index)
 	if option_button.get_item_index(Workshop.WorkshopTask.BLUEPRINT) == -1:
-		option_button.add_item("Draft blueprints", Workshop.WorkshopTask.BLUEPRINT);
-		option_button.set_item_tooltip(Workshop.WorkshopTask.BLUEPRINT, "Blueprints help you invent new things");
+		add_text_and_tooltip_to_id(option_button, Workshop.WorkshopTask.BLUEPRINT, "Draft blueprints",  "Blueprints help you invent new things")
 	for key in workshop_types.keys():
 		var data = workshop_types[key]
 		if data[0]:
 			if option_button.get_item_index(data[1]) == -1:
-				option_button.add_item(data[2], data[1])
-				option_button.set_item_tooltip(data[1], data[3])
+				add_text_and_tooltip_to_id(option_button, data[1], data[2], data[3])
 
 func activate_invention(blueprint_cost : int, activation_type : Invention.ActivationType, _activation_amount : int) -> void:
 	assert(blueprints >= blueprint_cost)
@@ -390,8 +447,23 @@ func activate_invention(blueprint_cost : int, activation_type : Invention.Activa
 	else:
 		assert(false, "Can't activate invention for %s - no matching workshop" % [Invention.ActivationType.find_key(activation_type)])
 
+func money_string(dollars : float) -> String:
+	if dollars < 100:
+		return "$%.2f" % dollars
+	
+	if dollars < 1000:
+		return "$%.0f" % dollars
+	
+	if dollars < 1000000:
+		return "%.1fK" % (dollars / 1000.0)
+
+	if dollars < 1000000000:
+		return "%.1fM" % (dollars / 1000000.0)
+
+	return "%.1fB" % (dollars / 1000000000.0)
+
 func update_minion_button() -> void:
-	hire_minion_button.text = "Hire Minion\n$%.0f" % [cost_to_hire_next_minion]
+	hire_minion_button.text = "Hire Minion\n%s" % money_string(cost_to_hire_next_minion)
 	if money < cost_to_hire_next_minion:
 		hire_minion_button.set_disabled(true)
 	elif hire_minion_button.is_disabled():
@@ -399,7 +471,7 @@ func update_minion_button() -> void:
 		hire_minion_button.set_disabled(false)
 
 func update_workshop_button() -> void:
-	build_workshop_button.text = "Build Workshop\n$%.0f" % [cost_to_build_next_workshop]
+	build_workshop_button.text = "Build Workshop\n%s" % money_string(cost_to_build_next_workshop)
 	if money < cost_to_build_next_workshop:
 		build_workshop_button.set_disabled(true)
 	elif build_workshop_button.is_disabled():
@@ -444,6 +516,12 @@ func _on_workshops_button_pressed() -> void:
 
 var total_golems : int = 0
 var total_minions : int = 0
+
+func increase_golems() -> void:
+	total_golems += 1
+	update_minion_button()
+	update_all_workshops()
+
 func _on_hire_minion_pressed() -> void:
 	click_count += 1
 	money -= cost_to_hire_next_minion
@@ -484,7 +562,7 @@ func generate_workshop_name() -> String:
 var workshop_array : Array[Workshop] = []
 
 func get_available_minions() -> int:
-	var retVal : int = total_minions
+	var retVal : int = total_minions + total_golems
 	for workshop in workshop_array:
 		retVal -= workshop.minion_count
 	return retVal

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ResearchTrackData" load_steps=4 format=3 uid="uid://b6lgcgt7gcvtj"]
+
+[ext_resource type="Resource" uid="uid://bn7m3twhgdk4l" path="res://ResearchTracks/Muscle1.tres" id="1_ikmtg"]
+[ext_resource type="Resource" uid="uid://bidt2apipsxcv" path="res://ResearchTracks/Muscle2.tres" id="2_wt5ru"]
+[ext_resource type="Script" path="res://Scripts/ResearchTrackData.gd" id="3_s8ljg"]
+
+[resource]
+script = ExtResource("3_s8ljg")
+inventions = Array[Resource]([ExtResource("1_ikmtg"), ExtResource("2_wt5ru")])

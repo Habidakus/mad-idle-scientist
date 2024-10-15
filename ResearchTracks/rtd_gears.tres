@@ -1,7 +1,9 @@
-[gd_resource type="Resource" script_class="ResearchTrackData" load_steps=2 format=3 uid="uid://bfs22cxftqca0"]
+[gd_resource type="Resource" script_class="ResearchTrackData" load_steps=4 format=3 uid="uid://bfs22cxftqca0"]
 
+[ext_resource type="Resource" uid="uid://cbr2ltesea5f8" path="res://ResearchTracks/Gear1.tres" id="1_wtxov"]
 [ext_resource type="Script" path="res://Scripts/ResearchTrackData.gd" id="1_y6g4r"]
+[ext_resource type="Resource" uid="uid://dxlyncl7fshqm" path="res://ResearchTracks/Gear2.tres" id="2_ghpco"]
 
 [resource]
 script = ExtResource("1_y6g4r")
-inventions = Array[Resource]([])
+inventions = Array[Resource]([ExtResource("1_wtxov"), ExtResource("2_ghpco")])
