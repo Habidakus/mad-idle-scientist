@@ -274,6 +274,7 @@ func werehouse_count(item_type : CraftedItemType) -> int:
 	else:
 		return 0
 
+var werehouse_account_label_mapping : Dictionary = {}
 func werehouse_add(item_type: CraftedItemType, amount: int) -> void:
 	if werehouse_holdings.has(item_type):
 		werehouse_holdings[item_type] += amount
@@ -281,20 +282,23 @@ func werehouse_add(item_type: CraftedItemType, amount: int) -> void:
 		werehouse_holdings[item_type] = amount
 		change_tab(TabRef.WEREHOUSE_TAB, TabAction.SHOW_TAB)
 		change_tab(TabRef.WEREHOUSE_TAB, TabAction.HIGHLIGHT_TAB)
-	var it_name = CraftedItemType.find_key(item_type)
-	var existing_child = werehouse_grid.find_child(it_name)
-	if existing_child == null:
+	
+	if werehouse_account_label_mapping.has(item_type as int):
+		werehouse_account_label_mapping[item_type as int].text = str(werehouse_holdings[item_type])
+	else:
 		var mc = MarginContainer.new()
-		mc.name = it_name
+		mc.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var l = Label.new()
-		l.text = it_name
+		l.text = "%s: " % [CraftedItemType.find_key(item_type)]
+		l.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		mc.add_child(l)
 		var a = Label.new()
 		a.text = str(werehouse_holdings[item_type])
+		a.size_flags_horizontal = Control.SIZE_SHRINK_END
 		mc.add_child(a)
 		werehouse_grid.add_child(mc)
-	else:
-		existing_child.get_child(1).text = str(werehouse_holdings[item_type])
+		werehouse_account_label_mapping[item_type as int] = a
+		assert(werehouse_account_label_mapping.has(item_type as int))
 
 func get_tab_index(tab: TabRef) -> int:
 	var idx : int = -1;

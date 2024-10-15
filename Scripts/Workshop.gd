@@ -110,7 +110,7 @@ func update_status() -> void:
 				status_label.text = "Stalled - no synthetic muscle"
 			else:
 				var golems_per_second : float = game.minion_golems_delta * minion_strength
-				status_label.text = "%.2f golems/sec" % golems_per_second;
+				status_label.text = "%.2f robots/sec" % golems_per_second;
 		WorkshopTask.GEARS:
 			var gears_per_second : float = game.minion_gears_delta * minion_strength
 			status_label.text = "%.2f gears/sec" % gears_per_second;
