@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="IDGearCount" load_steps=2 format=3 uid="uid://cpw15yxlatjk1"]
+
+[ext_resource type="Script" path="res://Scripts/Dependancies/IDGearCount.gd" id="1_rndwu"]
+
+[resource]
+script = ExtResource("1_rndwu")
+gear_count = 200
+blueprint_cost = 50
+money_cost = 0

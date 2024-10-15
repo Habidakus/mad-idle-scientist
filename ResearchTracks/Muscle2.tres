@@ -1,9 +1,11 @@
-[gd_resource type="Resource" script_class="Invention" load_steps=2 format=3 uid="uid://bidt2apipsxcv"]
+[gd_resource type="Resource" script_class="Invention" load_steps=3 format=3 uid="uid://bidt2apipsxcv"]
 
+[ext_resource type="Resource" uid="uid://btdxlmiyt5rrv" path="res://ResearchTracks/dep_muscle_2.tres" id="1_dhfom"]
 [ext_resource type="Script" path="res://Scripts/Invention.gd" id="1_o6e8j"]
 
 [resource]
 script = ExtResource("1_o6e8j")
+dependancy = ExtResource("1_dhfom")
 condition = 4
 condition_threshold = 100.0
 blueprint_cost = 100

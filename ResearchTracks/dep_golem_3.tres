@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="IDRobotCount" load_steps=2 format=3 uid="uid://xjfldov2ajl2"]
+
+[ext_resource type="Script" path="res://Scripts/Dependancies/IDRobotCount.gd" id="1_bca40"]
+
+[resource]
+script = ExtResource("1_bca40")
+robot_count = 100
+blueprint_cost = 100
+money_cost = 0

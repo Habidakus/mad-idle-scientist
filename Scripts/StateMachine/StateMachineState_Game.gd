@@ -204,21 +204,21 @@ func load_lab_grid() -> void:
 		track.init(self, rt_data)
 		lab_grid.add_child(track)
 	
-func is_invention_hidden(condition : Invention.InventionCondition, _threshold : float) -> bool:
-	match condition:
-		Invention.InventionCondition.WORKSHOP_COUNT:
-			return workshop_array.is_empty()
-		Invention.InventionCondition.GOLEM_COUNT:
-			return total_golems == 0
-		Invention.InventionCondition.GEAR_COUNT:
-			return werehouse_count(CraftedItemType.GEAR) == 0
-		Invention.InventionCondition.ARTIFICIAL_MUSCLE_COUNT:
-			return werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) == 0
-		Invention.InventionCondition.GEAR_AND_MUSCLE_COUNT:
-			return werehouse_count(CraftedItemType.GEAR) == 0 || werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) == 0
-		_:
-			assert(false, "Unknown invention condition: %s" % [Invention.InventionCondition.find_key(condition)])
-			return false
+#func is_invention_hidden(condition : Invention.InventionCondition, _threshold : float) -> bool:
+	#match condition:
+		#Invention.InventionCondition.WORKSHOP_COUNT:
+			#return workshop_array.is_empty()
+		#Invention.InventionCondition.GOLEM_COUNT:
+			#return total_golems == 0
+		#Invention.InventionCondition.GEAR_COUNT:
+			#return werehouse_count(CraftedItemType.GEAR) == 0
+		#Invention.InventionCondition.ARTIFICIAL_MUSCLE_COUNT:
+			#return werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) == 0
+		#Invention.InventionCondition.GEAR_AND_MUSCLE_COUNT:
+			#return werehouse_count(CraftedItemType.GEAR) == 0 || werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) == 0
+		#_:
+			#assert(false, "Unknown invention condition: %s" % [Invention.InventionCondition.find_key(condition)])
+			#return false
 
 var dbo0 : String
 func db0(t : String) -> void:
@@ -236,32 +236,32 @@ func db2(t : String) -> void:
 		dbo2 = t;
 		print(t)
 
-func is_invention_pending(condition : Invention.InventionCondition, threshold : float, blueprints_needed: int) -> String:
-	var blueprint_fraction : float = (blueprints as float) / (blueprints_needed as float)
-	var cond_fraction : float = 0 
-	match condition:
-		Invention.InventionCondition.WORKSHOP_COUNT:
-			cond_fraction = workshop_array.size() as float / threshold
-		Invention.InventionCondition.GOLEM_COUNT:
-			cond_fraction = total_golems as float / threshold
-		Invention.InventionCondition.GEAR_COUNT:
-			cond_fraction = werehouse_count(CraftedItemType.GEAR) as float / threshold
-		Invention.InventionCondition.ARTIFICIAL_MUSCLE_COUNT:
-			cond_fraction = werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) as float / threshold
-		Invention.InventionCondition.GEAR_AND_MUSCLE_COUNT:
-			var g : float = werehouse_count(CraftedItemType.GEAR) as float / threshold
-			var am : float = werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) as float / threshold
-			cond_fraction = (min(1.0, g) + min(1.0, am)) / 2.0
-		_:
-			assert(false, "Unknown invention condition: %s" % [Invention.InventionCondition.find_key(condition)])
-
-	#db1("is_pending[%s]: b = %f, bn = %f, bf = %f, cf = %f" % [Invention.InventionCondition.find_key(condition), blueprints as float, blueprints_needed as float, blueprint_fraction, cond_fraction])
-	if blueprint_fraction >= 1.0 && cond_fraction >= 1.0:
-		return ""
-	
-	var percent : float = 50.0 * (min(1.0, blueprint_fraction) + min(1.0, cond_fraction))
-	#db2("pending[%s]: %.1f" % [Invention.InventionCondition.find_key(condition), percent])
-	return "%.1f%%" % [percent]
+#func is_invention_pending(condition : Invention.InventionCondition, threshold : float, blueprints_needed: int) -> String:
+	#var blueprint_fraction : float = (blueprints as float) / (blueprints_needed as float)
+	#var cond_fraction : float = 0 
+	#match condition:
+		#Invention.InventionCondition.WORKSHOP_COUNT:
+			#cond_fraction = workshop_array.size() as float / threshold
+		#Invention.InventionCondition.GOLEM_COUNT:
+			#cond_fraction = total_golems as float / threshold
+		#Invention.InventionCondition.GEAR_COUNT:
+			#cond_fraction = werehouse_count(CraftedItemType.GEAR) as float / threshold
+		#Invention.InventionCondition.ARTIFICIAL_MUSCLE_COUNT:
+			#cond_fraction = werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) as float / threshold
+		#Invention.InventionCondition.GEAR_AND_MUSCLE_COUNT:
+			#var g : float = werehouse_count(CraftedItemType.GEAR) as float / threshold
+			#var am : float = werehouse_count(CraftedItemType.ARTIFICIAL_MUSCLE) as float / threshold
+			#cond_fraction = (min(1.0, g) + min(1.0, am)) / 2.0
+		#_:
+			#assert(false, "Unknown invention condition: %s" % [Invention.InventionCondition.find_key(condition)])
+#
+	##db1("is_pending[%s]: b = %f, bn = %f, bf = %f, cf = %f" % [Invention.InventionCondition.find_key(condition), blueprints as float, blueprints_needed as float, blueprint_fraction, cond_fraction])
+	#if blueprint_fraction >= 1.0 && cond_fraction >= 1.0:
+		#return ""
+	#
+	#var percent : float = 50.0 * (min(1.0, blueprint_fraction) + min(1.0, cond_fraction))
+	##db2("pending[%s]: %.1f" % [Invention.InventionCondition.find_key(condition), percent])
+	#return "%.1f%%" % [percent]
 
 enum CraftedItemType {
 	GEAR,
@@ -439,9 +439,7 @@ func populate_workshop_option_button(option_button : OptionButton) -> void:
 			if option_button.get_item_index(data[1]) == -1:
 				add_text_and_tooltip_to_id(option_button, data[1], data[2], data[3])
 
-func activate_invention(blueprint_cost : int, activation_type : Invention.ActivationType, _activation_amount : int) -> void:
-	assert(blueprints >= blueprint_cost)
-	blueprints -= blueprint_cost
+func activate_invention(activation_type : Invention.ActivationType, _activation_amount : int) -> void:
 	if workshop_types.keys().has(activation_type):
 		if workshop_types[activation_type][0] == false:
 			workshop_types[activation_type][0] = true

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="IDGearAndMuscleCount" load_steps=2 format=3 uid="uid://d3qltxgrffrcv"]
+
+[ext_resource type="Script" path="res://Scripts/Dependancies/IDGearAndMuscleCount.gd" id="1_5cr48"]
+
+[resource]
+script = ExtResource("1_5cr48")
+gear_count = 3
+muscle_count = 3
+blueprint_cost = 5
+money_cost = 0

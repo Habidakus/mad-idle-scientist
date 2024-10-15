@@ -1,9 +1,11 @@
-[gd_resource type="Resource" script_class="Invention" load_steps=2 format=3 uid="uid://dxk64h2o5nh2m"]
+[gd_resource type="Resource" script_class="Invention" load_steps=3 format=3 uid="uid://dxk64h2o5nh2m"]
 
+[ext_resource type="Resource" uid="uid://d3qltxgrffrcv" path="res://ResearchTracks/dep_golem_1.tres" id="1_bfbp7"]
 [ext_resource type="Script" path="res://Scripts/Invention.gd" id="1_etfnl"]
 
 [resource]
 script = ExtResource("1_etfnl")
+dependancy = ExtResource("1_bfbp7")
 condition = 5
 condition_threshold = 3.0
 blueprint_cost = 5

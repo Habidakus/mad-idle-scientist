@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="IDWorkshopCount" load_steps=2 format=3 uid="uid://b6uph3esodnxx"]
+
+[ext_resource type="Script" path="res://Scripts/Dependancies/IDWorkshopCount.gd" id="1_3sk63"]
+
+[resource]
+script = ExtResource("1_3sk63")
+workshop_count = 2
+blueprint_cost = 5
+money_cost = 0
