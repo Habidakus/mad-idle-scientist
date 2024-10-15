@@ -16,17 +16,6 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 script = ExtResource("1_aw1yj")
 
-[node name="ETA" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "ETA"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Button" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -38,3 +27,34 @@ text = "Research"
 
 [node name="ControlDecorator" type="Node" parent="Button"]
 script = ExtResource("2_mlvy5")
+
+[node name="Pending" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Track" type="Label" parent="Pending"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Track"
+
+[node name="ETA" type="Label" parent="Pending"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "ETA"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Needs" type="Label" parent="Pending"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Needs: "

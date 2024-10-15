@@ -7,3 +7,4 @@
 [resource]
 script = ExtResource("3_s8ljg")
 inventions = Array[Resource]([ExtResource("1_ikmtg"), ExtResource("2_wt5ru")])
+track = "Artificial Muscle Development"

@@ -8,3 +8,4 @@
 [resource]
 script = ExtResource("1_x2th4")
 inventions = Array[Resource]([ExtResource("1_ex34w"), ExtResource("2_148pu"), ExtResource("3_jkjp7")])
+track = "Robot Development"

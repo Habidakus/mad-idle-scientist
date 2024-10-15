@@ -37,6 +37,8 @@ func is_pending() -> bool:
 
 func get_eta_text() -> String:
 	return eta_text
+func get_needs_text() -> String:
+	return dependancy_text
 
 func get_button_text() -> String:
 	return button_text

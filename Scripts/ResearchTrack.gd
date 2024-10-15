@@ -14,14 +14,12 @@ func _ready() -> void:
 	hide()
 
 func init(game : Control, rtd : ResearchTrackData) -> void:
-	#print("ResearchTrack.init() for %s" % [rtd.resource_path])
 	lab_manager = game
+	$Pending/Track.text = rtd.track
 	for i : Invention in rtd.inventions:
 		print("Adding invention %s" % [i.button_text])
 		i.set_condition_checker(game)
-		#print("Adding %s" % [i.describe()])
 		invensions.append(i)
-	#print("Initialized to %s" % [get_next_pending_invention().describe()])
 	
 func get_next_pending_invention() -> Invention:
 	if current_index >= invensions.size():
@@ -38,13 +36,13 @@ func update() -> void:
 	var pending_invention = get_next_pending_invention()
 	if pending_invention == null:
 		if self.visible:
-			print("Retiring Research Track")
+			#print("Retiring Research Track")
 			hide()
 		return
 
 	if pending_invention.is_hidden():
 		if self.visible:
-			print("Hiding %s" % pending_invention.get_button_text())
+			#print("Hiding %s" % pending_invention.get_button_text())
 			hide()
 		return
 
@@ -55,19 +53,24 @@ func update() -> void:
 	if pending_invention.is_pending():
 		if $Button.visible:
 			$Button.hide()
-		if $ETA.visible == false:
+		if $Pending.visible == false:
 			#print("Showing ETA for %s" % pending_invention.get_button_text())
+			if current_index == 0:
+				$Pending/Track.hide()
+			else:
+				$Pending/Track.show()
 			lab_manager.highlight_lab()
-			$ETA.show()
-		$ETA.text = pending_invention.get_eta_text()
+			$Pending.show()
+		$Pending/ETA.text = pending_invention.get_eta_text()
+		$Pending/Needs.text = "Needs: %s" % pending_invention.get_needs_text()
 		return
 	else:
 		if $Button.visible == false:
 			#print("Showing Button for %s" % pending_invention.get_button_text())
 			lab_manager.highlight_lab()
 			$Button.show()
-		if $ETA.visible:
-			$ETA.hide()
+		if $Pending.visible:
+			$Pending.hide()
 		$Button.text = pending_invention.get_button_text()
 		
 func on_button_press() -> void:
