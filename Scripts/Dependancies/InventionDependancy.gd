@@ -23,7 +23,7 @@ func pay_for_activation(_game : SMS_Game) -> void:
 # ------------- useful funcs -------------------------
 
 func sort_needs(a, b) -> bool:
-	return a[1] > b[1]
+	return a[0] < b[0]
 
 func pay_money(game : SMS_Game) -> void:
 	if money_cost > 0:
