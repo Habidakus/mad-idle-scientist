@@ -11,6 +11,7 @@ var blueprints_value : Label = null
 var idle_attr : Label = null
 var idle_value : Label = null
 var workshop_panel_label : Label = null
+var click_player : AudioStreamPlayer = null
 var main_button : Button = null
 var unlock_button : Button = null
 var augment_button : Button = null
@@ -104,7 +105,11 @@ func find_grid_container(grid_name : String) -> GridContainer:
 	var gc = find_child(grid_name) as GridContainer
 	assert(gc != null, "%s could not find grid container child %s" % [name, grid_name])
 	return gc
-
+func find_audio_stream_player(asp_name : String) -> AudioStreamPlayer:
+	var asp = find_child(asp_name) as AudioStreamPlayer
+	assert(asp != null, "%s could not find audio stream player child %s" % [name, asp_name])
+	return asp
+	
 func _ready() -> void:
 	
 	#-------
@@ -140,6 +145,8 @@ func _ready() -> void:
 	
 	main_button = find_button("Button")
 	main_button.text = main_button_stages[main_button_stage][0]
+	
+	click_player = find_audio_stream_player("ClickPlayer")
 	
 	unlock_button = find_button("UnlockButton")
 	unlock_button.hide()
@@ -474,6 +481,7 @@ func on_tab_changed(index : int) -> void:
 func _on_button_pressed() -> void:
 	click_count += 1
 	money += main_button_stages[main_button_stage][2]
+	click_player.play()
 
 func _on_unlock_button_pressed() -> void:
 	click_count += 1

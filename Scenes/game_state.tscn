@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://c58yyta2hdulp"]
+[gd_scene load_steps=10 format=3 uid="uid://c58yyta2hdulp"]
 
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_Game.gd" id="1_fiind"]
 [ext_resource type="Script" path="res://Scripts/Decorators/ControlDecorator.gd" id="2_f1jsb"]
@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://bfs22cxftqca0" path="res://ResearchTracks/rtd_gears.tres" id="3_rvlh5"]
 [ext_resource type="Theme" uid="uid://cqjlv35tewje1" path="res://theme.tres" id="3_yf0vc"]
 [ext_resource type="Resource" uid="uid://b6lgcgt7gcvtj" path="res://ResearchTracks/rtd_muscle.tres" id="4_ohmf4"]
+[ext_resource type="AudioStream" uid="uid://bj41kjm1xyiho" path="res://Sound/ChirpSound06.wav" id="8_4thog"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cut1r"]
 
@@ -120,10 +121,9 @@ script = ExtResource("2_f1jsb")
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 2
+current_tab = 0
 
 [node name="Generate Money" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -168,6 +168,12 @@ text = "Unlock"
 
 [node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/CenterContainer/MarginContainer/UnlockButton"]
 script = ExtResource("2_f1jsb")
+
+[node name="ClickPlayer" type="AudioStreamPlayer" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer"]
+stream = ExtResource("8_4thog")
+volume_db = -15.0
+pitch_scale = 0.75
+max_polyphony = 7
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money"]
 layout_mode = 1
@@ -297,6 +303,7 @@ size_flags_vertical = 3
 columns = 4
 
 [node name="Lab" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
