@@ -45,4 +45,4 @@ func get_button_text() -> String:
 
 func activate() -> void:
 	dependancy.pay_for_activation(condition_checker)
-	condition_checker.activate_invention(activation_type, activation_amount)
+	condition_checker.activate_invention(activation_type)

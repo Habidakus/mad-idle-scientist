@@ -14,7 +14,13 @@ var task : WorkshopTask = WorkshopTask.MONEY
 var minion_count : int = 0
 
 var name_label : Label = Label.new()
-var minion_count_selector : SpinBox = SpinBox.new()
+#var minion_count_selector : SpinBox = SpinBox.new()
+
+var minion_increase_button : Button = Button.new()
+var minion_decrease_button : Button = Button.new()
+var minion_label : Label = Label.new()
+var minion_container : HBoxContainer = HBoxContainer.new()
+
 var option_button : OptionButton = OptionButton.new()
 var status_label : Label = Label.new()
 
@@ -26,10 +32,23 @@ func init(workshop_name : String, grid_container : GridContainer, workshop_list 
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid_container.add_child(name_label)
-	minion_count_selector.prefix = "Minions allocated: "
-	minion_count_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	minion_count_selector.max_value = available_minions
-	grid_container.add_child(minion_count_selector)
+
+	minion_label.text = "Workers: 0"
+	minion_decrease_button.text = "-";
+	minion_increase_button.text = "+";
+	minion_increase_button.set_disabled(available_minions == 0)
+	minion_decrease_button.set_disabled(minion_count == 0)
+	minion_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	minion_container.add_child(minion_label)
+	minion_container.add_child(minion_decrease_button)
+	minion_container.add_child(minion_increase_button)
+	minion_container.alignment = BoxContainer.ALIGNMENT_CENTER
+	grid_container.add_child(minion_container)
+	#minion_count_selector.prefix = "Minions allocated: "
+	#minion_count_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	#minion_count_selector.max_value = available_minions
+	#grid_container.add_child(minion_count_selector)
+
 	game.populate_workshop_option_button(option_button)
 	option_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid_container.add_child(option_button)
@@ -41,7 +60,8 @@ func init(workshop_name : String, grid_container : GridContainer, workshop_list 
 	workshop_list.append(self)
 
 	option_button.item_selected.connect(on_workshop_task_selected)
-	minion_count_selector.value_changed.connect(on_workshop_minion_count_changed)
+	minion_decrease_button.pressed.connect(on_workshop_minion_count_decrease)
+	minion_increase_button.pressed.connect(on_workshop_minion_count_increase)
 	
 	update_status()
 
@@ -127,14 +147,25 @@ func on_workshop_task_selected(index : int) -> void:
 	get_parent().click_count += 1
 	update_status()
 
-func on_workshop_minion_count_changed(value : float) -> void:
-	minion_count = value as int
-	#print("Workshop %s minion count changed to %d (value = %f)" % [get_workshop_name(), minion_count, value])
+func on_workshop_minion_count_increase() -> void:
+	minion_count += 1
+	minion_label.text = "Workers: %d" % minion_count
+	var parent = get_parent()
+	parent.click_count += 1
+	parent.update_all_workshop_minions()
+	update_status()
+
+func on_workshop_minion_count_decrease() -> void:
+	assert(minion_count > 0)
+	minion_count -= 1
+	minion_label.text = "Workers: %d" % minion_count
 	var parent = get_parent()
 	parent.click_count += 1
 	parent.update_all_workshop_minions()
 	update_status()
 
 func update_available_minions(available_minions : int) -> void:
-	minion_count_selector.max_value = available_minions + minion_count
+	minion_increase_button.set_disabled(available_minions == 0)
+	minion_decrease_button.set_disabled(minion_count == 0)
+	#minion_count_selector.max_value = available_minions + minion_count
 	#print("Workshop %s max minions set to %d" % [get_workshop_name(), minion_count_selector.max_value])

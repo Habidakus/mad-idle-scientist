@@ -47,7 +47,7 @@ func update() -> void:
 		return
 
 	if self.visible == false:
-		print("Showing %s" % pending_invention.get_button_text())
+		#print("Showing %s" % pending_invention.get_button_text())
 		show()
 
 	if pending_invention.is_pending():
