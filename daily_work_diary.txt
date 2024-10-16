@@ -20,6 +20,7 @@ Oct 15th: 4 hours
 	Present dependancy needs and research track names on the lab tab
 	Replaced all instances of golem with robot (and fixed some spelling)
 	Fixed the number of significant digits when displaying money
+	Better minion control buttons
 
 TODO:
   - add sounds to all the button transitions
