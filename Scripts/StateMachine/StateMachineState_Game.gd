@@ -12,6 +12,10 @@ var idle_attr : Label = null
 var idle_value : Label = null
 var workshop_panel_label : Label = null
 var rant_player : AudioStreamPlayer = null
+var rant_pop_up : Control = null
+var rant_footnote : Label = null
+var rant_dismiss_button : Button = null
+var rant_text : RichTextLabel = null
 var click_player_alpha : AudioStreamPlayer = null
 var click_player_beta : AudioStreamPlayer = null
 var main_button : Button = null
@@ -71,11 +75,26 @@ var augment_button_stages = {
 
 var rant_index : int = 0
 var rants : Array = [
-	load("res://Sound/rant1.wav"),
-	load("res://Sound/rant2.wav"),
-	load("res://Sound/rant3.wav"),
-	load("res://Sound/rant4.wav"),
-	load("res://Sound/rant5.wav"),
+	[
+		load("res://Sound/rant1.wav"), false,
+		"How could I have failed?\nThe plan was perfect, every contingency covered.\nAnd yet, it all became undone... unraveled, victory slipping from my grasp!\nBut I am undaunted!\nI will show these simpletons - my genius knows no bounds.\nTo me, my marsupials! We shall gather at my lair!"
+	],
+	[
+		load("res://Sound/rant2.wav"), false,
+		"Damn those fools, and damn me for trusting them!\nTo be brought so low, to start over again from nothing?!\nHow can I abide this indignity!"
+	],
+	[
+		load("res://Sound/rant3.wav"), true,
+		"Boneheaded dullards!\nThey stood in the way of my genius.\nTo think they overruled my ideas of [i]Metatherian[/i]* domination!\nGiant super laser...\nThey wanted me to build a giant super laser?!\nPah!\nIn what world would nations bow in fear to a Giant Super Laser.\nThe idiots!"
+	],
+	[
+		load("res://Sound/rant4.wav"), false,
+		"Imbecilic cretins!\nThey could not appreciate my brilliance!\nHad they but given me the funds I needed to complete the project the [b]WORLD WOULD BE MINE![/b]\nI was shackled by their incompetence - my only failure was not seeing that they were an albatros around my neck.\nYes!\nYes!\nA lead albatros, or rather an iridium albatros, dragging me down to their level."
+	],
+	[
+		load("res://Sound/rant5.wav"), false,
+		"Did I vaporize a henchman or two?\nYes, I will admit, I was a little headstrong in my youth.\nBut look at me now, I have grown.\nI am as even keeled - as my rule is absolute.\nI will admit, initially,\n... that I stopped my murderous venting because I was running low on minions.\nBut! But! I have grown.\nI realize now that violently decimating my workforce is ... demoralizing.\n\nAnd no one wants to help overthrow the world when they're feeling low."
+	],
 ]
 
 enum TabRef {
@@ -100,6 +119,10 @@ func find_label(label_name : String) -> Label:
 	var label = find_child(label_name) as Label
 	assert(label != null, "%s could not find label child %s" % [name, label_name])
 	return label
+func find_rich_text(rt_name : String) -> RichTextLabel:
+	var rt = find_child(rt_name) as RichTextLabel
+	assert(rt != null, "%s could not find rich text label child %s" % [name, rt_name])
+	return rt
 func find_button(button_name : String) -> Button:
 	var button = find_child(button_name) as Button
 	assert(button != null, "%s could not find button child %s" % [name, button_name])
@@ -148,6 +171,14 @@ func _ready() -> void:
 	idle_attr.hide()
 	idle_value = find_label("IdleValue")
 	idle_value.hide()
+	
+	rant_pop_up = find_control("RantPopUp")
+	rant_pop_up.hide()
+	rant_text = find_rich_text("RantText")
+	rant_footnote = find_label("RantFootnote")
+	rant_footnote.hide()
+	rant_dismiss_button = find_button("DismissRant")
+	rant_dismiss_button.pressed.connect(on_rant_dismissed)
 	
 	#-------
 	# Money Page
@@ -333,15 +364,36 @@ func _process(delta: float) -> void:
 	process_workshops(delta)
 	
 	if rant_index == 0:
-		rant_player.stream = rants[rant_index]
-		rant_player.play()
-		rant_index += 1
+		start_rant()
+
+func start_rant() -> void:
+	if rant_index >= rants.size():
+		return
+	
+	rant_pop_up.show()
+	rant_text.text = rants[rant_index][2]
+	
+	if rants[rant_index][1]:
+		rant_footnote.show()
+	
+	rant_player.stream = rants[rant_index][0]
+	rant_player.play()
+	rant_index += 1
 
 func on_rant_finished() -> void:
-	if rant_index < rants.size():
-		rant_player.stream = rants[rant_index]
-		rant_player.play()
-		rant_index += 1
+	if rant_footnote.visible:
+		rant_footnote.hide();
+	if rant_pop_up.visible:
+		rant_pop_up.hide()
+		
+	await get_tree().create_timer(5.0).timeout
+	start_rant()
+
+func on_rant_dismissed() -> void:
+	if rant_footnote.visible:
+		rant_footnote.hide();
+	if rant_pop_up.visible:
+		rant_pop_up.hide()
 
 func update_augment_button_fraction(amount: float, index: int) -> void:
 	if amount == 0:
