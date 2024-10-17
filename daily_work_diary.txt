@@ -30,11 +30,12 @@ Oct 16th: 8 hours
 Oct 17th:
 	Worked on exporting to Web (and setting up itch.io account)
 	worked on dependancy checking for when to play rants
+	Fixed workshop task selector highlight format
 
 TODO:
   - randomize the type of marsupials each player might get
-  - bigger primary click button
   - fix better gear/muscle tech trees
+  - add endgame
 
 Research Tracks:
   - minion cost
