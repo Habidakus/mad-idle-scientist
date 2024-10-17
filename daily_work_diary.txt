@@ -22,6 +22,8 @@ Oct 15th: 8 hours
 	Fixed the number of significant digits when displaying money
 	Better minion control buttons
 	Added initial click sound
+Oct 16th: 
+	Voice & Dialog
 
 TODO:
   - add sounds to all the button transitions
@@ -42,3 +44,35 @@ Research Tracks:
     - endgame part 1
     - endgame part 2
     - endgame part 3
+
+Rant:
+  - past failure
+      How could I have failed? 
+      The plan was perfect, every contingency covered.
+      And yet, it all became undone... unraveled, victory slipping from my grasp!
+      But I am undaunted! 
+      I will show these simpletons - my genius knows no bounds.
+      To me, my marsupials! We shall gather at my lair!
+
+  - starting from nothing
+      Damn those fools, and damn me for trusting them!
+      To be brought so low, to start over from nothing again?! How can I abide this indignity!
+
+  - assigned wrong tech - not marsupial based
+      Boneheaded dullards!
+      They stood in the way of my genius.
+      To think they overruled my ideas of Metatherian* domination!
+      Giant super laser.. They wanted me to build a giant super laser?! Pah! In what world would nations bow in fear to a Giant Super Laser. The idiot!
+
+  - blame management
+      Imbecilic cretins! They could not appreciate my brilliance!
+      Had they but given me the funds I needed to complete the project the WORLD WOULD BE MINE!
+      I was shackled by their incompetence - my only failure was not seeing that they were an albatros around my neck. Yes! Yes! A lead albatros, or rather an iridium albatros, dragging me down to their level.
+
+  - temper issues
+      Did I vaporize a henchman or two? Yes, I will admit, I was a little headstrong in my youth.
+      But look at me now, I have grown. I am as even keeled as my rule is absolute.
+      Now, I will admit to stopping my murderous rants originally because I was running low on minions.
+      But! But! I have grown.
+      I realize now that violently decimating my workforce is ... demoralizing.
+      And no one wants to help overthrow the world when they're feeling low.

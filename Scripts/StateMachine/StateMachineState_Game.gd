@@ -11,6 +11,7 @@ var blueprints_value : Label = null
 var idle_attr : Label = null
 var idle_value : Label = null
 var workshop_panel_label : Label = null
+var rant_player : AudioStreamPlayer = null
 var click_player : AudioStreamPlayer = null
 var main_button : Button = null
 var unlock_button : Button = null
@@ -67,6 +68,15 @@ var augment_button_stages = {
 	3: [400, 1000, 0.2, "Type with your tails if need be!"],
 }
 
+var rant_index : int = 0
+var rants : Array = [
+	load("res://Sound/rant1.wav"),
+	load("res://Sound/rant2.wav"),
+	load("res://Sound/rant3.wav"),
+	load("res://Sound/rant4.wav"),
+	load("res://Sound/rant5.wav"),
+]
+
 enum TabRef {
 	GENERATE_MONEY_TAB,
 	WORKSHOP_TAB,
@@ -115,6 +125,9 @@ func _ready() -> void:
 	#-------
 	# Page Frame & Header
 	#-------
+	rant_player = find_audio_stream_player("RantPlayer")
+	rant_player.finished.connect(on_rant_finished)
+	
 	tab_container = find_tab_container("TabContainer");
 	tab_container.tab_changed.connect(on_tab_changed)
 	
@@ -316,6 +329,17 @@ func _process(delta: float) -> void:
 			money += (int)(augment_remainder)
 			augment_remainder -= floor(augment_remainder)
 	process_workshops(delta)
+	
+	if rant_index == 0:
+		rant_player.stream = rants[rant_index]
+		rant_player.play()
+		rant_index += 1
+
+func on_rant_finished() -> void:
+	if rant_index < rants.size():
+		rant_player.stream = rants[rant_index]
+		rant_player.play()
+		rant_index += 1
 
 func update_augment_button_fraction(amount: float, index: int) -> void:
 	if amount == 0:
