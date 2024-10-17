@@ -22,8 +22,10 @@ Oct 15th: 8 hours
 	Fixed the number of significant digits when displaying money
 	Better minion control buttons
 	Added initial click sound
-Oct 16th: 
-	Voice & Dialog
+Oct 16th: 8 hours
+	Added ranting (Voice)
+	Options screen to turn off sounds
+	Sounds for button clicks
 
 TODO:
   - add sounds to all the button transitions
