@@ -38,12 +38,12 @@ var warehouse_tab : Control = null
 
 var main_button_stage : int = 0
 var main_button_stages = {
-	0: ["Tinker", 0, 1, "Put away your tinkering!\nBecome a coder."],
-	1: ["Code", 10, 5, "Stop coding!\nTeach others your brilliance."],
-	2: ["Mentor", 100, 10, "Bah, I'm thinking too small.\nLet me plan!"],
-	3: ["Architect", 1000, 20, "Surely there is a market\nfor my brilliance!"],
-	4: ["Patent", 10000, 50, "The fools don't understand me\nI will show them!"],
-	5: ["Scheme", 100000, 100, "(((should not see this)))"],
+	0: ["Tinker\nin your lab", 0, 1, "Put away your tinkering!\nBecome a coder."],
+	1: ["Code\nup something keen", 10, 5, "Stop coding!\nTeach others your brilliance."],
+	2: ["Mentor others\nShare your brilliance!", 100, 10, "Bah, I'm thinking too small.\nLet me plan!"],
+	3: ["Architect\nlike a mad genius!", 1000, 20, "Surely there is a market\nfor my brilliance!"],
+	4: ["Patent\nyour tremendous inventions!", 10000, 50, "The fools don't understand me\nI will show them!"],
+	5: ["Scheme\nNo one can scheme like you!", 100000, 100, "(((should not see this)))"],
 }
 
 var highlight_tab_texture : Texture2D = load("res://Art/redCircle.png")
@@ -53,9 +53,9 @@ var cost_to_hire_next_minion_multiplier : float = 2
 var cost_to_build_next_workshop : int = 1000
 var cost_to_build_next_workshop_multiplier : float = 3
 
-var workshop_unlock_amount : int = 3500
+var workshop_unlock_amount : int = 2500
 
-var minion_money_delta : float = 600.0
+var minion_money_delta : float = 400.0
 var minion_blueprints_delta : float = 1 / 20.0
 var minion_robots_delta : float = 1 / 20.0
 var minion_gears_delta : float = 1 / 20.0
@@ -68,10 +68,10 @@ var augment_button_stage : int = 0
 var augment_button_unlock_fraction : float = 0
 var augment_button_stages = {
 	# augment_button_stage: [increase per click, increase per second, fraction needed before percent appears, button text]
-	0: [50, 0, 1.5, "Odds Fish, I could train oppossums to do this!"],
-	1: [100, 250, 0.4, "I need more oppossums!"],
-	2: [200, 500, 0.3, "Onward, my marsupials!"],
-	3: [400, 1000, 0.2, "Type with your tails if need be!"],
+	0: [50, 0, 1.5, "Odds Fish, I could train opossums to do this!"],
+	1: [100, 250, 0.4, "Yes, more opossums\nmore wealth!"],
+	2: [200, 500, 0.3, "Onward, my marsupials!\nTogether we earn riches!"],
+	3: [400, 1000, 0.2, "Type with your tails if need be!\nEvery dollar brings us closer to victory!"],
 }
 
 var rant_next_rant_start : float = 0;

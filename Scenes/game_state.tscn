@@ -61,7 +61,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
-text = "Opposum Income:"
+text = "Opossum Income:"
 
 [node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/MoneyStats/OpposumAttr"]
 script = ExtResource("2_f1jsb")
