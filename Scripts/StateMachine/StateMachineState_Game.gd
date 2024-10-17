@@ -67,33 +67,41 @@ var augment_stage_multiplier : float = 1.5
 var augment_button_stage : int = 0
 var augment_button_unlock_fraction : float = 0
 var augment_button_stages = {
+	# augment_button_stage: [increase per click, increase per second, fraction needed before percent appears, button text]
 	0: [50, 0, 1.5, "Odds Fish, I could train oppossums to do this!"],
 	1: [100, 250, 0.4, "I need more oppossums!"],
 	2: [200, 500, 0.3, "Onward, my marsupials!"],
 	3: [400, 1000, 0.2, "Type with your tails if need be!"],
 }
 
+var rant_next_rant_start : float = 0;
 var rant_index : int = 0
 var rants : Array = [
 	[
-		load("res://Sound/rant1.wav"), false,
-		"How could I have failed?\nThe plan was perfect, every contingency covered.\nAnd yet, it all became undone... unraveled, victory slipping from my grasp!\nBut I am undaunted!\nI will show these simpletons - my genius knows no bounds.\nTo me, my marsupials! We shall gather at my lair!"
+		load("res://Sound/rant1.wav"), 
+		false,
+		"How could I have failed?\nThe plan was perfect, every contingency covered.\nAnd yet, it all became undone... unraveled, victory slipping from my grasp!\nBut I am undaunted!\nI will show these simpletons - my genius knows no bounds.\nTo me, my marsupials! We shall gather at my lair!",
+		rant_1_can_start
 	],
 	[
 		load("res://Sound/rant2.wav"), false,
-		"Damn those fools, and damn me for trusting them!\nTo be brought so low, to start over again from nothing?!\nHow can I abide this indignity!"
+		"Damn those fools, and damn me for trusting them!\nTo be brought so low, to start over again from nothing?!\nHow can I abide this indignity!",
+		rant_2_can_start
 	],
 	[
 		load("res://Sound/rant3.wav"), true,
-		"Boneheaded dullards!\nThey stood in the way of my genius.\nTo think they overruled my ideas of [i]Metatherian[/i]* domination!\nGiant super laser...\nThey wanted me to build a giant super laser?!\nPah!\nIn what world would nations bow in fear to a Giant Super Laser.\nThe idiots!"
+		"Boneheaded dullards!\nThey stood in the way of my genius.\nTo think they overruled my ideas of [i]Metatherian[/i]* domination!\nGiant super laser...\nThey wanted me to build a giant super laser?!\nPah!\nIn what world would nations bow in fear to a Giant Super Laser.\nThe idiots!",
+		rant_3_can_start
 	],
 	[
 		load("res://Sound/rant4.wav"), false,
-		"Imbecilic cretins!\nThey could not appreciate my brilliance!\nHad they but given me the funds I needed to complete the project the [b]WORLD WOULD BE MINE![/b]\nI was shackled by their incompetence - my only failure was not seeing that they were an albatros around my neck.\nYes!\nYes!\nA lead albatros, or rather an iridium albatros, dragging me down to their level."
+		"Imbecilic cretins!\nThey could not appreciate my brilliance!\nHad they but given me the funds I needed to complete the project the [i]world would be mine![/i]\nI was shackled by [i]their[/i] incompetence - my only failure was not seeing that they were an albatros around my neck.\nYes!\nYes!\nA lead albatros, or rather an iridium albatros, dragging me down to their level.",
+		rant_4_can_start
 	],
 	[
 		load("res://Sound/rant5.wav"), false,
-		"Did I vaporize a henchman or two?\nYes, I will admit, I was a little headstrong in my youth.\nBut look at me now, I have grown.\nI am as even keeled - as my rule is absolute.\nI will admit, initially,\n... that I stopped my murderous venting because I was running low on minions.\nBut! But! I have grown.\nI realize now that violently decimating my workforce is ... demoralizing.\n\nAnd no one wants to help overthrow the world when they're feeling low."
+		"Did I vaporize a henchman or two?\nYes, I will admit, I was a little headstrong in my youth.\nBut look at me now, I have grown.\nI am as even keeled - as my rule is absolute.\nI will admit, initially,\n... that I stopped my murderous venting because I was running low on minions.\nBut! But! I have grown.\nI realize now that violently decimating my workforce is ... demoralizing.\n\nAnd no one wants to help overthrow the world when they're feeling low.",
+		rant_5_can_start
 	],
 ]
 
@@ -243,7 +251,7 @@ func _ready() -> void:
 	# Other
 	#-------
 
-	money = 3300
+	money = 0
 	
 	var it : Image = highlight_tab_texture.get_image();
 	var imt : ImageTexture = ImageTexture.create_from_image(it)
@@ -362,13 +370,47 @@ func _process(delta: float) -> void:
 			money += (int)(augment_remainder)
 			augment_remainder -= floor(augment_remainder)
 	process_workshops(delta)
-	
-	if rant_index == 0:
+
+	if can_rant():
 		start_rant()
 
-func start_rant() -> void:
+func can_rant() -> bool:
 	if rant_index >= rants.size():
-		return
+		return false
+	
+	if Time.get_unix_time_from_system() < rant_next_rant_start:
+		return false
+		
+	var functor : Callable = rants[rant_index][3]
+	if functor == null:
+		return true;
+
+	var retVal : bool = functor.call()
+	return retVal
+
+func rant_1_can_start() -> bool:
+	# This rant starts at the very begining of the game
+	return true
+
+func rant_2_can_start() -> bool:
+	# This rant applies to low resources, so should start as soon as possible
+	return true
+
+func rant_3_can_start() -> bool:
+	# This rant is marsupial focused, and should be run when marsupials are maxed out
+	return augment_button_stage >= augment_button_stages.size()
+
+func rant_4_can_start() -> bool:
+	# This rant should be run whenever
+	return true
+
+func rant_5_can_start() -> bool:
+	# This rant is minion focused, and should be done when it cost a million to buy our next minion
+	return cost_to_hire_next_minion > 1000000
+
+func start_rant() -> void:
+	
+	rant_next_rant_start = Time.get_unix_time_from_system() + 120.0
 	
 	rant_pop_up.show()
 	rant_text.text = rants[rant_index][2]
@@ -385,9 +427,6 @@ func on_rant_finished() -> void:
 		rant_footnote.hide();
 	if rant_pop_up.visible:
 		rant_pop_up.hide()
-		
-	await get_tree().create_timer(5.0).timeout
-	start_rant()
 
 func on_rant_dismissed() -> void:
 	if rant_footnote.visible:

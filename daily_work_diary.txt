@@ -27,9 +27,14 @@ Oct 16th: 8 hours
 	Options screen to turn off sounds
 	Sounds for button clicks
 	Hooked up rant display screens, and the buttons to dismiss them
+Oct 17th:
+	Worked on exporting to Web (and setting up itch.io account)
+	worked on dependancy checking for when to play rants
 
 TODO:
   - randomize the type of marsupials each player might get
+  - bigger primary click button
+  - fix better gear/muscle tech trees
 
 Research Tracks:
   - minion cost
