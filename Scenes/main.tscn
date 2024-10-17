@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://7cvnh6gy8rxu"]
+[gd_scene load_steps=7 format=3 uid="uid://7cvnh6gy8rxu"]
 
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachine.gd" id="1_2u3i6"]
+[ext_resource type="Script" path="res://Scenes/main.gd" id="1_wetco"]
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_AnyKeyToContinue.gd" id="2_6bx2r"]
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_MainMenu.gd" id="3_dgp3i"]
 [ext_resource type="Script" path="res://Scripts/Decorators/ControlDecorator.gd" id="4_hagyi"]
@@ -13,6 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_wetco")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -57,6 +59,7 @@ theme_override_font_sizes/font_size = 80
 text = "Mad Idle Scientist"
 
 [node name="MainMenu" type="Control" parent="MainStateMachine"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -133,32 +136,158 @@ columns = 2
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 80
+theme_override_font_sizes/font_size = 56
 text = "Code:"
 
 [node name="JasonAbbott" type="Label" parent="MainStateMachine/Credits/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 80
+theme_override_font_sizes/font_size = 56
 text = "Jason Abbott"
 
 [node name="Design" type="Label" parent="MainStateMachine/Credits/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 80
+theme_override_font_sizes/font_size = 56
 text = "Design:"
 
 [node name="JasonAbbott2" type="Label" parent="MainStateMachine/Credits/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 80
+theme_override_font_sizes/font_size = 56
 text = "Jason Abbott"
 
+[node name="Rants" type="Label" parent="MainStateMachine/Credits/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 56
+text = "Rants & Sound:"
+
+[node name="JasonAbbott3" type="Label" parent="MainStateMachine/Credits/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 56
+text = "Jason Abbott"
+
+[node name="Tools" type="Label" parent="MainStateMachine/Credits/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 56
+text = "Tools:"
+
+[node name="Various" type="Label" parent="MainStateMachine/Credits/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 56
+text = "Godot,
+Gimp, 
+rFXGen,
+Audacity"
+
 [node name="Game" parent="MainStateMachine" instance=ExtResource("5_wjm77")]
+visible = false
+
+[node name="Options" type="MarginContainer" parent="."]
+top_level = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="ColorRect" type="ColorRect" parent="Options"]
+layout_mode = 2
+color = Color(0.5, 0.225, 0.5, 0.501961)
+
+[node name="MarginContainer" type="MarginContainer" parent="Options/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ColorRect" type="ColorRect" parent="Options/ColorRect/MarginContainer"]
+layout_mode = 2
+color = Color(1, 0.454902, 1, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Options/ColorRect/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Options/ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Options"
+
+[node name="GridContainer" type="GridContainer" parent="Options/ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+columns = 2
+
+[node name="Label" type="Label" parent="Options/ColorRect/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Button Sounds:"
+horizontal_alignment = 2
+
+[node name="ClickSoundButton" type="CheckButton" parent="Options/ColorRect/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+button_pressed = true
+text = "Currently On"
+
+[node name="Label2" type="Label" parent="Options/ColorRect/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Rant Sounds:"
+horizontal_alignment = 2
+
+[node name="RantSoundButton" type="CheckButton" parent="Options/ColorRect/MarginContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+button_pressed = true
+text = "Currently On"
+
+[node name="Label2" type="Label" parent="Options/ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Press ESC to resume"
 
 [connection signal="pressed" from="MainStateMachine/MainMenu/VBoxContainer/Play" to="MainStateMachine/MainMenu" method="_on_play_pressed"]
 [connection signal="pressed" from="MainStateMachine/MainMenu/VBoxContainer/Credits" to="MainStateMachine/MainMenu" method="_on_credits_pressed"]
 [connection signal="pressed" from="MainStateMachine/MainMenu/VBoxContainer/Quit" to="MainStateMachine/MainMenu" method="_on_quit_pressed"]
+[connection signal="toggled" from="Options/ColorRect/MarginContainer/VBoxContainer/GridContainer/ClickSoundButton" to="." method="_on_click_sound_button_toggled"]
+[connection signal="toggled" from="Options/ColorRect/MarginContainer/VBoxContainer/GridContainer/RantSoundButton" to="." method="_on_rant_sound_button_toggled"]

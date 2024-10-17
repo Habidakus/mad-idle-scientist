@@ -144,14 +144,14 @@ func on_workshop_task_selected(index : int) -> void:
 	task = option_button.get_item_id(index) as WorkshopTask
 	#print("Workshop %s task changed to %s (index = %s)" % [get_workshop_name(), WorkshopTask.find_key(task), str(index)])
 	option_button.selected = option_button.get_item_index(task as int)
-	get_parent().click_count += 1
+	get_parent().inc_click_count(false)
 	update_status()
 
 func on_workshop_minion_count_increase() -> void:
 	minion_count += 1
 	minion_label.text = "Workers: %d" % minion_count
-	var parent = get_parent()
-	parent.click_count += 1
+	var parent = get_parent() as SMS_Game
+	parent.inc_click_count(false)
 	parent.update_all_workshop_minions()
 	update_status()
 
@@ -159,8 +159,8 @@ func on_workshop_minion_count_decrease() -> void:
 	assert(minion_count > 0)
 	minion_count -= 1
 	minion_label.text = "Workers: %d" % minion_count
-	var parent = get_parent()
-	parent.click_count += 1
+	var parent = get_parent() as SMS_Game
+	parent.inc_click_count(false)
 	parent.update_all_workshop_minions()
 	update_status()
 

@@ -2,7 +2,7 @@ extends StateMachineState
 
 class_name SMS_Game
 
-var click_count : int = 0 : set = set_click_count
+var click_count : int = 0
 var money : int = 0 : set = set_money
 var blueprints : int = 0 : set = set_blueprints
 var money_label : Label = null
@@ -12,7 +12,8 @@ var idle_attr : Label = null
 var idle_value : Label = null
 var workshop_panel_label : Label = null
 var rant_player : AudioStreamPlayer = null
-var click_player : AudioStreamPlayer = null
+var click_player_alpha : AudioStreamPlayer = null
+var click_player_beta : AudioStreamPlayer = null
 var main_button : Button = null
 var unlock_button : Button = null
 var augment_button : Button = null
@@ -29,7 +30,7 @@ var generate_money_tab : Control = null
 var workshop_tab : Control = null
 var lab_tab : Control = null
 var tab_container : TabContainer = null
-var	warehouse_tab : Control = null;
+var warehouse_tab : Control = null
 
 var main_button_stage : int = 0
 var main_button_stages = {
@@ -159,7 +160,8 @@ func _ready() -> void:
 	main_button = find_button("Button")
 	main_button.text = main_button_stages[main_button_stage][0]
 	
-	click_player = find_audio_stream_player("ClickPlayer")
+	click_player_alpha = find_audio_stream_player("ClickPlayerAlpha")
+	click_player_beta = find_audio_stream_player("ClickPlayerBeta")
 	
 	unlock_button = find_button("UnlockButton")
 	unlock_button.hide()
@@ -319,7 +321,7 @@ func query_tab(tab : TabRef, query : TabAction) -> bool:
 		_:
 			assert(false, "Do not understand the %s query to perform on %s.%s" % [TabAction.find_key(query), tab_container.name, TabRef.find_key(tab)])
 	return false
-	
+
 func _process(delta: float) -> void:
 	update_augment_button_fraction(delta, 1)
 	if augment_amount > 0:
@@ -495,26 +497,29 @@ func update_workshop_button() -> void:
 		change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
 		build_workshop_button.set_disabled(false)
 
-func set_click_count(new_value : int) -> void:
-	click_count = new_value
+func inc_click_count(is_primary : bool) -> void:
+	click_count += 1
+	if is_primary:
+		click_player_beta.play()
+	else:
+		click_player_alpha.play()
 	update_augment_button_fraction(1.0, 0)
 
 func on_tab_changed(index : int) -> void:
 	tab_container.get_tab_bar().set_tab_icon(index, null)
 
 func _on_button_pressed() -> void:
-	click_count += 1
+	inc_click_count(true)
 	money += main_button_stages[main_button_stage][2]
-	click_player.play()
 
 func _on_unlock_button_pressed() -> void:
-	click_count += 1
+	inc_click_count(false)
 	unlock_button.hide()
 	main_button_stage += 1
 	main_button.text = main_button_stages[main_button_stage][0]
 
 func _on_augment_button_pressed() -> void:
-	click_count += 1
+	inc_click_count(false)
 	augment_button_unlock_fraction = 0
 	augment_button_stage += 1
 	augment_button.hide()
@@ -527,7 +532,7 @@ func _on_augment_button_pressed() -> void:
 		augment_amount *= augment_stage_multiplier
 
 func _on_workshops_button_pressed() -> void:
-	click_count += 1
+	inc_click_count(false)
 	workshops_button.hide()
 	change_tab(TabRef.WORKSHOP_TAB, TabAction.SHOW_TAB)
 	change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
@@ -541,7 +546,7 @@ func increase_robots() -> void:
 	update_all_workshop_minions()
 
 func _on_hire_minion_pressed() -> void:
-	click_count += 1
+	inc_click_count(false)
 	money -= cost_to_hire_next_minion
 	total_minions += 1
 	cost_to_hire_next_minion = (int) (cost_to_hire_next_minion * cost_to_hire_next_minion_multiplier)
@@ -551,7 +556,7 @@ func _on_hire_minion_pressed() -> void:
 var workshop_name_index_a : int = -1
 var workshop_name_index_b : int = -1
 var workshop_name_index_c : int = -1
-var some_primes : Array = [2749, 2909, 3083, 3259, 3433, 3581, 3733, 3749, 1709]
+var some_primes : Array = [2749, 2909, 3083, 3433, 3733, 3749, 3259, 3581, 1709]
 var workshop_name_stepper_a : int
 var workshop_name_stepper_b : int
 var workshop_name_stepper_c : int
@@ -565,8 +570,8 @@ func generate_workshop_name() -> String:
 		workshop_name_stepper_a = some_primes[rng.randi_range(0, some_primes.size() - 1)]
 		workshop_name_stepper_b = some_primes[rng.randi_range(0, some_primes.size() - 1)]
 		workshop_name_stepper_c = some_primes[rng.randi_range(0, some_primes.size() - 1)]
-	var a : Array = ["Alpha", "Beta", "Gamma", "Delta", "Omega", "Primus", "Secundus", "Tertius", "Quartus"]
-	var b : Array = [2, 3, 5,  7, 11, 13,  17, 19, 23,  29, 31, 37,  41, 43, 47, 53, 59, 61]
+	var a : Array = ["Alpha", "Beta", "Gamma", "Delta", "Omega", "Primus", "Secundus", "Tertius", "Quartus", "Eins", "Zwei"]
+	var b : Array = [2, 3, 5, 7, 11, 13,  17, 19, 23,  29, 31, 37,  41, 43, 47, 53, 59, 61]
 	var c : Array = ["Jekyll", "Strange", "No", "Moreau", "Moriarty", "Luthor", "Brundle", "Von Doom", "Loveless", "West", "Octavius", "Nemo"]
 	workshop_name_index_a = (workshop_name_index_a + workshop_name_stepper_a) % a.size()
 	workshop_name_index_b = (workshop_name_index_b + workshop_name_stepper_b) % b.size()
@@ -612,7 +617,7 @@ func add_workshop() -> void:
 	workshop.init(workshop_name, list_of_workshops_grid, workshop_array, get_available_minions(), self)
 
 func _on_build_workshop_pressed() -> void:
-	click_count += 1
+	inc_click_count(false)
 	money -= cost_to_build_next_workshop
 	cost_to_build_next_workshop = (int) (cost_to_build_next_workshop * cost_to_build_next_workshop_multiplier)
 	add_workshop()
