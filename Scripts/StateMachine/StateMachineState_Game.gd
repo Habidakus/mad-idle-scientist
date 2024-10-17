@@ -251,7 +251,7 @@ func _ready() -> void:
 	# Other
 	#-------
 
-	money = 0
+	money = 2500
 	
 	var it : Image = highlight_tab_texture.get_image();
 	var imt : ImageTexture = ImageTexture.create_from_image(it)
@@ -508,6 +508,15 @@ func add_text_and_tooltip_to_id(option_button : OptionButton, task : Workshop.Wo
 	option_button.set_item_tooltip(index, item_tooltip);
 	return index
 
+var highlight_all_workshop_tasks: bool = true
+func should_workshop_task_be_highlighted() -> bool:
+	return highlight_all_workshop_tasks
+
+func on_workshop_tasks_seen() -> void:
+	for workshop in workshop_array:
+		workshop.highlight_option_button(false)
+	highlight_all_workshop_tasks = false
+
 func populate_workshop_option_button(option_button : OptionButton) -> void:
 	if option_button.get_item_index(Workshop.WorkshopTask.MONEY) == -1:
 		var index = add_text_and_tooltip_to_id(option_button, Workshop.WorkshopTask.MONEY, "Perform mindless labor", "This will generate some money")
@@ -524,7 +533,9 @@ func activate_invention(activation_type : Invention.ActivationType) -> void:
 	if workshop_types.keys().has(activation_type):
 		if workshop_types[activation_type][0] == false:
 			workshop_types[activation_type][0] = true
+			highlight_all_workshop_tasks = true
 			for workshop in workshop_array:
+				workshop.highlight_option_button(true)
 				populate_workshop_option_button(workshop.option_button)
 			change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
 		workshop_types[activation_type][4] += 1
