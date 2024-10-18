@@ -165,6 +165,8 @@ func update_status() -> void:
 		WorkshopTask.SENSOR_PACKS:
 			var sensors_per_second : float = game.minion_sensor_pack_delta * minion_strength
 			status_label.text = "%.2f packs/sec" % sensors_per_second;
+		WorkshopTask.KAIJU:
+			status_label.text = "Building Kaiju"
 		_:
 			status_label.text = "TASK UNKNOWN"
 

@@ -2,7 +2,7 @@ extends StateMachineState
 
 class_name SMS_Game
 
-var in_debug_mode : bool = true
+var in_debug_mode : bool = false
 
 var click_count : int = 0
 var money : int = 0 : set = set_money
@@ -37,6 +37,8 @@ var workshop_tab : Control = null
 var lab_tab : Control = null
 var tab_container : TabContainer = null
 var warehouse_tab : Control = null
+var kaiju_tab : Control = null
+var kaiju_progress : ProgressBar = null
 
 var main_button_stage : int = 0
 var main_button_stages = {
@@ -117,6 +119,7 @@ enum TabRef {
 	WORKSHOP_TAB,
 	LAB_TAB,
 	WAREHOUSE_TAB,
+	KAIJU_TAB,
 }
 enum TabAction {
 	HIDE_TAB,
@@ -158,6 +161,10 @@ func find_audio_stream_player(asp_name : String) -> AudioStreamPlayer:
 	var asp = find_child(asp_name) as AudioStreamPlayer
 	assert(asp != null, "%s could not find audio stream player child %s" % [name, asp_name])
 	return asp
+func find_progress_bar(prog_name : String) -> ProgressBar:
+	var pb = find_child(prog_name) as ProgressBar
+	assert(pb != null, "%s could not find progress bar child %s" % [name, prog_name])
+	return pb
 	
 func _ready() -> void:
 	
@@ -255,6 +262,14 @@ func _ready() -> void:
 	warehouse_grid = find_grid_container("ListOfGoods");
 	
 	#-------
+	# Kaiju
+	#-------
+	
+	kaiju_tab = find_control("Kaiju");
+	change_tab(TabRef.KAIJU_TAB, TabAction.HIDE_TAB)
+	kaiju_progress = find_progress_bar("KaijuProgress");
+	
+	#-------
 	# Other
 	#-------
 
@@ -334,6 +349,9 @@ func warehouse_count(item_type : CraftedItemType) -> int:
 	else:
 		return 0
 
+func has_been_invented(item_type : CraftedItemType) -> bool:
+	return warehouse_holdings.has(item_type)
+
 var warehouse_account_label_mapping : Dictionary = {}
 func warehouse_add(item_type: CraftedItemType, amount: int) -> void:
 	if warehouse_holdings.has(item_type):
@@ -375,6 +393,8 @@ func get_tab_index(tab: TabRef) -> int:
 			idx = tab_container.get_tab_idx_from_control(lab_tab)
 		TabRef.WAREHOUSE_TAB:
 			idx = tab_container.get_tab_idx_from_control(warehouse_tab)
+		TabRef.KAIJU_TAB:
+			idx = tab_container.get_tab_idx_from_control(kaiju_tab)
 	assert(idx != -1, "Did not find tab %s in %s" % [TabRef.find_key(tab), tab_container.name])
 	return idx
 
@@ -547,7 +567,6 @@ var workshop_types : Dictionary = {
 	Invention.ActivationType.UNLOCK_ARTIFICIAL_MUSCLE: [false, Workshop.WorkshopTask.ARTIFICIAL_MUSCLE, "Craft Synthetic Muscle", "Synthetic muscle will help you craft other things", 0],
 	Invention.ActivationType.UNLOCK_SENSORS: [false, Workshop.WorkshopTask.SENSOR_PACKS, "Craft Sensor Packs", "Synthetic optic and nerve clusters", 0],
 	Invention.ActivationType.UNLOCK_KAIJU: [false, Workshop.WorkshopTask.KAIJU, "Build the Kaiju Kangaroo", "Nations will bow before the might of the Kaiju Kangaroo", 0],
-	
 }
 
 func add_text_and_tooltip_to_id(option_button : OptionButton, task : Workshop.WorkshopTask, item_name : String, item_tooltip : String) -> int:
@@ -779,3 +798,23 @@ func _on_build_workshop_pressed() -> void:
 	cost_to_build_next_workshop = (int) (cost_to_build_next_workshop * cost_to_build_next_workshop_multiplier)
 	add_workshop()
 	update_workshop_button()
+
+var kaiju_count : float = 0
+var kaiju_max : float = 5000
+var kaiju_reconnected_dismiss : bool = false
+func add_kaiju_parts(amount : float) -> void:
+	if kaiju_count == 0:
+		change_tab(TabRef.KAIJU_TAB, TabAction.SHOW_TAB)
+		change_tab(TabRef.KAIJU_TAB, TabAction.HIGHLIGHT_TAB)
+	kaiju_count += amount
+	kaiju_progress.value = 100.0 * kaiju_count / kaiju_max
+	if kaiju_count >= kaiju_max:
+		rant_pop_up.show()
+		rant_text.text = "[b]VICTORY![/b]\n\nThey mocked me, but now the tables have turned!\nSee how they scatter before my Marsupial Might!\n\nOnward my Kangaroo Kaiju!\n"
+		if kaiju_reconnected_dismiss == false:
+			kaiju_reconnected_dismiss = true;
+			rant_dismiss_button.pressed.disconnect(on_rant_dismissed)
+			rant_dismiss_button.pressed.connect(close_game)
+
+func close_game() -> void:
+	get_tree().quit()

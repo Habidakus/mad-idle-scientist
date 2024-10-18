@@ -27,26 +27,16 @@ Oct 16th: 8 hours
 	Options screen to turn off sounds
 	Sounds for button clicks
 	Hooked up rant display screens, and the buttons to dismiss them
-Oct 17th:
+Oct 17th: 8 hours
 	Worked on exporting to Web (and setting up itch.io account)
 	worked on dependancy checking for when to play rants
 	Fixed workshop task selector highlight format
 	Added sensor packs
+	Added endgame
 
 TODO:
   - randomize the type of marsupials each player might get
-  - fix better gear/muscle tech trees
-  - add endgame
-
-Research Tracks:
-  - minion cost
-  - minion/workspace efficiency (cybernetics, chimera, etc...)
-  - max golems per workspace
-  - mercenary gigs (risk minions)
-  - theft gigs (risk minions)
-  - endgame
-  - crafting:
-	- cyborg parts
-	- endgame part 1
-	- endgame part 2
-	- endgame part 3
+  - Research Tracks:
+    - max golems per workspace
+    - mercenary gigs (risk minions)
+    - theft gigs (risk minions)

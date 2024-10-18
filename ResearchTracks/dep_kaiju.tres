@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="IDKaiju" load_steps=2 format=3 uid="uid://cxs68i2cjnw71"]
+
+[ext_resource type="Script" path="res://Scripts/Dependancies/IDKaiju.gd" id="1_j54g5"]
+
+[resource]
+script = ExtResource("1_j54g5")
+gear_count = 100
+sensor_count = 100
+muscle_count = 100
+blueprint_cost = 100
+money_cost = 10000000

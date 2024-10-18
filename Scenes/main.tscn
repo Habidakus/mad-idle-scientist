@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://7cvnh6gy8rxu"]
+[gd_scene load_steps=14 format=3 uid="uid://7cvnh6gy8rxu"]
 
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachine.gd" id="1_2u3i6"]
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_wetco"]
@@ -12,6 +12,7 @@
 [ext_resource type="Resource" uid="uid://crjky3dtffew5" path="res://ResearchTracks/rtd_sensors.tres" id="10_p0ps6"]
 [ext_resource type="Resource" uid="uid://ctgdbuxwuiuxc" path="res://ResearchTracks/rtd_workshop_upgrade.tres" id="11_d64m3"]
 [ext_resource type="Resource" uid="uid://c57phb1thingm" path="res://ResearchTracks/rtd_marsupial_augmentation.tres" id="12_qptde"]
+[ext_resource type="Resource" uid="uid://dj738j1jvljk4" path="res://ResearchTracks/rtd_kaiju.tres" id="13_4jbdl"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -90,6 +91,7 @@ grow_vertical = 2
 
 [node name="Play" type="Button" parent="MainStateMachine/MainMenu/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Play"
 
 [node name="PlayDecorator" type="Node" parent="MainStateMachine/MainMenu/VBoxContainer/Play"]
@@ -97,6 +99,7 @@ script = ExtResource("4_hagyi")
 
 [node name="Credits" type="Button" parent="MainStateMachine/MainMenu/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Credits"
 
 [node name="CreditsDecorator" type="Node" parent="MainStateMachine/MainMenu/VBoxContainer/Credits" node_paths=PackedStringArray("loads_after")]
@@ -105,6 +108,7 @@ loads_after = NodePath("../../Play/PlayDecorator")
 
 [node name="Quit" type="Button" parent="MainStateMachine/MainMenu/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Quit"
 
 [node name="QuitDecorator" type="Node" parent="MainStateMachine/MainMenu/VBoxContainer/Quit" node_paths=PackedStringArray("loads_after")]
@@ -200,7 +204,7 @@ Audacity"
 
 [node name="Game" parent="MainStateMachine" instance=ExtResource("5_wjm77")]
 visible = false
-research_track_data_sets = Array[Resource]([ExtResource("7_ql8q4"), ExtResource("8_nc1ox"), ExtResource("9_5885i"), ExtResource("10_p0ps6"), ExtResource("11_d64m3"), ExtResource("12_qptde")])
+research_track_data_sets = Array[Resource]([ExtResource("7_ql8q4"), ExtResource("8_nc1ox"), ExtResource("9_5885i"), ExtResource("10_p0ps6"), ExtResource("11_d64m3"), ExtResource("12_qptde"), ExtResource("13_4jbdl")])
 
 [node name="Options" type="MarginContainer" parent="."]
 top_level = true
