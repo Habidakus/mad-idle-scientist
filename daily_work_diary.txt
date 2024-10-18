@@ -37,6 +37,6 @@ Oct 17th: 8 hours
 TODO:
   - randomize the type of marsupials each player might get
   - Research Tracks:
-    - max golems per workspace
-    - mercenary gigs (risk minions)
-    - theft gigs (risk minions)
+	- max golems per workspace
+	- mercenary gigs (risk minions)
+	- theft gigs (risk minions)
