@@ -408,8 +408,9 @@ func query_tab(tab : TabRef, query : TabAction) -> bool:
 func _process(delta: float) -> void:
 	update_augment_button_fraction(delta, 1)
 	if augment_amount > 0:
-		augment_remainder += delta * augment_amount * marsupial_size * main_button_stages[main_button_stage][2]
-		oppossum_value.text = "%s/sec" % money_string(augment_amount * main_button_stages[main_button_stage][2])
+		var dollars_per_second : float = augment_amount * marsupial_size * main_button_stages[main_button_stage][2]
+		augment_remainder += delta * dollars_per_second
+		oppossum_value.text = "%s/sec" % money_string(dollars_per_second)
 		if augment_remainder >= 1.0:
 			money += (int)(augment_remainder)
 			augment_remainder -= floor(augment_remainder)
@@ -593,7 +594,7 @@ func activate_invention(activation_type : Invention.ActivationType) -> void:
 				workshop_efficiency *= 1.5
 				self.update_all_workshop_status()
 			Invention.ActivationType.UNLOCK_MARSUPIAL_GROWTH:
-				marsupial_size *= 1.5
+				marsupial_size *= 5
 			_:
 				assert(false, "Can't activate invention for %s - no matching workshop" % [Invention.ActivationType.find_key(activation_type)])
 			
@@ -667,6 +668,12 @@ func _on_unlock_button_pressed() -> void:
 	unlock_button.hide()
 	main_button_stage += 1
 	main_button.text = main_button_stages[main_button_stage][0]
+
+func measure_marsupial_augmentation(full: bool) -> float:
+	if full:
+		return augment_button_stage as float / augment_button_stages.size() as float
+	else:
+		return augment_button_stage > 0
 
 func _on_augment_button_pressed() -> void:
 	inc_click_count(false)

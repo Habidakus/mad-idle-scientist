@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Invention" load_steps=3 format=3 uid="uid://b1cg7ojtq0pdx"]
+
+[ext_resource type="Script" path="res://Scripts/Invention.gd" id="1_1rklo"]
+[ext_resource type="Resource" uid="uid://dqswannnmst2q" path="res://ResearchTracks/dep_marsupial_3.tres" id="1_mcbs6"]
+
+[resource]
+script = ExtResource("1_1rklo")
+dependancy = ExtResource("1_mcbs6")
+button_text = "Cybernetic Augmentation"
+activation_type = 6
+activation_amount = 3

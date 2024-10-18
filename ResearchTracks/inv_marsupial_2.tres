@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Invention" load_steps=3 format=3 uid="uid://beqs1tbfv40ce"]
+
+[ext_resource type="Resource" uid="uid://gmafdhhkf5jj" path="res://ResearchTracks/dep_marsupial_2.tres" id="1_7fy3h"]
+[ext_resource type="Script" path="res://Scripts/Invention.gd" id="1_wtlei"]
+
+[resource]
+script = ExtResource("1_wtlei")
+dependancy = ExtResource("1_7fy3h")
+button_text = "Marsupial Perfection"
+activation_type = 6
+activation_amount = 2

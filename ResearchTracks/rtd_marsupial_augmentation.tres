@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ResearchTrackData" load_steps=5 format=3 uid="uid://c57phb1thingm"]
+
+[ext_resource type="Resource" uid="uid://buolhpwupu8e7" path="res://ResearchTracks/inv_marsupial_1.tres" id="1_ggvs7"]
+[ext_resource type="Script" path="res://Scripts/ResearchTrackData.gd" id="1_ptlnm"]
+[ext_resource type="Resource" uid="uid://beqs1tbfv40ce" path="res://ResearchTracks/inv_marsupial_2.tres" id="2_fg5id"]
+[ext_resource type="Resource" uid="uid://b1cg7ojtq0pdx" path="res://ResearchTracks/inv_marsupial_3.tres" id="3_crhtn"]
+
+[resource]
+script = ExtResource("1_ptlnm")
+inventions = Array[Resource]([ExtResource("1_ggvs7"), ExtResource("2_fg5id"), ExtResource("3_crhtn")])
+track = "Marsupial Augmentation"

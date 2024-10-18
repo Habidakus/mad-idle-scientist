@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="IDMarsupialAdvancement" load_steps=2 format=3 uid="uid://gmafdhhkf5jj"]
+
+[ext_resource type="Script" path="res://Scripts/Dependancies/IDMarsupialAdvancement.gd" id="1_bms7q"]
+
+[resource]
+script = ExtResource("1_bms7q")
+full = true
+blueprint_cost = 10
+money_cost = 250000

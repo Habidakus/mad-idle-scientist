@@ -6,6 +6,7 @@ class_name ResearchTrack
 var invensions : Array[Invention] = []
 var current_index : int = 0
 var lab_manager : Control = null
+var official_track_name : String
 
 func _ready() -> void:
 	var button : Button = ($Button as Button)
@@ -16,7 +17,7 @@ func _ready() -> void:
 
 func init(game : Control, rtd : ResearchTrackData) -> void:
 	lab_manager = game
-	$Pending/Track.text = rtd.track
+	official_track_name = rtd.track
 	for i : Invention in rtd.inventions:
 		print("Adding invention %s" % [i.button_text])
 		i.set_condition_checker(game)
@@ -56,10 +57,11 @@ func update() -> void:
 			$Button.hide()
 		if $Pending.visible == false:
 			#print("Showing ETA for %s" % pending_invention.get_button_text())
+			$Pending/Track.show()
 			if current_index == 0:
-				$Pending/Track.hide()
+				$Pending/Track.text = "Unknown Tech"
 			else:
-				$Pending/Track.show()
+				$Pending/Track.text = official_track_name
 			lab_manager.highlight_lab()
 			$Pending.show()
 		$Pending/ETA.text = pending_invention.get_eta_text()

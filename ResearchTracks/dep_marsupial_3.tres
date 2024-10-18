@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="IDMuscleCount" load_steps=2 format=3 uid="uid://dqswannnmst2q"]
+
+[ext_resource type="Script" path="res://Scripts/Dependancies/IDMuscleCount.gd" id="1_0r5k2"]
+
+[resource]
+script = ExtResource("1_0r5k2")
+muscle_count = 25
+blueprint_cost = 25
+money_cost = 1500000
