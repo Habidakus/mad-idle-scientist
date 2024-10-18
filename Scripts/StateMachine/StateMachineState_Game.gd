@@ -586,22 +586,17 @@ func activate_invention(activation_type : Invention.ActivationType) -> void:
 				populate_workshop_option_button(workshop.option_button)
 			change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
 		workshop_types[activation_type][4] += 1
+		assert(workshop_types[activation_type][4] == 1, "Do not know what it means to increase %s a second time" % Invention.ActivationType.find_key(activation_type))
+	else:
 		match activation_type:
 			Invention.ActivationType.UNLOCK_WORKSHOP_UPGRADE:
 				workshop_efficiency *= 1.5
+				self.update_all_workshop_status()
 			Invention.ActivationType.UNLOCK_MARSUPIAL_GROWTH:
 				marsupial_size *= 1.5
-			#Invention.ActivationType.UNLOCK_INVESTMENT_BANKING:
-			#Invention.ActivationType.UNLOCK_ROBOT:
-			#Invention.ActivationType.UNLOCK_GEARS:
-			#Invention.ActivationType.UNLOCK_ARTIFICIAL_MUSCLE:
-			#Invention.ActivationType.UNLOCK_SENSORS:
-			#Invention.ActivationType.UNLOCK_KAIJU:
 			_:
-				assert(workshop_types[activation_type][4] == 1, "Do not know what it means to increase %s a second time" % Invention.ActivationType.find_key(activation_type))
-		#print("%s = %d" % [Invention.ActivationType.find_key(activation_type), workshop_types[activation_type][4]])
-	else:
-		assert(false, "Can't activate invention for %s - no matching workshop" % [Invention.ActivationType.find_key(activation_type)])
+				assert(false, "Can't activate invention for %s - no matching workshop" % [Invention.ActivationType.find_key(activation_type)])
+			
 
 func money_string(dollars : float) -> String:
 	if dollars < 100:

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="IDGearAndSensorCount" load_steps=2 format=3 uid="uid://bkrnxynq88o1y"]
+
+[ext_resource type="Script" path="res://Scripts/Dependancies/IDGearAndSensor.gd" id="1_qr871"]
+
+[resource]
+script = ExtResource("1_qr871")
+gear_count = 40
+sensor_count = 40
+blueprint_cost = 40
+money_cost = 2500000

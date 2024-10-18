@@ -4,11 +4,11 @@ class_name Invention
 
 enum ActivationType {
 	UNSET,
-	UNLOCK_ROBOT,
+	UNLOCK_ROBOT,	#  made from gears and artificial muscle
 	UNLOCK_GEARS,
 	UNLOCK_ARTIFICIAL_MUSCLE,
 	UNLOCK_SENSORS, 
-	UNLOCK_WORKSHOP_UPGRADE, # x3
+	UNLOCK_WORKSHOP_UPGRADE, # x3 - made from gears and sensors
 	UNLOCK_MARSUPIAL_GROWTH, # x4
 	UNLOCK_INVESTMENT_BANKING, # x4
 	UNLOCK_KAIJU,

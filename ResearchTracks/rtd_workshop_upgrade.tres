@@ -1,8 +1,11 @@
-[gd_resource type="Resource" script_class="ResearchTrackData" load_steps=2 format=3 uid="uid://ctgdbuxwuiuxc"]
+[gd_resource type="Resource" script_class="ResearchTrackData" load_steps=5 format=3 uid="uid://ctgdbuxwuiuxc"]
 
 [ext_resource type="Script" path="res://Scripts/ResearchTrackData.gd" id="1_n8x0c"]
+[ext_resource type="Resource" uid="uid://c1677vvf6ymyf" path="res://ResearchTracks/inv_workshop_upgrade_1.tres" id="1_rhaii"]
+[ext_resource type="Resource" uid="uid://bj37mkhb1l1wp" path="res://ResearchTracks/inv_workshop_upgrade_2.tres" id="2_14vs6"]
+[ext_resource type="Resource" uid="uid://ba5vii03fbc5o" path="res://ResearchTracks/inv_workshop_upgrade_3.tres" id="3_yqk7n"]
 
 [resource]
 script = ExtResource("1_n8x0c")
-inventions = Array[Resource]([])
-track = ""
+inventions = Array[Resource]([ExtResource("1_rhaii"), ExtResource("2_14vs6"), ExtResource("3_yqk7n")])
+track = "Workshop Upgrades"

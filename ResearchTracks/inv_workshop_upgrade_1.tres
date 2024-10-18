@@ -6,6 +6,6 @@
 [resource]
 script = ExtResource("1_1wpb4")
 dependancy = ExtResource("1_h1i4g")
-button_text = "Mechanized Workshops"
+button_text = "Self Aware Workshops"
 activation_type = 5
 activation_amount = 1
