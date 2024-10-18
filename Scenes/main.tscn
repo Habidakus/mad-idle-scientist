@@ -37,7 +37,6 @@ script = ExtResource("1_2u3i6")
 initial_state = NodePath("SplashScreen")
 
 [node name="SplashScreen" type="Control" parent="MainStateMachine" node_paths=PackedStringArray("next_state")]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -47,6 +46,9 @@ grow_vertical = 2
 script = ExtResource("2_6bx2r")
 next_state = NodePath("../MainMenu")
 time_out_in_seconds = 5.0
+fade_in = true
+fade_out = true
+fade_time = 1.0
 
 [node name="Label" type="Label" parent="MainStateMachine/SplashScreen"]
 layout_mode = 1
@@ -74,6 +76,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_dgp3i")
+fade_in = true
+fade_out = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainStateMachine/MainMenu"]
 layout_mode = 1
@@ -125,6 +129,9 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_6bx2r")
 next_state = NodePath("../MainMenu")
+fade_in = true
+fade_out = true
+fade_time = 1.0
 
 [node name="GridContainer" type="GridContainer" parent="MainStateMachine/Credits"]
 layout_mode = 1
@@ -205,8 +212,10 @@ Audacity"
 [node name="Game" parent="MainStateMachine" instance=ExtResource("5_wjm77")]
 visible = false
 research_track_data_sets = Array[Resource]([ExtResource("7_ql8q4"), ExtResource("8_nc1ox"), ExtResource("9_5885i"), ExtResource("10_p0ps6"), ExtResource("11_d64m3"), ExtResource("12_qptde"), ExtResource("13_4jbdl")])
+fade_in = true
 
 [node name="Options" type="MarginContainer" parent="."]
+visible = false
 top_level = true
 layout_mode = 1
 anchors_preset = 15

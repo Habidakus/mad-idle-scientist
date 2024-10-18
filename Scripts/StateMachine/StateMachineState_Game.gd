@@ -283,6 +283,16 @@ func _ready() -> void:
 	imt.set_size_override(Vector2i(8, 8))
 	highlight_tab_texture = imt
 
+@export var fade_in : bool = false
+@export var fade_time : float = 1.0
+func enter_state() -> void:
+	super.enter_state()
+	if fade_in:
+		self.modulate = Color(Color.WHITE, 0)
+		var tween = get_tree().create_tween()
+		var destination_color : Color = Color(Color.WHITE, 1)
+		tween.tween_property(self, "modulate", destination_color, fade_time)
+
 func _input(event):
 	if in_debug_mode:
 		if event is InputEventKey:

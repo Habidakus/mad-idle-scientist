@@ -96,7 +96,8 @@ func invoke_tween_callback() -> void:
 	var tmp : Callable = callback_after_tween_finished
 	callback_after_tween_finished = Callable()
 	#print("callback invoking, %s.scale=%s" % [target.name, str(target.scale)])
-	tmp.call()
+	if tmp != null:
+		tmp.call()
 
 func add_transition(mode_name : String, settings, seconds : float, callback : Callable ) -> void:
 	#print("Starting transition " + target.name + " to " + mode_name)
