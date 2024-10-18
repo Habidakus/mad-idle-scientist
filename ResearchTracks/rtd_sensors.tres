@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ResearchTrackData" load_steps=3 format=3 uid="uid://crjky3dtffew5"]
+
+[ext_resource type="Resource" uid="uid://cobovglqsevul" path="res://ResearchTracks/inv_sensor_1.tres" id="1_g03v3"]
+[ext_resource type="Script" path="res://Scripts/ResearchTrackData.gd" id="1_qd36x"]
+
+[resource]
+script = ExtResource("1_qd36x")
+inventions = Array[Resource]([ExtResource("1_g03v3")])
+track = "Sensor Packs"

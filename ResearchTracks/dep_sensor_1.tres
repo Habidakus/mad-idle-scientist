@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="IDSensorCount" load_steps=2 format=3 uid="uid://dfeyyg8wnqtv8"]
+
+[ext_resource type="Script" path="res://Scripts/Dependancies/IDSensorCount.gd" id="1_2pj4y"]
+
+[resource]
+script = ExtResource("1_2pj4y")
+sensor_count = 10
+blueprint_cost = 10
+money_cost = 500000

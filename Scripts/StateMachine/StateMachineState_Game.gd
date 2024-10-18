@@ -2,6 +2,8 @@ extends StateMachineState
 
 class_name SMS_Game
 
+var in_debug_mode : bool = true
+
 var click_count : int = 0
 var money : int = 0 : set = set_money
 var blueprints : int = 0 : set = set_blueprints
@@ -60,6 +62,11 @@ var minion_blueprints_delta : float = 1 / 20.0
 var minion_robots_delta : float = 1 / 20.0
 var minion_gears_delta : float = 1 / 20.0
 var minion_muscles_delta : float = 1 / 20.0
+var minion_sensor_pack_delta : float = 1 / 20.0
+var minion_kaiju_delta : float = 1;
+
+var workshop_efficiency : float = 1.0
+var marsupial_size : float = 1.0
 
 var augment_remainder : float = 0
 var augment_amount : float = 0
@@ -251,12 +258,34 @@ func _ready() -> void:
 	# Other
 	#-------
 
-	money = 2500
+	if in_debug_mode:
+		money = 2500
+	else:
+		money = 0
 	
 	var it : Image = highlight_tab_texture.get_image();
 	var imt : ImageTexture = ImageTexture.create_from_image(it)
 	imt.set_size_override(Vector2i(8, 8))
 	highlight_tab_texture = imt
+
+func _input(event):
+	if in_debug_mode:
+		if event is InputEventKey:
+			var iek : InputEventKey = event as InputEventKey
+			if iek.is_released():
+				if iek.keycode == KEY_1:
+					money = money + money
+					print("DEBUG MODE: Doubling Money")
+				elif iek.keycode == KEY_2:
+					blueprints = blueprints + blueprints
+					print("DEBUG MODE: Doubling Blueprints")
+				elif iek.keycode == KEY_3:
+					warehouse_add(CraftedItemType.GEAR, 1)
+					warehouse_add(CraftedItemType.ARTIFICIAL_MUSCLE, 1)
+					print("DEBUG MODE: Adding Gear & Muscle")
+				elif iek.keycode == KEY_4:
+					warehouse_add(CraftedItemType.SENSOR_PACK, 1)
+					print("DEBUG MODE: Adding Sensor Pack")
 
 func load_lab_grid() -> void:
 	for rt_data : Resource in research_track_data_sets:
@@ -284,7 +313,20 @@ func db2(t : String) -> void:
 enum CraftedItemType {
 	GEAR,
 	ARTIFICIAL_MUSCLE,
+	SENSOR_PACK,
 }
+
+func name_from_crafted_type(cit : CraftedItemType) -> String:
+	match cit:
+		CraftedItemType.GEAR:
+			return "Gears"
+		CraftedItemType.ARTIFICIAL_MUSCLE:
+			return "Synthetic Muscles"
+		CraftedItemType.SENSOR_PACK:
+			return "Sensor Packs"
+		_:
+			return "UNKNOWN//%s" % CraftedItemType.find_key(cit)
+
 var warehouse_holdings : Dictionary = {}
 func warehouse_count(item_type : CraftedItemType) -> int:
 	if warehouse_holdings.has(item_type):
@@ -295,8 +337,10 @@ func warehouse_count(item_type : CraftedItemType) -> int:
 var warehouse_account_label_mapping : Dictionary = {}
 func warehouse_add(item_type: CraftedItemType, amount: int) -> void:
 	if warehouse_holdings.has(item_type):
+		var was_zero = warehouse_holdings[item_type] == 0
 		warehouse_holdings[item_type] += amount
-		if warehouse_holdings[item_type] == 0:
+		var now_zero = warehouse_holdings[item_type] == 0
+		if was_zero != now_zero:
 			update_all_workshop_status()
 	else:
 		warehouse_holdings[item_type] = amount
@@ -309,7 +353,7 @@ func warehouse_add(item_type: CraftedItemType, amount: int) -> void:
 		var mc = MarginContainer.new()
 		mc.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var l = Label.new()
-		l.text = "%s: " % [CraftedItemType.find_key(item_type)]
+		l.text = name_from_crafted_type(item_type)
 		l.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		mc.add_child(l)
 		var a = Label.new()
@@ -364,7 +408,7 @@ func query_tab(tab : TabRef, query : TabAction) -> bool:
 func _process(delta: float) -> void:
 	update_augment_button_fraction(delta, 1)
 	if augment_amount > 0:
-		augment_remainder += delta * augment_amount * main_button_stages[main_button_stage][2]
+		augment_remainder += delta * augment_amount * marsupial_size * main_button_stages[main_button_stage][2]
 		oppossum_value.text = "%s/sec" % money_string(augment_amount * main_button_stages[main_button_stage][2])
 		if augment_remainder >= 1.0:
 			money += (int)(augment_remainder)
@@ -500,6 +544,9 @@ var workshop_types : Dictionary = {
 	Invention.ActivationType.UNLOCK_ROBOT: [false, Workshop.WorkshopTask.ROBOTS, "Craft Robots", "Robots will work with minions in workshops", 0],
 	Invention.ActivationType.UNLOCK_GEARS: [false, Workshop.WorkshopTask.GEARS, "Craft Gears", "Gears will help you craft other things", 0],
 	Invention.ActivationType.UNLOCK_ARTIFICIAL_MUSCLE: [false, Workshop.WorkshopTask.ARTIFICIAL_MUSCLE, "Craft Synthetic Muscle", "Synthetic muscle will help you craft other things", 0],
+	Invention.ActivationType.UNLOCK_SENSORS: [false, Workshop.WorkshopTask.SENSOR_PACKS, "Craft Sensor Packs", "Synthetic optic and nerve clusters", 0],
+	Invention.ActivationType.UNLOCK_KAIJU: [false, Workshop.WorkshopTask.KAIJU, "Build the Kaiju Kangaroo", "Nations will bow before the might of the Kaiju Kangaroo", 0],
+	
 }
 
 func add_text_and_tooltip_to_id(option_button : OptionButton, task : Workshop.WorkshopTask, item_name : String, item_tooltip : String) -> int:
@@ -539,13 +586,19 @@ func activate_invention(activation_type : Invention.ActivationType) -> void:
 				populate_workshop_option_button(workshop.option_button)
 			change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
 		workshop_types[activation_type][4] += 1
-		if workshop_types[activation_type][4] > 1:
-			match activation_type:
-				#Invention.ActivationType.UNLOCK_ROBOT:
-				#Invention.ActivationType.UNLOCK_GEARS:
-				#Invention.ActivationType.UNLOCK_ARTIFICIAL_MUSCLE:
-				_:
-					assert(false, "Do not know what it means to increase %s a second time" % Invention.ActivationType.find_key(activation_type))
+		match activation_type:
+			Invention.ActivationType.UNLOCK_WORKSHOP_UPGRADE:
+				workshop_efficiency *= 1.5
+			Invention.ActivationType.UNLOCK_MARSUPIAL_GROWTH:
+				marsupial_size *= 1.5
+			#Invention.ActivationType.UNLOCK_INVESTMENT_BANKING:
+			#Invention.ActivationType.UNLOCK_ROBOT:
+			#Invention.ActivationType.UNLOCK_GEARS:
+			#Invention.ActivationType.UNLOCK_ARTIFICIAL_MUSCLE:
+			#Invention.ActivationType.UNLOCK_SENSORS:
+			#Invention.ActivationType.UNLOCK_KAIJU:
+			_:
+				assert(workshop_types[activation_type][4] == 1, "Do not know what it means to increase %s a second time" % Invention.ActivationType.find_key(activation_type))
 		#print("%s = %d" % [Invention.ActivationType.find_key(activation_type), workshop_types[activation_type][4]])
 	else:
 		assert(false, "Can't activate invention for %s - no matching workshop" % [Invention.ActivationType.find_key(activation_type)])

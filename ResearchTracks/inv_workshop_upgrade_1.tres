@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Invention" load_steps=3 format=3 uid="uid://c1677vvf6ymyf"]
+
+[ext_resource type="Script" path="res://Scripts/Invention.gd" id="1_1wpb4"]
+[ext_resource type="Resource" uid="uid://dfeyyg8wnqtv8" path="res://ResearchTracks/dep_sensor_1.tres" id="1_h1i4g"]
+
+[resource]
+script = ExtResource("1_1wpb4")
+dependancy = ExtResource("1_h1i4g")
+button_text = "Mechanized Workshops"
+activation_type = 5
+activation_amount = 1

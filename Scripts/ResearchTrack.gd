@@ -11,6 +11,7 @@ func _ready() -> void:
 	var button : Button = ($Button as Button)
 	assert(button != null, "%s does not have a Button" % [name])
 	($Button as Button).pressed.connect(on_button_press)
+	$Pending.hide()
 	hide()
 
 func init(game : Control, rtd : ResearchTrackData) -> void:

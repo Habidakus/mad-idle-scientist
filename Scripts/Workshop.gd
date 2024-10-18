@@ -8,6 +8,8 @@ enum WorkshopTask {
 	ROBOTS,
 	GEARS,
 	ARTIFICIAL_MUSCLE,
+	SENSOR_PACKS,
+	KAIJU,
 }
 
 var task : WorkshopTask = WorkshopTask.MONEY
@@ -29,6 +31,7 @@ var partial_blueprints : float = 0
 var partial_robots : float = 0
 var partial_gears : float = 0
 var partial_muscles : float = 0
+var partial_sensor_pack : float = 0
 
 func get_workshop_name() -> String:
 	return name_label.text
@@ -74,8 +77,8 @@ func init(workshop_name : String, grid_container : GridContainer, workshop_list 
 	update_status()
 
 func process(delta : float) -> void:
-	var minion_strength : float = sqrt(minion_count)
 	var game : SMS_Game = get_parent();
+	var minion_strength : float = sqrt(minion_count) * game.workshop_efficiency
 	match task:
 		WorkshopTask.MONEY:
 			partial_money += game.minion_money_delta * minion_strength * delta
@@ -109,6 +112,14 @@ func process(delta : float) -> void:
 				var earned_muscles : int = floor(partial_muscles) as int
 				partial_muscles -= earned_muscles
 				game.warehouse_add(SMS_Game.CraftedItemType.ARTIFICIAL_MUSCLE, earned_muscles)
+		WorkshopTask.SENSOR_PACKS:
+			partial_sensor_pack += game.minion_sensor_pack_delta * minion_strength * delta
+			if partial_sensor_pack >= 1.0:
+				var earned_sensor_pack : int = floor(partial_sensor_pack) as int
+				partial_sensor_pack -= earned_sensor_pack
+				game.warehouse_add(SMS_Game.CraftedItemType.SENSOR_PACK, earned_sensor_pack)
+		WorkshopTask.KAIJU:
+			game.add_kaiju_parts(game.minion_kaiju_delta * minion_strength * delta)
 		_:
 			assert(false, "Workshops don't know how to process task %s yet" % [WorkshopTask.find_key(task)])
 
@@ -128,8 +139,8 @@ func update_status() -> void:
 		status_label.text = "NO WORKERS ASSIGNED"
 		return
 
-	var minion_strength : float = sqrt(minion_count)
 	var game : SMS_Game = get_parent()
+	var minion_strength : float = sqrt(minion_count) * game.workshop_efficiency
 	match task:
 		WorkshopTask.MONEY:
 			var dollars_per_second : float = game.minion_money_delta * minion_strength
@@ -151,6 +162,9 @@ func update_status() -> void:
 		WorkshopTask.ARTIFICIAL_MUSCLE:
 			var muscles_per_second : float = game.minion_muscles_delta * minion_strength
 			status_label.text = "%.2f synmusc/sec" % muscles_per_second;
+		WorkshopTask.SENSOR_PACKS:
+			var sensors_per_second : float = game.minion_sensor_pack_delta * minion_strength
+			status_label.text = "%.2f packs/sec" % sensors_per_second;
 		_:
 			status_label.text = "TASK UNKNOWN"
 

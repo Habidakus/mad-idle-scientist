@@ -31,6 +31,7 @@ Oct 17th:
 	Worked on exporting to Web (and setting up itch.io account)
 	worked on dependancy checking for when to play rants
 	Fixed workshop task selector highlight format
+	Added sensor packs
 
 TODO:
   - randomize the type of marsupials each player might get
