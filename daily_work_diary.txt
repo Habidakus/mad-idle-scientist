@@ -33,6 +33,9 @@ Oct 17th: 8 hours
 	Fixed workshop task selector highlight format
 	Added sensor packs
 	Added endgame
+Oct 17th: 1 hour
+	Added some fades between state screens
+	Final check-in to itch.io
 
 TODO:
   - randomize the type of marsupials each player might get
