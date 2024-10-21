@@ -51,3 +51,4 @@ POST-MORTEM:
   - the victory page should have included it's own dialog audio
   - have the inc/dec button on the workers increase by a factor of 10 if SHIFT is being held
   - with each new item you can build in the workshop, add a "Set All to X" button on the workshop tab to instantly switch all workshops to building just that one resource
+  - need to draw much more attention to "highlight" tabs and buttons. Players can get stuck not realizing there are areas of the game they haven't played with yet.
