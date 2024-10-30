@@ -12,7 +12,7 @@ var blueprints_attr : Label = null
 var blueprints_value : Label = null
 var idle_attr : Label = null
 var idle_value : Label = null
-var workshop_panel_label : Label = null
+#var workshop_panel_label : Label = null
 var rant_player : AudioStreamPlayer = null
 var rant_pop_up : Control = null
 var rant_footnote : Label = null
@@ -23,7 +23,7 @@ var click_player_beta : AudioStreamPlayer = null
 var main_button : Button = null
 var unlock_button : Button = null
 var augment_button : Button = null
-var workshops_button : Button = null
+var start_spending_money_button : Button = null
 var hire_minion_button : Button = null
 var build_workshop_button : Button = null
 var list_of_workshops_grid : GridContainer = null
@@ -33,6 +33,7 @@ var augment_eta : Label = null
 var oppossum_attr : Label = null
 var oppossum_value : Label = null
 var generate_money_tab : Control = null
+var spend_money_tab : Control = null
 var workshop_tab : Control = null
 var lab_tab : Control = null
 var tab_container : TabContainer = null
@@ -43,11 +44,11 @@ var kaiju_progress : ProgressBar = null
 var main_button_stage : int = 0
 var main_button_stages = {
 	0: ["Tinker\nin your lab", 0, 1, "Put away your tinkering!\nBecome a coder."],
-	1: ["Code\nup something keen", 10, 5, "Stop coding!\nTeach others your brilliance."],
+	1: ["Code up\nsomething keen", 10, 5, "Stop coding!\nTeach others your brilliance."],
 	2: ["Mentor others\nShare your brilliance!", 100, 10, "Bah, I'm thinking too small.\nLet me plan!"],
 	3: ["Architect\nlike a mad genius!", 1000, 20, "Surely there is a market\nfor my brilliance!"],
-	4: ["Patent\nyour tremendous inventions!", 10000, 50, "The fools don't understand me\nI will show them!"],
-	5: ["Scheme\nNo one can scheme like you!", 100000, 100, "(((should not see this)))"],
+	4: ["Patent your\ntremendous inventions!", 10000, 50, "The fools don't understand me\nI will show them!"],
+	5: ["Scheme! No one\ncan scheme like you!", 100000, 100, "(((should not see this)))"],
 }
 
 var highlight_tab_texture : Texture2D = load("res://Art/redCircle.png")
@@ -77,7 +78,7 @@ var augment_button_stage : int = 0
 var augment_button_unlock_fraction : float = 0
 var augment_button_stages = {
 	# augment_button_stage: [increase per click, increase per second, fraction needed before percent appears, button text]
-	0: [50, 0, 1.5, "Odds Fish, I could train opossums to do this!"],
+	0: [50, 0, 1.5, "Odds Fish,\nI could train opossums to do this!"],
 	1: [100, 250, 0.4, "Yes, more opossums\nmore wealth!"],
 	2: [200, 500, 0.3, "Onward, my marsupials!\nTogether we earn riches!"],
 	3: [400, 1000, 0.2, "Type with your tails if need be!\nEvery dollar brings us closer to victory!"],
@@ -116,6 +117,7 @@ var rants : Array = [
 
 enum TabRef {
 	GENERATE_MONEY_TAB,
+	SPEND_MONEY_TAB,
 	WORKSHOP_TAB,
 	LAB_TAB,
 	WAREHOUSE_TAB,
@@ -223,7 +225,22 @@ func _ready() -> void:
 	augment_button.hide()
 	augment_eta = find_label("AugmentETA")
 	augment_eta.hide()
+	
+	start_spending_money_button = find_button("StartSpendingMoneyButton");
+	start_spending_money_button.hide()
 
+	#-------
+	# Spend Money Page
+	#-------
+
+	spend_money_tab = find_control("Spend Money");
+	change_tab(TabRef.SPEND_MONEY_TAB, TabAction.HIDE_TAB)
+	
+	hire_minion_button = find_button("HireMinion")
+	update_minion_button()
+	build_workshop_button = find_button("BuildWorkshop")
+	update_workshop_button()
+	
 	#-------
 	# Workshop Page
 	#-------
@@ -231,18 +248,10 @@ func _ready() -> void:
 	workshop_tab = find_control("Workshops");
 	change_tab(TabRef.WORKSHOP_TAB, TabAction.HIDE_TAB)
 	
-	hire_minion_button = find_button("HireMinion")
-	update_minion_button()
-	build_workshop_button = find_button("BuildWorkshop")
-	update_workshop_button()
-	
-	workshops_button = find_button("WorkshopsButton");
-	workshops_button.hide()
-	
-	workshop_panel_label = find_label("WorkshopPanelLabel");
-	workshop_panel_label.hide();
+	#workshop_panel_label = find_label("WorkshopPanelLabel");
+	#workshop_panel_label.hide();
 	list_of_workshops_grid = find_grid_container("ListOfWorkshops");
-	list_of_workshops_grid.hide();
+	#list_of_workshops_grid.hide();
 
 	#-------
 	# Labrotory
@@ -397,6 +406,8 @@ func get_tab_index(tab: TabRef) -> int:
 	match tab:
 		TabRef.GENERATE_MONEY_TAB:
 			idx = tab_container.get_tab_idx_from_control(generate_money_tab)
+		TabRef.SPEND_MONEY_TAB:
+			idx = tab_container.get_tab_idx_from_control(spend_money_tab)
 		TabRef.WORKSHOP_TAB:
 			idx = tab_container.get_tab_idx_from_control(workshop_tab)
 		TabRef.LAB_TAB:
@@ -549,10 +560,10 @@ func set_money(new_value : int) -> void:
 			unlock_button.text = main_button_stages[main_button_stage][3]
 			unlock_button.show()
 			change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.HIGHLIGHT_TAB)
-	if money >= workshop_unlock_amount && workshops_button.visible == false:
-		if query_tab(TabRef.WORKSHOP_TAB, TabAction.IS_HIDDEN):
-			workshops_button.show()
-			change_tab(TabRef.GENERATE_MONEY_TAB, TabAction.HIGHLIGHT_TAB)
+	if money >= workshop_unlock_amount && start_spending_money_button.visible == false:
+		if query_tab(TabRef.SPEND_MONEY_TAB, TabAction.IS_HIDDEN):
+			start_spending_money_button.show()
+			change_tab(TabRef.SPEND_MONEY_TAB, TabAction.HIGHLIGHT_TAB)
 	update_minion_button()
 	update_workshop_button()
 
@@ -666,15 +677,18 @@ func update_minion_button() -> void:
 	if money < cost_to_hire_next_minion:
 		hire_minion_button.set_disabled(true)
 	elif hire_minion_button.is_disabled():
-		change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
+		change_tab(TabRef.SPEND_MONEY_TAB, TabAction.HIGHLIGHT_TAB)
 		hire_minion_button.set_disabled(false)
 
 func update_workshop_button() -> void:
 	build_workshop_button.text = "Build Workshop\n%s" % money_string(cost_to_build_next_workshop)
-	if money < cost_to_build_next_workshop:
+	if workshop_array.size() >= 6:
+		build_workshop_button.set_disabled(true)
+		build_workshop_button.hide();
+	elif money < cost_to_build_next_workshop:
 		build_workshop_button.set_disabled(true)
 	elif build_workshop_button.is_disabled():
-		change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
+		change_tab(TabRef.SPEND_MONEY_TAB, TabAction.HIGHLIGHT_TAB)
 		build_workshop_button.set_disabled(false)
 
 func inc_click_count(is_primary : bool) -> void:
@@ -719,9 +733,9 @@ func _on_augment_button_pressed() -> void:
 
 func _on_workshops_button_pressed() -> void:
 	inc_click_count(false)
-	workshops_button.hide()
-	change_tab(TabRef.WORKSHOP_TAB, TabAction.SHOW_TAB)
-	change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
+	start_spending_money_button.hide()
+	change_tab(TabRef.SPEND_MONEY_TAB, TabAction.SHOW_TAB)
+	change_tab(TabRef.SPEND_MONEY_TAB, TabAction.HIGHLIGHT_TAB)
 
 var total_robots : int = 0
 var total_minions : int = 0
@@ -756,16 +770,13 @@ func generate_workshop_name() -> String:
 		workshop_name_stepper_a = some_primes[rng.randi_range(0, some_primes.size() - 1)]
 		workshop_name_stepper_b = some_primes[rng.randi_range(0, some_primes.size() - 1)]
 		workshop_name_stepper_c = some_primes[rng.randi_range(0, some_primes.size() - 1)]
-	var a : Array = ["Alpha", "Beta", "Gamma", "Delta", "Omega", "Primus", "Secundus", "Tertius", "Quartus", "Eins", "Zwei"]
 	var b : Array = [2, 3, 5, 7, 11, 13,  17, 19, 23,  29, 31, 37,  41, 43, 47, 53, 59, 61]
-	var c : Array = ["Jekyll", "Strange", "No", "Moreau", "Moriarty", "Luthor", "Brundle", "Von Doom", "Loveless", "West", "Octavius", "Nemo"]
-	workshop_name_index_a = (workshop_name_index_a + workshop_name_stepper_a) % a.size()
+	var c : Array = ["Jekyll", "Strange", "No", "Moreau", "Moriarty", "Luthor", "Brundle", "Von Doom", "Loveless", "West", "Octavius", "Nemo", "Alpha", "Beta", "Gamma", "Delta", "Omega", "Primus", "Secundus", "Tertius", "Quartus", "Eins", "Zwei"]
 	workshop_name_index_b = (workshop_name_index_b + workshop_name_stepper_b) % b.size()
 	workshop_name_index_c = (workshop_name_index_c + workshop_name_stepper_c) % c.size()
-	var x = a[workshop_name_index_a]
 	var y = b[workshop_name_index_b]
 	var z = c[workshop_name_index_c]
-	return "%s-%d-%s" % [x, y, z]
+	return "%s-%d" % [z, y]
 	
 # index: [task, minions]
 var workshop_array : Array[Workshop] = []
@@ -794,9 +805,11 @@ func update_all_workshop_minions() -> void:
 		workshop.update_available_minions(available_minions)
 
 func add_workshop() -> void:
-	if workshop_panel_label.hidden:
-		workshop_panel_label.show()
-		list_of_workshops_grid.show()
+	#if workshop_panel_label.hidden:
+	#	workshop_panel_label.show()
+	#	list_of_workshops_grid.show()
+	change_tab(TabRef.WORKSHOP_TAB, TabAction.SHOW_TAB)
+	change_tab(TabRef.WORKSHOP_TAB, TabAction.HIGHLIGHT_TAB)
 	var workshop : Workshop = Workshop.new()
 	var workshop_name : String = generate_workshop_name()
 	add_child(workshop)

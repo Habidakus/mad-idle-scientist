@@ -36,6 +36,10 @@ Oct 17th: 8 hours
 Oct 17th: 1 hour
 	Added some fades between state screens
 	Final check-in to itch.io
+-------<Game Jam Ends>---------------
+Oct 30th: 
+	Make the game more friendly to mobile devices
+	Split Workshop tab into Spend Money & Manage Workshops
 
 TODO:
   - randomize the type of marsupials each player might get
@@ -45,7 +49,7 @@ TODO:
 	- theft gigs (risk minions)
 
 POST-MORTEM:
-  - if working for web (especially mobile) start with much small size
+  + if working for web (especially mobile) start with much small size
   - for mobile idle/clicker allow holding inc’r button for auto increase
   - inc’r button should have been accessible no matter which tab you were on
   - the victory page should have included it's own dialog audio

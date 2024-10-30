@@ -37,6 +37,7 @@ script = ExtResource("1_2u3i6")
 initial_state = NodePath("SplashScreen")
 
 [node name="SplashScreen" type="Control" parent="MainStateMachine" node_paths=PackedStringArray("next_state")]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -64,7 +65,7 @@ offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 80
+theme_override_font_sizes/font_size = 71
 text = "Mad Idle Scientist"
 
 [node name="MainMenu" type="Control" parent="MainStateMachine"]
@@ -120,7 +121,6 @@ script = ExtResource("4_hagyi")
 loads_after = NodePath("../../Credits/CreditsDecorator")
 
 [node name="Credits" type="Control" parent="MainStateMachine" node_paths=PackedStringArray("next_state")]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -140,10 +140,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -358.0
-offset_top = -55.0
-offset_right = 358.0
-offset_bottom = 55.0
+offset_left = -236.0
+offset_top = -168.0
+offset_right = 236.0
+offset_bottom = 168.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/h_separation = 40
@@ -153,42 +153,42 @@ columns = 2
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 56
+theme_override_font_sizes/font_size = 32
 text = "Code:"
 
 [node name="JasonAbbott" type="Label" parent="MainStateMachine/Credits/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 56
+theme_override_font_sizes/font_size = 32
 text = "Jason Abbott"
 
 [node name="Design" type="Label" parent="MainStateMachine/Credits/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 56
+theme_override_font_sizes/font_size = 32
 text = "Design:"
 
 [node name="JasonAbbott2" type="Label" parent="MainStateMachine/Credits/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 56
+theme_override_font_sizes/font_size = 32
 text = "Jason Abbott"
 
 [node name="Rants" type="Label" parent="MainStateMachine/Credits/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 56
+theme_override_font_sizes/font_size = 32
 text = "Rants & Sound:"
 
 [node name="JasonAbbott3" type="Label" parent="MainStateMachine/Credits/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 56
+theme_override_font_sizes/font_size = 32
 text = "Jason Abbott"
 
 [node name="Tools" type="Label" parent="MainStateMachine/Credits/GridContainer"]
@@ -196,14 +196,14 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 56
+theme_override_font_sizes/font_size = 32
 text = "Tools:"
 
 [node name="Various" type="Label" parent="MainStateMachine/Credits/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 56
+theme_override_font_sizes/font_size = 32
 text = "Godot,
 Gimp, 
 rFXGen,
@@ -239,10 +239,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="ColorRect" type="ColorRect" parent="Options/ColorRect/MarginContainer"]
 layout_mode = 2
@@ -256,7 +256,12 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 34
 text = "Options"
+
+[node name="Control" type="Control" parent="Options/ColorRect/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="Options/ColorRect/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -267,6 +272,7 @@ columns = 2
 [node name="Label" type="Label" parent="Options/ColorRect/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 34
 text = "Button Sounds:"
 horizontal_alignment = 2
 
@@ -279,12 +285,14 @@ theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 34
 button_pressed = true
 text = "Currently On"
 
 [node name="Label2" type="Label" parent="Options/ColorRect/MarginContainer/VBoxContainer/GridContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 34
 text = "Rant Sounds:"
 horizontal_alignment = 2
 
@@ -297,6 +305,7 @@ theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 34
 button_pressed = true
 text = "Currently On"
 
@@ -304,6 +313,7 @@ text = "Currently On"
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 34
 text = "Press ESC to resume"
 
 [connection signal="pressed" from="MainStateMachine/MainMenu/VBoxContainer/Play" to="MainStateMachine/MainMenu" method="_on_play_pressed"]
