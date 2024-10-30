@@ -130,6 +130,7 @@ enum TabAction {
 	IS_HIDDEN,
 }
 
+var highlight_particle_scene : PackedScene = preload("res://Scenes/highlight.tscn")
 var research_track_packed_scene : PackedScene = preload("res://Scenes/research_track.tscn")
 	
 @export var research_track_data_sets : Array[Resource] = []
@@ -419,6 +420,7 @@ func get_tab_index(tab: TabRef) -> int:
 	assert(idx != -1, "Did not find tab %s in %s" % [TabRef.find_key(tab), tab_container.name])
 	return idx
 
+var highlight_vfxes = {}
 func change_tab(tab : TabRef, change : TabAction) -> void:
 	var idx : int = get_tab_index(tab)
 	match change:
@@ -429,13 +431,25 @@ func change_tab(tab : TabRef, change : TabAction) -> void:
 			tab_container.set_tab_hidden(idx, false)
 			#print("Showing tab %s" % tab_container.get_tab_title(idx))
 		TabAction.HIGHLIGHT_TAB:
-			if !tab_container.is_tab_disabled(idx):
+			if !tab_container.is_tab_disabled(idx) && tab_container.is_tab_hidden(idx) == false:
 				if tab_container.current_tab != idx:
 					tab_container.get_tab_bar().set_tab_icon(idx, highlight_tab_texture)
+					if !highlight_vfxes.has(idx):
+						var highlight_vfx : Control = highlight_particle_scene.instantiate()
+						var tab_local_pos : Vector2 = tab_container.get_tab_bar().get_tab_rect(idx).get_center() - tab_container.get_tab_bar().position
+						highlight_vfx.global_position = tab_container.global_position + tab_local_pos
+						#print("VFX for %s at %s (tab_container=%s + tab_local=%s)" % [TabRef.find_key(tab), highlight_vfx.global_position, tab_container.global_position, tab_local_pos])
+						highlight_vfxes[idx] = highlight_vfx
+						add_child(highlight_vfx)
 			else:
 				print("Can't highlight of Tab.%s - still hidden" % TabRef.find_key(tab))
 		_:
 			assert(false, "Do not understand the %s action to perform on %s.%s" % [TabAction.find_key(change), tab_container.name, TabRef.find_key(tab)])
+
+func process_tab_highlights() -> void:
+	for idx in highlight_vfxes.keys():
+		var tab_local_pos : Vector2 = tab_container.get_tab_bar().get_tab_rect(idx).get_center() - tab_container.get_tab_bar().position
+		highlight_vfxes[idx].global_position = tab_container.global_position + tab_local_pos
 
 func query_tab(tab : TabRef, query : TabAction) -> bool:
 	var idx : int = get_tab_index(tab)
@@ -456,6 +470,7 @@ func _process(delta: float) -> void:
 			money += (int)(augment_remainder)
 			augment_remainder -= floor(augment_remainder)
 	process_workshops(delta)
+	process_tab_highlights()
 
 	if can_rant():
 		start_rant()
@@ -701,6 +716,9 @@ func inc_click_count(is_primary : bool) -> void:
 
 func on_tab_changed(index : int) -> void:
 	tab_container.get_tab_bar().set_tab_icon(index, null)
+	if highlight_vfxes.has(index):
+		highlight_vfxes[index].queue_free()
+		highlight_vfxes.erase(index)
 
 func _on_button_pressed() -> void:
 	inc_click_count(true)

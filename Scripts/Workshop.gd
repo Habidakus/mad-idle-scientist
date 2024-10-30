@@ -15,6 +15,8 @@ enum WorkshopTask {
 var task : WorkshopTask = WorkshopTask.MONEY
 var minion_count : int = 0
 
+var highlight_particle_scene : PackedScene = preload("res://Scenes/highlight.tscn")
+
 var name_label : Label = Label.new()
 
 var minion_increase_button : Button = Button.new()
@@ -25,6 +27,7 @@ var minion_container : HBoxContainer = HBoxContainer.new()
 var style_box : StyleBoxLine = StyleBoxLine.new()
 var option_button : OptionButton = OptionButton.new()
 var status_label : Label = Label.new()
+var highlight_vfx : Control = null
 
 var partial_money : float = 0
 var partial_blueprints : float = 0
@@ -41,6 +44,11 @@ func init(workshop_name : String, grid_container : GridContainer, workshop_list 
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	grid_container.add_child(name_label)
+	
+	highlight_vfx = highlight_particle_scene.instantiate()
+	#highlight_vfx.global_position = option_button.global_position + option_button.size / 2.0
+	highlight_vfx.hide()
+	option_button.add_child(highlight_vfx)
 
 	minion_label.text = "Workers: 0"
 	minion_decrease_button.text = "-";
@@ -79,6 +87,7 @@ func init(workshop_name : String, grid_container : GridContainer, workshop_list 
 func process(delta : float) -> void:
 	var game : SMS_Game = get_parent();
 	var minion_strength : float = sqrt(minion_count) * game.workshop_efficiency
+	highlight_vfx.position = option_button.size / 2.0
 	match task:
 		WorkshopTask.MONEY:
 			partial_money += game.minion_money_delta * minion_strength * delta
@@ -131,8 +140,12 @@ func on_button_down() -> void:
 func highlight_option_button(enable: bool) -> void:
 	if enable:
 		option_button.add_theme_stylebox_override("normal", style_box)
+		highlight_vfx.show()
+		print("showing button highlight at %s" % [highlight_vfx.global_position])
 	else:
 		option_button.remove_theme_stylebox_override("normal")
+		highlight_vfx.hide()
+		print("hiding button highlight at %s" % [highlight_vfx.global_position])
 
 func update_status() -> void:
 	if minion_count == 0:

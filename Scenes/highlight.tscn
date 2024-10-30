@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://yq0cd3s00yun"]
+
+[sub_resource type="Curve" id="Curve_ogau8"]
+min_value = -1.0
+max_value = 2.0
+_data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, 2), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_cg5ur"]
+_data = [Vector2(0.0129534, 0), 0.0, 0.0, 0, 0, Vector2(0.119171, 1), 0.0, 0.0, 0, 0, Vector2(0.865285, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="Gradient" id="Gradient_804qd"]
+offsets = PackedFloat32Array(0, 0.0810056, 0.513967, 0.907821, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1, 0.952941, 1, 0.427451, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="highlight" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+amount = 16
+fixed_fps = 30
+emission_shape = 1
+emission_sphere_radius = 20.0
+gravity = Vector2(0, 0)
+orbit_velocity_min = -0.5
+orbit_velocity_max = 2.0
+orbit_velocity_curve = SubResource("Curve_ogau8")
+scale_amount_curve = SubResource("Curve_cg5ur")
+color_ramp = SubResource("Gradient_804qd")
