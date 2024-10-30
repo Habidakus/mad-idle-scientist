@@ -753,24 +753,20 @@ func _on_hire_minion_pressed() -> void:
 	update_minion_button()
 	update_all_workshop_minions()
 
-var workshop_name_index_a : int = -1
 var workshop_name_index_b : int = -1
 var workshop_name_index_c : int = -1
-var some_primes : Array = [2749, 2909, 3083, 3433, 3733, 3749, 3259, 3581, 1709]
-var workshop_name_stepper_a : int
+var some_primes : Array = [2749, 2909, 3083, 3433, 3733, 3259, 3581, 1709]
 var workshop_name_stepper_b : int
 var workshop_name_stepper_c : int
 
 func generate_workshop_name() -> String:
-	if workshop_name_index_a == -1:
+	if workshop_name_index_b == -1:
 		var rng : RandomNumberGenerator = RandomNumberGenerator.new()
-		workshop_name_index_a = rng.randi() % 100000;
 		workshop_name_index_b = rng.randi() % 100000;
 		workshop_name_index_c = rng.randi() % 100000;
-		workshop_name_stepper_a = some_primes[rng.randi_range(0, some_primes.size() - 1)]
 		workshop_name_stepper_b = some_primes[rng.randi_range(0, some_primes.size() - 1)]
 		workshop_name_stepper_c = some_primes[rng.randi_range(0, some_primes.size() - 1)]
-	var b : Array = [2, 3, 5, 7, 11, 13,  17, 19, 23,  29, 31, 37,  41, 43, 47, 53, 59, 61]
+	var b : Array = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61]
 	var c : Array = ["Jekyll", "Strange", "No", "Moreau", "Moriarty", "Luthor", "Brundle", "Von Doom", "Loveless", "West", "Octavius", "Nemo", "Alpha", "Beta", "Gamma", "Delta", "Omega", "Primus", "Secundus", "Tertius", "Quartus", "Eins", "Zwei"]
 	workshop_name_index_b = (workshop_name_index_b + workshop_name_stepper_b) % b.size()
 	workshop_name_index_c = (workshop_name_index_c + workshop_name_stepper_c) % c.size()
