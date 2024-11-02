@@ -839,7 +839,11 @@ func process_workshops(delta: float) -> void:
 func update_all_workshop_status() -> void:
 	for workshop in workshop_array:
 		workshop.update_status()
-	
+
+func set_all_workshop_tasks(task : Workshop.WorkshopTask) -> void:
+	for workshop in workshop_array:
+		workshop.set_task(task)
+
 func update_all_workshop_minions() -> void:
 	var available_minions : int = get_available_minions()
 	if available_minions > 0 && idle_attr.hidden:

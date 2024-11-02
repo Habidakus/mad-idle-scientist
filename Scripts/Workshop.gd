@@ -182,11 +182,18 @@ func update_status() -> void:
 			status_label.text = "TASK UNKNOWN"
 
 func on_workshop_task_selected(index : int) -> void:
-	task = option_button.get_item_id(index) as WorkshopTask
+	var assign_task : WorkshopTask = option_button.get_item_id(index) as WorkshopTask
+	var parent = get_parent() as SMS_Game
+	parent.inc_click_count(false)
+	if Input.is_key_pressed(KEY_SHIFT):
+		parent.set_all_workshop_tasks(assign_task)
+	else:
+		set_task(assign_task)
+
+func set_task(assign_task : WorkshopTask) -> void:
+	task = assign_task
 	option_button.remove_theme_stylebox_override("normal")
-	#print("Workshop %s task changed to %s (index = %s)" % [get_workshop_name(), WorkshopTask.find_key(task), str(index)])
-	option_button.selected = option_button.get_item_index(task as int)
-	get_parent().inc_click_count(false)
+	option_button.selected = option_button.get_item_index(assign_task as int)
 	update_status()
 
 func on_workshop_minion_count_increase() -> void:
