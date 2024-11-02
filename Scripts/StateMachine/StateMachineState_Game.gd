@@ -790,11 +790,17 @@ func increase_robots() -> void:
 
 func _on_hire_minion_pressed() -> void:
 	inc_click_count(false)
-	money -= cost_to_hire_next_minion
-	total_minions += 1
-	cost_to_hire_next_minion = (int) (cost_to_hire_next_minion * cost_to_hire_next_minion_multiplier)
-	update_minion_button()
-	update_all_workshop_minions()
+	# We'll keep increasing minions if SHIFT is held down until all money is spent
+	while true:
+		money -= cost_to_hire_next_minion
+		total_minions += 1
+		cost_to_hire_next_minion = (int) (cost_to_hire_next_minion * cost_to_hire_next_minion_multiplier)
+		update_minion_button()
+		update_all_workshop_minions()
+		if hire_minion_button.disabled:
+			break
+		if Input.is_key_pressed(KEY_SHIFT) == false:
+			break
 
 var workshop_name_index_b : int = -1
 var workshop_name_index_c : int = -1
@@ -856,10 +862,17 @@ func add_workshop() -> void:
 
 func _on_build_workshop_pressed() -> void:
 	inc_click_count(false)
-	money -= cost_to_build_next_workshop
-	cost_to_build_next_workshop = (int) (cost_to_build_next_workshop * cost_to_build_next_workshop_multiplier)
-	add_workshop()
-	update_workshop_button()
+	
+	# We'll keep increasing workshops if SHIFT is held down until all money is spent
+	while true:
+		money -= cost_to_build_next_workshop
+		cost_to_build_next_workshop = (int) (cost_to_build_next_workshop * cost_to_build_next_workshop_multiplier)
+		add_workshop()
+		update_workshop_button()
+		if build_workshop_button.disabled:
+			break
+		if Input.is_key_pressed(KEY_SHIFT) == false:
+			break
 
 var kaiju_count : float = 0
 var kaiju_max : float = 5000

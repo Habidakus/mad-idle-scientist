@@ -123,9 +123,10 @@ script = ExtResource("2_f1jsb")
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 16
-current_tab = 0
+current_tab = 1
 
 [node name="Generate Money" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -237,7 +238,6 @@ autowrap_mode = 2
 script = ExtResource("2_f1jsb")
 
 [node name="Spend Money" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 

@@ -49,6 +49,8 @@ Oct 30th: 4 hours
 Nov 1st: 2 hours
 	Added the controls menu screen
 	Added ability to hold down the generate money key
+	Holding shift while buying minions/workshops will spend the maximum amount of money
+
 -------< Other >--------------------
 
 TODO:

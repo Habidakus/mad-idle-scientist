@@ -254,14 +254,15 @@ theme_override_constants/margin_bottom = 10
 [node name="RichTextLabel" type="RichTextLabel" parent="MainStateMachine/Controls/MarginContainer"]
 layout_mode = 2
 theme_override_colors/default_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/bold_italics_font_size = 32
-theme_override_font_sizes/italics_font_size = 32
-theme_override_font_sizes/mono_font_size = 32
-theme_override_font_sizes/normal_font_size = 32
-theme_override_font_sizes/bold_font_size = 32
+theme_override_font_sizes/bold_italics_font_size = 24
+theme_override_font_sizes/italics_font_size = 24
+theme_override_font_sizes/mono_font_size = 24
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 24
 text = "The game is built to be played with a mouse, and right clicking on buttons and selector boxes.
 
-- Those on touch screen devices might want to hold down the generate money key, as that will be easier on the fingers."
+- Those on touch screen devices might want to hold down the generate money key, as that will be easier on the fingers.
+- When hiring minions or buying workshops, you can hold down the SHIFT key when clicks to spend the maximum amount of cash in one click."
 
 [node name="Options" type="MarginContainer" parent="."]
 visible = false
