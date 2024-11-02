@@ -141,11 +141,9 @@ func highlight_option_button(enable: bool) -> void:
 	if enable:
 		option_button.add_theme_stylebox_override("normal", style_box)
 		highlight_vfx.show()
-		print("showing button highlight at %s" % [highlight_vfx.global_position])
 	else:
 		option_button.remove_theme_stylebox_override("normal")
 		highlight_vfx.hide()
-		print("hiding button highlight at %s" % [highlight_vfx.global_position])
 
 func update_status() -> void:
 	if minion_count == 0:
@@ -192,16 +190,25 @@ func on_workshop_task_selected(index : int) -> void:
 	update_status()
 
 func on_workshop_minion_count_increase() -> void:
-	minion_count += 1
-	minion_label.text = "Workers: %d" % minion_count
 	var parent = get_parent() as SMS_Game
+	# Holding down shift will change the count by a factor of 10
+	var available_minions : int = parent.get_available_minions()
+	if Input.is_key_pressed(KEY_SHIFT):
+		minion_count += min(10, available_minions)
+	else:
+		minion_count += min(1, available_minions)
+	minion_label.text = "Workers: %d" % minion_count
 	parent.inc_click_count(false)
 	parent.update_all_workshop_minions()
 	update_status()
 
 func on_workshop_minion_count_decrease() -> void:
 	assert(minion_count > 0)
-	minion_count -= 1
+	# Holding down shift will change the count by a factor of 10
+	if Input.is_key_pressed(KEY_SHIFT):
+		minion_count = max(0, minion_count - 10)
+	else:
+		minion_count = max(0, minion_count - 1)
 	minion_label.text = "Workers: %d" % minion_count
 	var parent = get_parent() as SMS_Game
 	parent.inc_click_count(false)
