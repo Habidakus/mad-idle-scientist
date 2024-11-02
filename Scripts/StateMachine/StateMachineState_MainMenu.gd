@@ -29,7 +29,6 @@ func leave_state(next_state : String) -> void:
 	else:
 		our_state_machine.switch_state(next_state)
 
-
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		get_tree().quit()
@@ -42,3 +41,6 @@ func _on_credits_pressed() -> void:
 
 func _on_play_pressed() -> void:
 	leave_state("Game")
+
+func _on_controls_pressed() -> void:
+	leave_state("Controls")

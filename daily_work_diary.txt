@@ -46,7 +46,9 @@ Oct 30th: 4 hours
 	Make the game more friendly to mobile devices
 	Split Workshop tab into Spend Money & Manage Workshops
 	Highlight the buttons that the player should investigate
-
+Nov 1st: 2 hours
+	Added the controls menu screen
+	Added ability to hold down the generate money key
 -------< Other >--------------------
 
 TODO:
@@ -57,9 +59,6 @@ TODO:
 	- theft gigs (risk minions)
 
 Game Jam Post Mortem:
-  + if working for web (especially mobile) start with much small size
-  + need to draw much more attention to "highlight" tabs and buttons. Players can get stuck not realizing there are areas of the game they haven't played with yet.
-  - for mobile idle/clicker allow holding inc’r button for auto increase
   - inc’r button should have been accessible no matter which tab you were on
   - the victory page should have included it's own dialog audio
   - have the inc/dec button on the workers increase by a factor of 10 if SHIFT is being held

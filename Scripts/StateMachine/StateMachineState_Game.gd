@@ -471,6 +471,7 @@ func _process(delta: float) -> void:
 			augment_remainder -= floor(augment_remainder)
 	process_workshops(delta)
 	process_tab_highlights()
+	process_money_button(delta)
 
 	if can_rant():
 		start_rant()
@@ -723,6 +724,30 @@ func on_tab_changed(index : int) -> void:
 func _on_button_pressed() -> void:
 	inc_click_count(true)
 	money += main_button_stages[main_button_stage][2]
+
+var money_button_reset_wait_max : float = 0.75
+var money_button_absolute_min : float = 0.15
+var money_button_speed_up_factor : float = 0.8
+var money_button_current_wait_remaining : float
+var money_button_current_wait_max : float
+
+var money_button_held : bool = false
+func _on_button_button_down() -> void:
+	money_button_held = true
+	money_button_current_wait_remaining = money_button_reset_wait_max
+	money_button_current_wait_max = money_button_reset_wait_max
+
+func _on_button_button_up() -> void:
+	money_button_held = false
+
+func process_money_button(delta) -> void:
+	if money_button_held:
+		money_button_current_wait_remaining -= delta
+		if money_button_current_wait_remaining <= 0.0:
+			money_button_current_wait_max = max(money_button_speed_up_factor * money_button_current_wait_max, money_button_absolute_min)
+			money_button_current_wait_remaining = money_button_current_wait_max
+			inc_click_count(true)
+			money += main_button_stages[main_button_stage][2]
 
 func _on_unlock_button_pressed() -> void:
 	inc_click_count(false)

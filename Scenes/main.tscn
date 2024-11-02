@@ -93,6 +93,7 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 15
 
 [node name="Play" type="Button" parent="MainStateMachine/MainMenu/VBoxContainer"]
 layout_mode = 2
@@ -111,6 +112,16 @@ text = "Credits"
 script = ExtResource("4_hagyi")
 loads_after = NodePath("../../Play/PlayDecorator")
 
+[node name="Controls" type="Button" parent="MainStateMachine/MainMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Controls
+"
+
+[node name="ControlsDecorator" type="Node" parent="MainStateMachine/MainMenu/VBoxContainer/Controls" node_paths=PackedStringArray("loads_after")]
+script = ExtResource("4_hagyi")
+loads_after = NodePath("../../Play/PlayDecorator")
+
 [node name="Quit" type="Button" parent="MainStateMachine/MainMenu/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
@@ -121,6 +132,7 @@ script = ExtResource("4_hagyi")
 loads_after = NodePath("../../Credits/CreditsDecorator")
 
 [node name="Credits" type="Control" parent="MainStateMachine" node_paths=PackedStringArray("next_state")]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -213,6 +225,43 @@ Audacity"
 visible = false
 research_track_data_sets = Array[Resource]([ExtResource("7_ql8q4"), ExtResource("8_nc1ox"), ExtResource("9_5885i"), ExtResource("10_p0ps6"), ExtResource("11_d64m3"), ExtResource("12_qptde"), ExtResource("13_4jbdl")])
 fade_in = true
+
+[node name="Controls" type="Control" parent="MainStateMachine" node_paths=PackedStringArray("next_state")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_6bx2r")
+next_state = NodePath("../MainMenu")
+fade_in = true
+fade_out = true
+fade_time = 1.0
+
+[node name="MarginContainer" type="MarginContainer" parent="MainStateMachine/Controls"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MainStateMachine/Controls/MarginContainer"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 32
+theme_override_font_sizes/mono_font_size = 32
+theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/bold_font_size = 32
+text = "The game is built to be played with a mouse, and right clicking on buttons and selector boxes.
+
+- Those on touch screen devices might want to hold down the generate money key, as that will be easier on the fingers."
 
 [node name="Options" type="MarginContainer" parent="."]
 visible = false
@@ -318,6 +367,7 @@ text = "Press ESC to resume"
 
 [connection signal="pressed" from="MainStateMachine/MainMenu/VBoxContainer/Play" to="MainStateMachine/MainMenu" method="_on_play_pressed"]
 [connection signal="pressed" from="MainStateMachine/MainMenu/VBoxContainer/Credits" to="MainStateMachine/MainMenu" method="_on_credits_pressed"]
+[connection signal="pressed" from="MainStateMachine/MainMenu/VBoxContainer/Controls" to="MainStateMachine/MainMenu" method="_on_controls_pressed"]
 [connection signal="pressed" from="MainStateMachine/MainMenu/VBoxContainer/Quit" to="MainStateMachine/MainMenu" method="_on_quit_pressed"]
 [connection signal="toggled" from="Options/ColorRect/MarginContainer/VBoxContainer/GridContainer/ClickSoundButton" to="." method="_on_click_sound_button_toggled"]
 [connection signal="toggled" from="Options/ColorRect/MarginContainer/VBoxContainer/GridContainer/RantSoundButton" to="." method="_on_rant_sound_button_toggled"]

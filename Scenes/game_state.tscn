@@ -123,10 +123,9 @@ script = ExtResource("2_f1jsb")
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 16
-current_tab = 2
+current_tab = 0
 
 [node name="Generate Money" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -278,6 +277,7 @@ text = "Build Workshop"
 script = ExtResource("2_f1jsb")
 
 [node name="Workshops" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -477,6 +477,8 @@ layout_mode = 2
 size_flags_horizontal = 6
 text = "Dismiss"
 
+[connection signal="button_down" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/Button" to="." method="_on_button_button_down"]
+[connection signal="button_up" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/Button" to="." method="_on_button_button_up"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/CenterContainer/MarginContainer/UnlockButton" to="." method="_on_unlock_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer/AugmentButton" to="." method="_on_augment_button_pressed"]
