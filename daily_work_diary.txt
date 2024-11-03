@@ -46,12 +46,15 @@ Oct 30th: 4 hours
 	Make the game more friendly to mobile devices
 	Split Workshop tab into Spend Money & Manage Workshops
 	Highlight the buttons that the player should investigate
-Nov 1st: 2 hours
+Nov 1st: 3 hours
 	Added the controls menu screen
 	Added ability to hold down the generate money key
 	Holding shift while buying minions/workshops will spend the maximum amount of money
 	Holding shift while adjusting workers in workshops will change amount by 10 instead of 1 at a time
 	Holding shift while selecting workshop task will change all workshops to the same task
+Nov 2ne: 1 hours
+	The highlight VFX starts invisible but at a large scale, so it fades into view as it centers to the button the player should be paying attention to
+	Track total time spent playing (for future scoreboard)
 
 -------< Other >--------------------
 

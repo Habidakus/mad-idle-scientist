@@ -71,6 +71,8 @@ var minion_kaiju_delta : float = 1;
 var workshop_efficiency : float = 1.0
 var marsupial_size : float = 1.0
 
+var total_time : float = 0.0
+
 var augment_remainder : float = 0
 var augment_amount : float = 0
 var augment_stage_multiplier : float = 1.5
@@ -170,6 +172,8 @@ func find_progress_bar(prog_name : String) -> ProgressBar:
 	return pb
 	
 func _ready() -> void:
+	
+	total_time = 0
 	
 	#-------
 	# Page Frame & Header
@@ -461,6 +465,7 @@ func query_tab(tab : TabRef, query : TabAction) -> bool:
 	return false
 
 func _process(delta: float) -> void:
+	total_time += delta
 	update_augment_button_fraction(delta, 1)
 	if augment_amount > 0:
 		var dollars_per_second : float = augment_amount * marsupial_size * main_button_stages[main_button_stage][2]
