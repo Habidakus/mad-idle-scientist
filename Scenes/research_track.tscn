@@ -49,6 +49,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Track" type="Label" parent="Pending"]
+visible = false
 custom_minimum_size = Vector2(180, 23)
 layout_mode = 2
 size_flags_horizontal = 4
