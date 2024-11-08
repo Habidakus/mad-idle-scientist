@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c58yyta2hdulp"]
+[gd_scene load_steps=12 format=3 uid="uid://c58yyta2hdulp"]
 
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_Game.gd" id="1_fiind"]
 [ext_resource type="Script" path="res://Scripts/Decorators/ControlDecorator.gd" id="2_f1jsb"]
@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://bfs22cxftqca0" path="res://ResearchTracks/rtd_gears.tres" id="3_rvlh5"]
 [ext_resource type="Theme" uid="uid://cqjlv35tewje1" path="res://theme.tres" id="3_yf0vc"]
 [ext_resource type="Resource" uid="uid://b6lgcgt7gcvtj" path="res://ResearchTracks/rtd_muscle.tres" id="4_ohmf4"]
+[ext_resource type="Script" path="res://Scripts/Decorators/FontSizeDecorator.gd" id="7_7eqh8"]
 [ext_resource type="AudioStream" uid="uid://bj41kjm1xyiho" path="res://Sound/ChirpSound06.wav" id="8_4thog"]
 [ext_resource type="AudioStream" uid="uid://dabxpgda7wfrt" path="res://Sound/clop.wav" id="9_olg7r"]
 
@@ -123,7 +124,7 @@ script = ExtResource("2_f1jsb")
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 16
-current_tab = 1
+current_tab = 3
 
 [node name="Generate Money" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
 visible = false
@@ -152,6 +153,10 @@ text = "Click Me"
 [node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/Button"]
 script = ExtResource("2_f1jsb")
 
+[node name="FontSizeDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/Button"]
+script = ExtResource("7_7eqh8")
+max_width = 292.0
+
 [node name="CenterContainer" type="CenterContainer" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer"]
 layout_mode = 2
 
@@ -176,6 +181,10 @@ text = "Unlock"
 [node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/CenterContainer/MarginContainer/UnlockButton"]
 script = ExtResource("2_f1jsb")
 
+[node name="FontSizeDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer/CenterContainer/MarginContainer/UnlockButton"]
+script = ExtResource("7_7eqh8")
+max_width = 300.0
+
 [node name="ClickPlayerAlpha" type="AudioStreamPlayer" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer"]
 stream = ExtResource("8_4thog")
 volume_db = -19.0
@@ -184,7 +193,7 @@ max_polyphony = 7
 
 [node name="ClickPlayerBeta" type="AudioStreamPlayer" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/HBoxContainer"]
 stream = ExtResource("9_olg7r")
-volume_db = 8.0
+volume_db = 17.0
 max_polyphony = 7
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money"]
@@ -203,12 +212,15 @@ grow_vertical = 0
 theme = ExtResource("3_yf0vc")
 
 [node name="AugmentButton" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer"]
-visible = false
 layout_mode = 2
 text = "Augment"
 
 [node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer/AugmentButton"]
 script = ExtResource("2_f1jsb")
+
+[node name="FontSizeDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer/AugmentButton"]
+script = ExtResource("7_7eqh8")
+max_width = 277.0
 
 [node name="AugmentETA" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer"]
 layout_mode = 2
@@ -237,7 +249,11 @@ autowrap_mode = 2
 [node name="ControlDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer2/StartSpendingMoneyButton"]
 script = ExtResource("2_f1jsb")
 
+[node name="FontSizeDecorator" type="Node" parent="MarginContainer/VBoxContainer/TabContainer/Generate Money/MarginContainer2/StartSpendingMoneyButton"]
+script = ExtResource("7_7eqh8")
+
 [node name="Spend Money" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
@@ -296,9 +312,12 @@ theme_override_constants/margin_bottom = 5
 layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer/Workshops/MarginContainer2/VBoxContainer"]
+clip_contents = false
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Workshops/MarginContainer2/VBoxContainer/ScrollContainer"]
 custom_minimum_size = Vector2(10, 10)
@@ -313,7 +332,6 @@ size_flags_vertical = 3
 columns = 4
 
 [node name="Lab" type="Control" parent="MarginContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 

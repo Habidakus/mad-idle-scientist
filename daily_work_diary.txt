@@ -52,9 +52,11 @@ Nov 1st: 3 hours
 	Holding shift while buying minions/workshops will spend the maximum amount of money
 	Holding shift while adjusting workers in workshops will change amount by 10 instead of 1 at a time
 	Holding shift while selecting workshop task will change all workshops to the same task
-Nov 2ne: 1 hours
+Nov 2nd: 1 hours
 	The highlight VFX starts invisible but at a large scale, so it fades into view as it centers to the button the player should be paying attention to
 	Track total time spent playing (for future scoreboard)
+Nov 7th: 5 hours
+	Worked on crafting a font-size decorator that could be equipped to any control that had text to adjust the font size dynamically
 
 -------< Other >--------------------
 

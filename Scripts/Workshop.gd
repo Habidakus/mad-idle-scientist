@@ -18,15 +18,18 @@ var minion_count : int = 0
 var highlight_particle_scene : PackedScene = preload("res://Scenes/highlight.tscn")
 
 var name_label : Label = Label.new()
+var name_label_font_decorator = FontSizeDecorator.new()
 
 var minion_increase_button : Button = Button.new()
 var minion_decrease_button : Button = Button.new()
 var minion_label : Label = Label.new()
+var minion_label_font_decorator = FontSizeDecorator.new()
 var minion_container : HBoxContainer = HBoxContainer.new()
 
 var style_box : StyleBoxLine = StyleBoxLine.new()
 var option_button : OptionButton = OptionButton.new()
 var status_label : Label = Label.new()
+var status_label_font_decorator = FontSizeDecorator.new()
 var highlight_vfx : Control = null
 
 var partial_money : float = 0
@@ -40,9 +43,13 @@ func get_workshop_name() -> String:
 	return name_label.text
 
 func init(workshop_name : String, grid_container : GridContainer, workshop_list : Array[Workshop], available_minions : int, game : SMS_Game) -> void:
+	var custom_min_height : int = 31
 	name_label.text = workshop_name
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.custom_minimum_size = Vector2(100, custom_min_height)
+	name_label.add_child(name_label_font_decorator)
 	grid_container.add_child(name_label)
 	
 	highlight_vfx = highlight_particle_scene.instantiate()
@@ -51,6 +58,9 @@ func init(workshop_name : String, grid_container : GridContainer, workshop_list 
 	option_button.add_child(highlight_vfx)
 
 	minion_label.text = "Workers: 0"
+	minion_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	minion_label.custom_minimum_size = Vector2(90, custom_min_height)
+	minion_label.add_child(minion_label_font_decorator)
 	minion_decrease_button.text = "-";
 	minion_increase_button.text = "+";
 	minion_increase_button.set_disabled(available_minions == 0)
@@ -71,6 +81,9 @@ func init(workshop_name : String, grid_container : GridContainer, workshop_list 
 	
 	grid_container.add_child(option_button)
 	status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	status_label.custom_minimum_size = Vector2(165, custom_min_height)
+	status_label.add_child(status_label_font_decorator)
 	grid_container.add_child(status_label)
 	
 	var child_count = grid_container.get_children().size();
@@ -85,6 +98,7 @@ func init(workshop_name : String, grid_container : GridContainer, workshop_list 
 	update_status()
 
 func process(delta : float) -> void:
+	#print("option_button.size=%s incr_button.size=%s" % [option_button.size, minion_increase_button.size])
 	var game : SMS_Game = get_parent();
 	var minion_strength : float = sqrt(minion_count) * game.workshop_efficiency
 	highlight_vfx.position = option_button.size / 2.0
