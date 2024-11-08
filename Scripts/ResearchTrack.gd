@@ -19,7 +19,7 @@ func init(game : Control, rtd : ResearchTrackData) -> void:
 	lab_manager = game
 	official_track_name = rtd.track
 	for i : Invention in rtd.inventions:
-		print("Adding invention %s" % [i.button_text])
+		#print("Adding invention %s" % [i.button_text])
 		i.set_condition_checker(game)
 		invensions.append(i)
 	

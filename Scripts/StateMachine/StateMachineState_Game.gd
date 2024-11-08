@@ -328,7 +328,7 @@ func _input(event):
 
 func load_lab_grid() -> void:
 	for rt_data : Resource in research_track_data_sets:
-		print("load_lab_grid - processing %s" % [rt_data.resource_path]);
+		#print("load_lab_grid - processing %s" % [rt_data.resource_path]);
 		var track : ResearchTrack = research_track.instantiate()
 		track.init(self, rt_data)
 		lab_grid.add_child(track)
