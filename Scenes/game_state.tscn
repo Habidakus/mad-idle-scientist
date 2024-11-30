@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c58yyta2hdulp"]
+[gd_scene load_steps=16 format=3 uid="uid://c58yyta2hdulp"]
 
 [ext_resource type="Script" path="res://Scripts/StateMachine/StateMachineState_Game.gd" id="1_fiind"]
 [ext_resource type="Script" path="res://Scripts/Decorators/ControlDecorator.gd" id="2_f1jsb"]
@@ -10,8 +10,25 @@
 [ext_resource type="Script" path="res://Scripts/Decorators/FontSizeDecorator.gd" id="7_7eqh8"]
 [ext_resource type="AudioStream" uid="uid://bj41kjm1xyiho" path="res://Sound/ChirpSound06.wav" id="8_4thog"]
 [ext_resource type="AudioStream" uid="uid://dabxpgda7wfrt" path="res://Sound/clop.wav" id="9_olg7r"]
+[ext_resource type="Shader" path="res://Art/circuit.gdshader" id="11_qb01k"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cut1r"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_hue2p"]
+frequency = 0.4535
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_nlxxi"]
+seamless = true
+seamless_blend_skirt = 0.608
+noise = SubResource("FastNoiseLite_hue2p")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nkimx"]
+shader = ExtResource("11_qb01k")
+shader_parameter/zoom = 15.0
+shader_parameter/timeScale = 0.002
+shader_parameter/color_a = Color(0.85, 0.8925, 1, 1)
+shader_parameter/color_b = Color(0.7, 0.785, 1, 1)
+shader_parameter/noiseImage = SubResource("NoiseTexture3D_nlxxi")
 
 [node name="GameState" type="Control"]
 layout_mode = 3
@@ -401,7 +418,6 @@ theme_override_font_sizes/font_size = 42
 bus = &"Ranting"
 
 [node name="RantPopUp" type="MarginContainer" parent="."]
-visible = false
 top_level = true
 layout_mode = 1
 anchors_preset = 15
@@ -409,46 +425,38 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 40
-theme_override_constants/margin_right = 40
-theme_override_constants/margin_bottom = 40
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
 
 [node name="ColorRect" type="ColorRect" parent="RantPopUp"]
 layout_mode = 2
-color = Color(0.5, 0.225, 0.5, 0.501961)
+color = Color(0.5, 0.225, 0.5, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="RantPopUp/ColorRect"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -25.0
-offset_top = -25.0
-offset_right = 25.0
-offset_bottom = 21.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="MarginContainer" type="MarginContainer" parent="RantPopUp"]
+layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="ColorRect" type="ColorRect" parent="RantPopUp/ColorRect/MarginContainer"]
+[node name="ColorRect2" type="ColorRect" parent="RantPopUp/MarginContainer"]
+material = SubResource("ShaderMaterial_nkimx")
 layout_mode = 2
 color = Color(1, 0.454902, 1, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="RantPopUp/ColorRect/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="RantPopUp/MarginContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="RantPopUp/ColorRect/MarginContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="RantPopUp/MarginContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="RantPopUp/ColorRect/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="RantPopUp/MarginContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 10
@@ -456,7 +464,7 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="RantText" type="RichTextLabel" parent="RantPopUp/ColorRect/MarginContainer/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="RantText" type="RichTextLabel" parent="RantPopUp/MarginContainer/MarginContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/default_color = Color(0, 0, 0, 1)
@@ -467,30 +475,30 @@ theme_override_font_sizes/bold_font_size = 17
 bbcode_enabled = true
 text = "Rant goes here"
 
-[node name="Spacer2" type="Control" parent="RantPopUp/ColorRect/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="Spacer2" type="Control" parent="RantPopUp/MarginContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 2
 
-[node name="RantFootnote" type="Label" parent="RantPopUp/ColorRect/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="RantFootnote" type="Label" parent="RantPopUp/MarginContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "*note: Metatherians are a classification of animals that include marsupials."
 horizontal_alignment = 1
 
-[node name="Spacer" type="Control" parent="RantPopUp/ColorRect/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="Spacer" type="Control" parent="RantPopUp/MarginContainer/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="RantPopUp/ColorRect/MarginContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="RantPopUp/MarginContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="RantPopUp/ColorRect/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="RantPopUp/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Press ESC to bring up options"
 
-[node name="DismissRant" type="Button" parent="RantPopUp/ColorRect/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="DismissRant" type="Button" parent="RantPopUp/MarginContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 text = "Dismiss"
