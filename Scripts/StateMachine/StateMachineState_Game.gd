@@ -86,6 +86,7 @@ var augment_button_stages = {
 	3: [400, 1000, 0.2, "Type with your tails if need be!\nEvery dollar brings us closer to victory!"],
 }
 
+var victory_rant = load("res://Sound/rantVictory1.wav")
 var rant_next_rant_start : float = 0;
 var rant_index : int = 0
 var rants : Array = [
@@ -102,12 +103,12 @@ var rants : Array = [
 	],
 	[
 		load("res://Sound/rant3.wav"), true,
-		"Boneheaded dullards!\nThey stood in the way of my genius.\nTo think they overruled my ideas of [i]Metatherian[/i]* domination!\nGiant super laser...\nThey wanted me to build a giant super laser?!\nPah!\nIn what world would nations bow in fear to a Giant Super Laser.\nThe idiots!",
+		"Boneheaded dullards!\nThey stood in the way of my genius.\nTo think they overruled my ideas of [i]Metatherian[/i]* domination!\nGiant super laser...\nThey wanted me to build a giant super laser?! Pah!\nIn what world would nations bow in fear to a Giant Super Laser.\nThe idiots!",
 		rant_3_can_start
 	],
 	[
 		load("res://Sound/rant4.wav"), false,
-		"Imbecilic cretins!\nThey could not appreciate my brilliance!\nHad they but given me the funds I needed to complete the project the [i]world would be mine![/i]\nI was shackled by [i]their[/i] incompetence - my only failure was not seeing that they were an albatros around my neck.\nYes!\nYes!\nA lead albatros, or rather an iridium albatros, dragging me down to their level.",
+		"Imbecilic cretins!\nThey could not appreciate my brilliance!\nHad they but given me the funds I needed to complete the project the [i]world would be mine![/i]\nI was shackled by [i]their[/i] incompetence - my only failure was not seeing that they were an albatros around my neck.\nYes! Yes!\nA lead albatros, or rather an iridium albatros, dragging me down to their level.",
 		rant_4_can_start
 	],
 	[
@@ -325,6 +326,8 @@ func _input(event):
 				elif iek.keycode == KEY_4:
 					warehouse_add(CraftedItemType.SENSOR_PACK, 1)
 					print("DEBUG MODE: Adding Sensor Pack")
+				elif iek.keycode == KEY_J:
+					add_kaiju_parts(kaiju_max / 3.1)
 
 func load_lab_grid() -> void:
 	for rt_data : Resource in research_track_data_sets:
@@ -895,6 +898,8 @@ func add_kaiju_parts(amount : float) -> void:
 	if kaiju_count >= kaiju_max:
 		rant_pop_up.show()
 		rant_text.text = "[b]VICTORY![/b]\n\nThey mocked me, but now the tables have turned!\nSee how they scatter before my Marsupial Might!\n\nOnward my Kangaroo Kaiju!\n"
+		rant_player.stream = victory_rant
+		rant_player.play()
 		if kaiju_reconnected_dismiss == false:
 			kaiju_reconnected_dismiss = true;
 			rant_dismiss_button.pressed.disconnect(on_rant_dismissed)
